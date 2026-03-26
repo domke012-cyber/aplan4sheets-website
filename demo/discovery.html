@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module Discovery — aPlan4Sheets Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.site-nav{background:#1a2744;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px}
+.site-nav .logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;letter-spacing:-.3px}
+.site-nav .logo .sheets-icon{width:28px;height:28px;background:#0f9d58;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700}
+.site-nav-links{display:flex;gap:24px;font-size:14px;font-weight:500}
+.site-nav-links a{color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
+.site-nav-links a:hover{color:#fff}
+.site-nav .cta-btn{background:#0f9d58;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer}
+.demo-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 24px;background:#f8f9fa;border-bottom:1px solid #e5e7eb}
+.demo-controls button{border:none;border-radius:6px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.ctrl-play{background:#0f9d58;color:#fff}.ctrl-play:hover{background:#0b8a4a}
+.ctrl-restart{background:#e5e7eb;color:#374151}.ctrl-restart:hover{background:#d1d5db}
+.ctrl-mute{background:#e5e7eb;color:#374151;font-size:16px;padding:6px 12px}.ctrl-mute:hover{background:#d1d5db}
+.step-indicator{font-size:13px;color:#6b7280;font-weight:500}.step-indicator .current{color:#1a2744;font-weight:700}
+.global-progress{height:3px;background:#e5e7eb}.global-progress-fill{height:100%;background:linear-gradient(90deg,#0f9d58,#34a853);width:0%;transition:width .4s ease}
+.browser-frame{display:flex;flex-direction:column;height:calc(100vh - 56px);background:#fff;overflow:hidden}
+.sheets-toolbar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:#1e8e3e;height:40px;color:#fff;font-size:13px;font-weight:500}
+.sheets-toolbar .doc-icon{width:24px;height:24px;background:#fff;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#1e8e3e;font-size:14px;font-weight:700}
+.sheets-toolbar .doc-name{font-weight:600;margin-right:auto}
+.formula-bar{display:flex;align-items:center;height:28px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368}
+.formula-bar .cell-ref{background:#f1f3f4;border-radius:3px;padding:2px 8px;margin-right:8px;font-weight:500;min-width:48px;text-align:center}
+.formula-bar .fx{color:#5f6368;margin-right:6px;font-style:italic}
+.main-area{display:flex;flex:1;overflow:hidden}
+.grid-area{flex:1;position:relative;background:#fff;overflow:hidden}
+.sheet-tabs{display:flex;align-items:center;height:28px;background:#f1f3f4;border-top:1px solid #dadce0;padding:0 8px;gap:2px;font-size:12px;color:#5f6368}
+.sheet-tab{padding:4px 16px;border-radius:4px 4px 0 0;cursor:default;white-space:nowrap}
+.sheet-tab.active{background:#fff;font-weight:600;color:#1e8e3e;border:1px solid #dadce0;border-bottom:1px solid #fff;margin-bottom:-1px}
+.grid-container{position:absolute;top:0;left:0;right:0;bottom:28px;overflow:hidden}
+.grid-table{border-collapse:collapse;font-size:11px;font-family:'Inter',-apple-system,sans-serif}
+.grid-table th{background:#f8f9fa;border:1px solid #e0e0e0;padding:2px 6px;font-weight:500;color:#5f6368;position:sticky;top:0;z-index:2;white-space:nowrap;min-width:32px}
+.grid-table td{border:1px solid #e0e0e0;padding:2px 6px;white-space:nowrap;min-width:32px}
+.grid-table .row-header{background:#f8f9fa;font-weight:500;color:#5f6368;text-align:center;position:sticky;left:0;z-index:1}
+.grid-table .col-header{text-align:center}
+.grid-table .corner{background:#f8f9fa;position:sticky;left:0;top:0;z-index:3}
+.sidebar-area{width:360px;min-width:360px;border-left:1px solid #dadce0;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateX(20px);transition:all .4s cubic-bezier(.25,.46,.45,.94)}
+.sidebar-area.visible{opacity:1;transform:translateX(0)}
+.sidebar-inner{flex:1;overflow-y:auto;padding:8px}
+.connector-ui{
+  --ios-primary:#007AFF;--ios-success:#30D158;--ios-text-primary:rgba(0,0,0,1);--ios-text-secondary:rgba(60,60,67,0.85);--ios-text-tertiary:rgba(60,60,67,0.6);--ios-text-inverse:#fff;
+  --ios-border:rgba(60,60,67,0.25);--ios-border-light:rgba(60,60,67,0.15);--ios-separator:rgba(60,60,67,0.18);
+  --ios-shadow-sm:0 2px 8px rgba(0,0,0,0.06);--ios-radius-sm:8px;--ios-radius-md:12px;
+  --ios-ease:cubic-bezier(0.25,0.46,0.45,0.94);--ios-transition:all 0.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  --ios-glass-thick:rgba(248,248,248,0.92);--ios-bg-primary:#FFFFFF;--ios-surface:rgba(255,255,255,0.85);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:14px;color:var(--ios-text-primary);-webkit-font-smoothing:antialiased;
+  background:linear-gradient(135deg,#E8F4FD 0%,#FFF4E6 25%,#F3E7FF 50%,#E6F7FF 75%,#FFF0F5 100%);background-size:400% 400%;animation:meshGradient 15s ease infinite;line-height:1.4;
+}
+@keyframes meshGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.connector-ui .btn-primary{background:var(--ios-primary);color:var(--ios-text-inverse);padding:8px 16px;border-radius:var(--ios-radius-sm);font-size:13px;min-height:32px;font-weight:600;box-shadow:var(--ios-shadow-sm);width:100%;border:none;cursor:pointer;font-family:inherit}
+
+/* Discovery dialog */
+.disc-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.disc-overlay.visible{opacity:1;pointer-events:auto}
+.disc-modal{width:700px;max-width:90vw;max-height:80vh;background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;display:flex;flex-direction:column;transform:scale(0.95);transition:transform .3s cubic-bezier(.68,-.55,.265,1.55);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
+.disc-overlay.visible .disc-modal{transform:scale(1)}
+.disc-header{padding:16px 20px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between}
+.disc-header h3{font-size:17px;font-weight:600;color:#1F2937}
+.disc-body{flex:1;overflow-y:auto;padding:16px 20px}
+.disc-footer{padding:12px 20px;border-top:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}
+
+/* Progress */
+.crawl-progress{text-align:center;padding:32px}
+.crawl-bar-wrap{width:100%;height:8px;background:#f3f4f6;border-radius:100px;overflow:hidden;margin:12px 0}
+.crawl-bar{height:100%;background:linear-gradient(135deg,#00C7BE,#0891B2);border-radius:100px;width:0%;transition:width .5s ease}
+.crawl-bar.complete{background:linear-gradient(135deg,#30D158,#34C759)}
+
+/* Module tree */
+.mod-tree-item{border:1px solid #e5e7eb;border-radius:10px;margin-bottom:6px;overflow:hidden;transition:all .2s}
+.mod-tree-header{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;transition:background .15s;font-size:13px}
+.mod-tree-header:hover{background:#f9fafb}
+.mod-tree-header .expand{font-size:10px;color:#9ca3af;transition:transform .2s;width:16px}
+.mod-tree-header .mod-name{flex:1;font-weight:500;color:#374151}
+.mod-tree-header .mod-count{font-size:10px;color:#9ca3af;background:#f3f4f6;padding:2px 8px;border-radius:8px}
+.mod-tree-body{display:none;padding:4px 12px 8px 28px;border-top:1px solid #f3f4f6}
+.mod-tree-item.open .mod-tree-body{display:block}
+.mod-tree-item.open .expand{transform:rotate(90deg)}
+.li-item{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:11px;border-bottom:1px solid #f9fafb}
+.li-item:last-child{border-bottom:none}
+.li-item .li-name{flex:1;font-weight:500;color:#374151}
+.li-item .li-type{font-size:9px;color:#6B7280;background:#f3f4f6;padding:1px 6px;border-radius:6px}
+.li-item .li-dims{font-size:9px;color:#9ca3af}
+
+/* Search */
+.disc-search{display:flex;align-items:center;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:6px 10px;margin-bottom:12px}
+.disc-search input{flex:1;border:none;background:transparent;font-size:13px;outline:none;font-family:inherit}
+.disc-search svg{width:14px;height:14px;color:#9ca3af;margin-right:6px}
+
+.type-cursor{border-right:2px solid #007AFF;animation:blink 1s step-end infinite}
+@keyframes blink{50%{border-color:transparent}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ios-spin{to{transform:rotate(360deg)}}
+
+/* AI Chat UI */
+.ai-chat-wrap{display:flex;flex-direction:column;height:100%;gap:0}
+.ai-chat-messages{flex:1;overflow-y:auto;padding:12px 0;display:flex;flex-direction:column;gap:10px}
+.ai-chat-input-row{display:flex;align-items:center;gap:8px;padding:10px 0 0;border-top:1px solid #f3f4f6}
+.ai-badge{background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;white-space:nowrap;letter-spacing:.3px}
+.ai-input-wrap{flex:1;display:flex;align-items:center;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:20px;padding:6px 14px;transition:border-color .2s}
+.ai-input-wrap:focus-within{border-color:#007AFF}
+.ai-input-field{flex:1;border:none;background:transparent;font-size:13px;outline:none;font-family:inherit;color:#1F2937;min-width:0}
+.ai-send-btn{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#007AFF,#5856D6);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,122,255,0.4)}
+.msg-user{display:flex;justify-content:flex-end}
+.msg-user .bubble{background:linear-gradient(135deg,#007AFF,#5856D6);color:#fff;padding:8px 14px;border-radius:18px 18px 4px 18px;font-size:13px;max-width:75%;line-height:1.4}
+.msg-ai{display:flex;justify-content:flex-start;gap:8px}
+.msg-ai .ai-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
+.msg-ai .bubble{background:#fff;border:1.5px solid #e5e7eb;color:#1F2937;padding:8px 14px;border-radius:4px 18px 18px 18px;font-size:13px;max-width:85%;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.thinking-dots{display:flex;gap:4px;align-items:center;padding:4px 0}
+.thinking-dots span{width:7px;height:7px;background:#9ca3af;border-radius:50%;animation:dotPulse 1.2s ease-in-out infinite}
+.thinking-dots span:nth-child(2){animation-delay:.2s}
+.thinking-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotPulse{0%,80%,100%{transform:scale(0.7);opacity:.4}40%{transform:scale(1);opacity:1}}
+.mod-highlight{display:inline-block;background:linear-gradient(135deg,#dbeafe,#e0e7ff);color:#1d4ed8;padding:1px 8px;border-radius:6px;font-weight:600;font-size:12px;border:1px solid #bfdbfe}
+.config-card{background:#f8faff;border:1.5px solid #c7d2fe;border-radius:10px;padding:10px 14px;margin:6px 0;font-size:12px}
+.config-card .cfg-row{display:flex;gap:8px;padding:3px 0;border-bottom:1px solid #e0e7ef;align-items:flex-start}
+.config-card .cfg-row:last-child{border-bottom:none}
+.config-card .cfg-label{color:#6B7280;font-weight:500;min-width:80px;font-size:11px;padding-top:1px}
+.config-card .cfg-val{color:#1F2937;font-weight:600;flex:1;line-height:1.4}
+.writing-indicator{display:flex;align-items:center;gap:8px;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:8px 14px;font-size:12px;color:#92400e;font-weight:500;margin-top:8px}
+.writing-bar-wrap{flex:1;height:4px;background:#fde68a;border-radius:4px;overflow:hidden}
+.writing-bar{height:100%;background:linear-gradient(90deg,#f59e0b,#10b981);width:0%;transition:width .4s ease;border-radius:4px}
+.toast-notif{position:fixed;bottom:24px;right:24px;background:#065f46;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:9999;display:flex;align-items:center;gap:8px;animation:toastIn .4s cubic-bezier(.68,-.55,.265,1.55)}
+@keyframes toastIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.grid-data-cell{background:#e8fdf0!important;transition:background .5s}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="logo"><div class="sheets-icon">a4</div><span>aPlan4Sheets</span></div>
+  <div class="site-nav-links"><a href="/demos.html">← Back to Demos</a><a href="https://aplan4sheets.com">Home</a></div>
+  <button class="cta-btn">Install Free</button>
+</nav>
+
+<div class="demo-controls">
+  <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+  <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
+  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 8 — <span id="stepLabel">Discovery Tab</span></div>
+</div>
+<div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
+
+<div class="browser-frame">
+  <div class="sheets-toolbar"><div class="doc-icon">📊</div><div class="doc-name">FY26 Financial Planning</div></div>
+  <div class="formula-bar"><div class="cell-ref">A1</div><span class="fx">fx</span><span></span></div>
+  <div class="main-area">
+    <div class="grid-area">
+      <div class="grid-container"><table class="grid-table" id="gridTable"></table></div>
+      <div class="sheet-tabs"><div class="sheet-tab active">Sheet1</div></div>
+    </div>
+    <div class="sidebar-area visible" id="sidebar">
+      <div class="sidebar-inner connector-ui" id="sidebarContent"></div>
+    </div>
+  </div>
+</div>
+
+<div class="disc-overlay" id="discOverlay">
+  <div class="disc-modal">
+    <div class="disc-header"><h3 id="discTitle">Model Architecture</h3><div style="font-size:12px;color:#6B7280" id="discSubtitle"></div></div>
+    <div class="disc-body" id="discBody"></div>
+    <div class="disc-footer" id="discFooter"></div>
+  </div>
+</div>
+
+<audio id="audio-1" src="audio/discovery-1.mp3" preload="auto"></audio>
+<audio id="audio-2" src="audio/discovery-2.mp3" preload="auto"></audio>
+<audio id="audio-3" src="audio/discovery-3.mp3" preload="auto"></audio>
+<audio id="audio-4" src="audio/discovery-4.mp3" preload="auto"></audio>
+<audio id="audio-5" src="audio/discovery-5.mp3" preload="auto"></audio>
+<audio id="audio-6" src="audio/discovery-6.mp3" preload="auto"></audio>
+<audio id="audio-7" src="audio/discovery-7.mp3" preload="auto"></audio>
+<audio id="audio-8" src="audio/discovery-8.mp3" preload="auto"></audio>
+<script>
+const SCENES=[
+  {name:'Discovery Tab',duration:6000},
+  {name:'Explore Model',duration:5000},
+  {name:'Crawling Modules',duration:10000},
+  {name:'Module Tree Results',duration:8000},
+  {name:'Expand Module Details',duration:8000},
+  {name:'Search & Filter',duration:13000},
+  {name:'Ask About Your Model',duration:12000},
+  {name:'Natural Language to Sheet',duration:15000},
+];
+const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
+let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
+
+function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
+function restartDemo(){
+  playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
+  currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
+  document.getElementById('discOverlay').classList.remove('visible');
+  updateProgress();runScene(0);
+}
+function updateProgress(){
+  document.getElementById('globalProgress').style.width=Math.min((elapsed/TOTAL)*100,100)+'%';
+  document.getElementById('stepNum').textContent=currentScene+1;
+  document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete';
+}
+function runScene(idx){
+  if(idx>=SCENES.length){currentScene=SCENES.length-1;updateProgress();return}
+  currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);
+  [scene1,scene2,scene3,scene4,scene5,scene6,scene7,scene8][idx]();
+  sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);
+  const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;document.getElementById('globalProgress').style.width=Math.min(((elapsed+se)/TOTAL)*100,100)+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};
+  animFrameId=requestAnimationFrame(tick);
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+function initGrid(){
+  const t=document.getElementById('gridTable');const L='ABCDEFGHIJ'.split('');
+  let h='<thead><tr><th class="corner"></th>';L.forEach(l=>{h+=`<th class="col-header">${l}</th>`});
+  h+='</tr></thead><tbody>';for(let r=1;r<=25;r++){h+=`<tr><td class="row-header">${r}</td>`;L.forEach(()=>{h+='<td></td>'});h+='</tr>'}h+='</tbody>';t.innerHTML=h;
+}
+
+function typeText(el,text,speed=50){
+  return new Promise(resolve=>{let i=0;el.classList.add('type-cursor');
+  const iv=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length){clearInterval(iv);el.classList.remove('type-cursor');resolve()}},speed)});
+}
+
+// Scene 1: Discovery tab in sidebar
+async function scene1(){
+  initGrid();
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div style="background:var(--ios-surface);padding:16px;border-radius:12px;border:1px solid var(--ios-border);text-align:center">
+      <div style="font-size:32px;margin-bottom:8px">🔍</div>
+      <div style="font-size:16px;font-weight:600;color:var(--ios-text-primary);margin-bottom:4px">Model Discovery</div>
+      <div style="font-size:12px;color:var(--ios-text-secondary);margin-bottom:16px">Explore the full architecture of your Anaplan model — modules, line items, dimensions, and relationships.</div>
+      <div style="background:#f0fdf4;border-radius:8px;padding:8px;margin-bottom:12px;font-size:11px;color:#059669;font-weight:500">
+        Model: Revenue & Headcount<br>FY26 Planning • Acme Corp
+      </div>
+      <button class="btn-primary" id="exploreBtn" style="background:linear-gradient(135deg,#00C7BE,#0891B2)">🔍 Explore Model Architecture</button>
+    </div>
+  `;
+  await wait(2000);
+  document.getElementById('exploreBtn').style.boxShadow='0 4px 20px rgba(0,199,190,0.4)';
+}
+
+// Scene 2: Click explore → dialog opens
+async function scene2(){
+  await wait(800);
+  const btn=document.getElementById('exploreBtn');
+  btn.style.transform='scale(0.97)';await wait(150);btn.style.transform='';
+  await wait(500);
+  document.getElementById('discOverlay').classList.add('visible');
+  document.getElementById('discTitle').textContent='Model Architecture';
+  document.getElementById('discSubtitle').textContent='Revenue & Headcount — FY26 Planning';
+  document.getElementById('discBody').innerHTML=`
+    <div class="crawl-progress" id="crawlProgress">
+      <div style="width:48px;height:48px;border:4px solid #f3f4f6;border-top-color:#00C7BE;border-radius:50%;animation:ios-spin 1s linear infinite;margin:0 auto 16px"></div>
+      <div style="font-size:15px;font-weight:600;color:#1F2937" id="crawlLabel">Initializing discovery...</div>
+      <div class="crawl-bar-wrap"><div class="crawl-bar" id="crawlBar"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#6B7280">
+        <span id="crawlDetail">Starting...</span>
+        <span id="crawlPct">0%</span>
+      </div>
+    </div>
+  `;
+  document.getElementById('discFooter').innerHTML=`<span style="font-size:11px;color:#9ca3af">This may take a moment for large models</span>`;
+}
+
+// Scene 3: Crawl progress
+async function scene3(){
+  const stages=[
+    {pct:10,label:'Crawling 262 modules...',detail:'Loading module metadata'},
+    {pct:30,label:'Crawling 262 modules...',detail:'Processing functional areas...'},
+    {pct:55,label:'Discovering line items...',detail:'1,847 line items found'},
+    {pct:75,label:'Mapping dimensions...',detail:'38 dimensions across 262 modules'},
+    {pct:90,label:'Building relationships...',detail:'Analyzing cross-module references'},
+    {pct:100,label:'Discovery complete!',detail:'262 modules • 1,847 line items • 38 dimensions'},
+  ];
+  for(const s of stages){
+    await wait(1400);
+    document.getElementById('crawlBar').style.width=s.pct+'%';
+    document.getElementById('crawlPct').textContent=s.pct+'%';
+    document.getElementById('crawlLabel').textContent=s.label;
+    document.getElementById('crawlDetail').textContent=s.detail;
+  }
+  await wait(600);
+  document.getElementById('crawlBar').classList.add('complete');
+  document.getElementById('crawlLabel').style.color='#059669';
+}
+
+// Scene 4: Module tree results
+async function scene4(){
+  await wait(600);
+  const modules=[
+    {name:'P&L Summary',items:12,area:'Financial'},
+    {name:'P&L Allocations',items:8,area:'Financial'},
+    {name:'REV01 Revenue Planning',items:24,area:'Revenue'},
+    {name:'REV02 MRR Waterfall',items:18,area:'Revenue'},
+    {name:'HC01 Headcount Tracker',items:15,area:'Workforce'},
+    {name:'HC02 Compensation',items:22,area:'Workforce'},
+    {name:'OPX01 Operating Expenses',items:19,area:'OpEx'},
+    {name:'OPX02 Travel & Entertainment',items:11,area:'OpEx'},
+    {name:'CASH01 Cash Flow',items:14,area:'Financial'},
+    {name:'BS01 Balance Sheet',items:16,area:'Financial'},
+  ];
+
+  document.getElementById('discBody').innerHTML=`
+    <div class="disc-search"><svg viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input placeholder="Search modules and line items..." id="discSearchInput"></div>
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+      <span style="font-size:10px;background:#dbeafe;color:#2563eb;padding:2px 8px;border-radius:8px;font-weight:600">262 modules</span>
+      <span style="font-size:10px;background:#fef3c7;color:#d97706;padding:2px 8px;border-radius:8px;font-weight:600">1,847 line items</span>
+      <span style="font-size:10px;background:#e0e7ff;color:#4f46e5;padding:2px 8px;border-radius:8px;font-weight:600">38 dimensions</span>
+    </div>
+    <div id="moduleTree"></div>
+  `;
+  document.getElementById('discFooter').innerHTML=`
+    <span style="font-size:11px;color:#059669;font-weight:500">✓ Discovery complete</span>
+    <button style="padding:8px 16px;border:none;border-radius:8px;background:#e5e7eb;color:#374151;font-size:12px;font-weight:600;cursor:pointer">Close</button>
+  `;
+
+  const tree=document.getElementById('moduleTree');
+  for(const m of modules){
+    await wait(200);
+    tree.insertAdjacentHTML('beforeend',`
+      <div class="mod-tree-item" id="mt-${m.name.replace(/\s/g,'')}">
+        <div class="mod-tree-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="expand">▸</span>
+          <span class="mod-name">${m.name}</span>
+          <span class="mod-count">${m.items} items</span>
+        </div>
+        <div class="mod-tree-body" id="mtb-${m.name.replace(/\s/g,'')}"></div>
+      </div>
+    `);
+  }
+}
+
+// Scene 5: Expand P&L Summary to show line items
+async function scene5(){
+  await wait(1000);
+  const item=document.getElementById('mt-P&LSummary');
+  item.classList.add('open');
+  item.style.borderColor='#00C7BE';
+
+  const body=document.getElementById('mtb-P&LSummary');
+  const lineItems=[
+    {name:'Total Revenue',type:'Number',dims:'Time, Versions, Department'},
+    {name:'SaaS Revenue',type:'Number',dims:'Time, Versions, Product Line'},
+    {name:'Services Revenue',type:'Number',dims:'Time, Versions'},
+    {name:'Total COGS',type:'Number',dims:'Time, Versions, Department'},
+    {name:'Gross Profit',type:'Number',dims:'Time, Versions'},
+    {name:'Gross Margin %',type:'Percentage',dims:'Time, Versions'},
+    {name:'Total OpEx',type:'Number',dims:'Time, Versions, Department'},
+    {name:'EBITDA',type:'Number',dims:'Time, Versions'},
+    {name:'EBITDA Margin %',type:'Percentage',dims:'Time, Versions'},
+    {name:'Depreciation',type:'Number',dims:'Time, Versions'},
+    {name:'Net Income',type:'Number',dims:'Time, Versions'},
+    {name:'EPS',type:'Number',dims:'Time, Versions'},
+  ];
+  for(const li of lineItems){
+    await wait(200);
+    body.insertAdjacentHTML('beforeend',`
+      <div class="li-item">
+        <span class="li-name">${li.name}</span>
+        <span class="li-type">${li.type}</span>
+        <span class="li-dims">${li.dims}</span>
+      </div>
+    `);
+  }
+
+  // Also expand HC01
+  await wait(1500);
+  const hcItem=document.getElementById('mt-HC01HeadcountTracker');
+  hcItem.classList.add('open');
+  hcItem.style.borderColor='#00C7BE';
+  const hcBody=document.getElementById('mtb-HC01HeadcountTracker');
+  const hcLineItems=[
+    {name:'Beginning HC',type:'Number',dims:'Time, Executive Owner'},
+    {name:'New Hires',type:'Number',dims:'Time, Executive Owner'},
+    {name:'Terminations',type:'Number',dims:'Time, Executive Owner'},
+    {name:'Ending HC',type:'Number',dims:'Time, Executive Owner'},
+    {name:'Avg HC',type:'Number',dims:'Time, Executive Owner'},
+  ];
+  for(const li of hcLineItems){
+    await wait(150);
+    hcBody.insertAdjacentHTML('beforeend',`
+      <div class="li-item"><span class="li-name">${li.name}</span><span class="li-type">${li.type}</span><span class="li-dims">${li.dims}</span></div>
+    `);
+  }
+}
+
+// Scene 6: Search/filter
+async function scene6(){
+  await wait(1500);
+  const searchInput=document.getElementById('discSearchInput');
+  await typeText(searchInput,'Revenue',60);
+  await wait(800);
+  // Filter to show only matching
+  const tree=document.getElementById('moduleTree');
+  const items=tree.querySelectorAll('.mod-tree-item');
+  items.forEach(item=>{
+    const name=item.querySelector('.mod-name').textContent;
+    if(!name.toLowerCase().includes('rev')&&!name.includes('P&L')){
+      item.style.opacity='0.3';
+      item.style.transform='scale(0.98)';
+    } else {
+      item.style.opacity='1';
+      item.style.borderColor='#00C7BE';
+    }
+  });
+
+  await wait(3000);
+  // Clear search
+  searchInput.textContent='';
+  searchInput.classList.remove('type-cursor');
+  items.forEach(item=>{
+    item.style.opacity='1';
+    item.style.transform='';
+    item.style.borderColor='';
+  });
+
+  // Search for specific line item
+  await wait(1000);
+  await typeText(searchInput,'EBITDA',60);
+  await wait(1200);
+  // Highlight matching
+  items.forEach(item=>{
+    const body=item.querySelector('.mod-tree-body');
+    if(body){
+      const lis=body.querySelectorAll('.li-item');
+      let hasMatch=false;
+      lis.forEach(li=>{
+        if(li.querySelector('.li-name').textContent.includes('EBITDA')){
+          li.style.background='#fef3c7';
+          li.style.borderRadius='6px';
+          hasMatch=true;
+        }
+      });
+      if(!hasMatch){
+        item.style.opacity='0.3';
+      } else {
+        item.classList.add('open');
+        item.style.borderColor='#d97706';
+      }
+    }
+  });
+}
+
+// Scene 7: Ask About Your Model — AI chat interface
+async function scene7(){
+  // Reset any leftover filter state from scene 6
+  const treeItems=document.querySelectorAll('.mod-tree-item');
+  treeItems.forEach(item=>{
+    item.style.opacity='1';
+    item.style.transform='';
+    item.style.borderColor='';
+  });
+
+  // Inject AI chat UI at bottom of discBody
+  const discBody=document.getElementById('discBody');
+  // Keep tree, just shrink it and add chat
+  const existingTree=discBody.querySelector('#moduleTree');
+  if(existingTree) existingTree.style.maxHeight='160px';
+
+  // Add AI chat area
+  discBody.insertAdjacentHTML('beforeend',`
+    <div id="aiChatArea" class="ai-chat-wrap" style="margin-top:10px;border-top:1px solid #f3f4f6;padding-top:10px">
+      <div class="ai-chat-messages" id="aiMessages"></div>
+      <div class="ai-chat-input-row">
+        <span class="ai-badge">✨ AI</span>
+        <div class="ai-input-wrap">
+          <span class="ai-input-field type-cursor" id="aiInputField" style="display:inline;min-height:18px">&nbsp;</span>
+        </div>
+        <button class="ai-send-btn">➤</button>
+      </div>
+    </div>
+  `);
+
+  await wait(800);
+
+  // Type user question
+  const inputField=document.getElementById('aiInputField');
+  inputField.textContent='';
+  await typeText(inputField,'Which modules contain revenue metrics?',45);
+
+  await wait(500);
+
+  // Add user message bubble
+  const messagesEl=document.getElementById('aiMessages');
+  messagesEl.insertAdjacentHTML('beforeend',`
+    <div class="msg-user"><div class="bubble">Which modules contain revenue metrics?</div></div>
+  `);
+  inputField.textContent='';
+  inputField.classList.remove('type-cursor');
+
+  // Thinking animation
+  messagesEl.insertAdjacentHTML('beforeend',`
+    <div class="msg-ai" id="thinkingMsg">
+      <div class="ai-avatar">✨</div>
+      <div class="bubble"><div class="thinking-dots"><span></span><span></span><span></span></div></div>
+    </div>
+  `);
+  messagesEl.scrollTop=messagesEl.scrollHeight;
+  await wait(1400);
+
+  // Remove thinking, add streamed response
+  document.getElementById('thinkingMsg').remove();
+
+  // Create AI response bubble with streaming
+  messagesEl.insertAdjacentHTML('beforeend',`
+    <div class="msg-ai" id="aiRespMsg">
+      <div class="ai-avatar">✨</div>
+      <div class="bubble" id="aiRespBubble"></div>
+    </div>
+  `);
+  messagesEl.scrollTop=messagesEl.scrollHeight;
+
+  const bubble=document.getElementById('aiRespBubble');
+
+  // Stream response lines progressively
+  const responseLines=[
+    {html:`I found revenue-related data in <strong>3 modules</strong>:`,delay:0},
+    {html:`<br><br><span class="mod-highlight">P&amp;L Summary</span> — <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Total Revenue</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">SaaS Revenue</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Services Revenue</code>`,delay:700},
+    {html:`<br><span class="mod-highlight">REV01 Revenue Planning</span> — <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Monthly Revenue</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">ARR</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">New Bookings</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Renewal Rate</code> <span style="color:#9ca3af;font-size:11px">(24 items)</span>`,delay:900},
+    {html:`<br><span class="mod-highlight">REV02 MRR Waterfall</span> — <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Beginning MRR</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">New MRR</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Expansion MRR</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Churned MRR</code> <span style="color:#9ca3af;font-size:11px">(18 items)</span>`,delay:900},
+  ];
+
+  let accumulated='';
+  for(const line of responseLines){
+    if(line.delay) await wait(line.delay);
+    accumulated+=line.html;
+    bubble.innerHTML=accumulated;
+    messagesEl.scrollTop=messagesEl.scrollHeight;
+  }
+
+  // Highlight the 3 modules in tree
+  await wait(600);
+  const highlights=['mt-P&LSummary','mt-REV01RevenuePlanning','mt-REV02MRRWaterfall'];
+  highlights.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.borderColor='#7c3aed';el.style.background='#f5f3ff';el.style.boxShadow='0 0 0 2px rgba(124,58,237,0.15)'}
+  });
+  messagesEl.scrollTop=messagesEl.scrollHeight;
+}
+
+// Scene 8: Natural Language to Sheet
+async function scene8(){
+  // Reset highlights from scene 7
+  document.querySelectorAll('.mod-tree-item').forEach(el=>{
+    el.style.borderColor='';el.style.background='';el.style.boxShadow='';
+  });
+
+  // Reuse existing input field from scene 7 chat UI
+  const inputField=document.getElementById('aiInputField');
+  const messagesEl=document.getElementById('aiMessages');
+
+  if(inputField) inputField.classList.add('type-cursor');
+  if(inputField) inputField.textContent='';
+
+  await wait(800);
+  if(inputField) await typeText(inputField,'Pull Q1 revenue by department to my sheet',45);
+  await wait(400);
+
+  // Add user bubble
+  if(messagesEl){
+    messagesEl.insertAdjacentHTML('beforeend',`
+      <div class="msg-user"><div class="bubble">Pull Q1 revenue by department to my sheet</div></div>
+    `);
+    if(inputField){inputField.textContent='';inputField.classList.remove('type-cursor')}
+
+    // Thinking
+    messagesEl.insertAdjacentHTML('beforeend',`
+      <div class="msg-ai" id="thinkingMsg2">
+        <div class="ai-avatar">✨</div>
+        <div class="bubble"><div class="thinking-dots"><span></span><span></span><span></span></div></div>
+      </div>
+    `);
+    messagesEl.scrollTop=messagesEl.scrollHeight;
+    await wait(1300);
+    document.getElementById('thinkingMsg2').remove();
+
+    // Config card response
+    messagesEl.insertAdjacentHTML('beforeend',`
+      <div class="msg-ai" id="aiRespMsg2">
+        <div class="ai-avatar">✨</div>
+        <div class="bubble" id="aiRespBubble2">
+          <span id="setupText"></span>
+        </div>
+      </div>
+    `);
+    messagesEl.scrollTop=messagesEl.scrollHeight;
+
+    const setupText=document.getElementById('setupText');
+    await typeText(setupText,"I'll set that up for you:",30);
+    await wait(300);
+
+    const bubble2=document.getElementById('aiRespBubble2');
+    bubble2.insertAdjacentHTML('beforeend',`
+      <div class="config-card" id="configCard" style="opacity:0;transition:opacity .5s;margin-top:8px">
+        <div class="cfg-row"><span class="cfg-label">Module</span><span class="cfg-val">REV01 Revenue Planning</span></div>
+        <div class="cfg-row"><span class="cfg-label">Line Items</span><span class="cfg-val">Total Revenue, SaaS Revenue, Services Revenue</span></div>
+        <div class="cfg-row"><span class="cfg-label">Rows</span><span class="cfg-val">Department (Engineering, Sales, Marketing, Support, Operations)</span></div>
+        <div class="cfg-row"><span class="cfg-label">Columns</span><span class="cfg-val">Jan 26, Feb 26, Mar 26</span></div>
+        <div class="cfg-row"><span class="cfg-label">Version</span><span class="cfg-val">Working</span></div>
+      </div>
+      <div class="writing-indicator" id="writingIndicator" style="display:none">
+        <span>⏳</span>
+        <span>Writing to Sheet...</span>
+        <div class="writing-bar-wrap"><div class="writing-bar" id="writingBar"></div></div>
+      </div>
+    `);
+    await wait(100);
+    document.getElementById('configCard').style.opacity='1';
+    messagesEl.scrollTop=messagesEl.scrollHeight;
+
+    await wait(1200);
+
+    // Show writing indicator
+    const writingIndicator=document.getElementById('writingIndicator');
+    writingIndicator.style.display='flex';
+    messagesEl.scrollTop=messagesEl.scrollHeight;
+
+    // Animate progress bar
+    const writingBar=document.getElementById('writingBar');
+    const pcts=[20,45,70,90,100];
+    for(const pct of pcts){
+      await wait(300);
+      writingBar.style.width=pct+'%';
+    }
+    await wait(400);
+  }
+
+  // Close the dialog
+  document.getElementById('discOverlay').classList.remove('visible');
+  await wait(600);
+
+  // Populate the grid with financial data
+  const depts=['Engineering','Sales','Marketing','Support','Operations'];
+  const jan=[1245000,2380000,890000,425000,310000];
+  const feb=[1310000,2510000,940000,445000,325000];
+  const mar=[1390000,2650000,1010000,470000,342000];
+
+  const table=document.getElementById('gridTable');
+  const rows=table.querySelectorAll('tbody tr');
+  const fmt=n=>n.toLocaleString();
+
+  // Headers row 1: blank, Jan 26, Feb 26, Mar 26
+  const headerRow=rows[0];
+  const headerCells=headerRow.querySelectorAll('td');
+  if(headerCells.length>=4){
+    headerCells[1].textContent='Jan 26';headerCells[1].style.fontWeight='600';headerCells[1].style.color='#374151';
+    headerCells[2].textContent='Feb 26';headerCells[2].style.fontWeight='600';headerCells[2].style.color='#374151';
+    headerCells[3].textContent='Mar 26';headerCells[3].style.fontWeight='600';headerCells[3].style.color='#374151';
+  }
+
+  // Data rows
+  for(let i=0;i<depts.length;i++){
+    await wait(180);
+    const row=rows[i+1];
+    if(!row)continue;
+    const cells=row.querySelectorAll('td');
+    if(cells.length<4)continue;
+    cells[0].textContent=depts[i];cells[0].style.fontWeight='500';cells[0].style.color='#374151';
+    cells[1].textContent=fmt(jan[i]);cells[1].classList.add('grid-data-cell');
+    cells[2].textContent=fmt(feb[i]);cells[2].classList.add('grid-data-cell');
+    cells[3].textContent=fmt(mar[i]);cells[3].classList.add('grid-data-cell');
+    // Also make row-header styled
+    const rowHeader=row.querySelector('.row-header');
+    if(rowHeader) rowHeader.style.background='#e8fdf0';
+  }
+
+  // Also style header cells green
+  if(headerCells&&headerCells.length>=4){
+    headerCells[1].classList.add('grid-data-cell');
+    headerCells[2].classList.add('grid-data-cell');
+    headerCells[3].classList.add('grid-data-cell');
+  }
+
+  // Toast notification
+  await wait(500);
+  document.body.insertAdjacentHTML('beforeend',`
+    <div class="toast-notif" id="successToast">✓ Data written to Sheet1</div>
+  `);
+  await wait(3000);
+  const toast=document.getElementById('successToast');
+  if(toast){toast.style.transition='opacity .4s';toast.style.opacity='0';setTimeout(()=>toast.remove(),400)}
+}
+
+// === Audio Narration ===
+let audioMuted = false;
+const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5'),document.getElementById('audio-6'),document.getElementById('audio-7'),document.getElementById('audio-8')];
+function toggleMute(){
+  audioMuted = !audioMuted;
+  document.getElementById('muteBtn').textContent = audioMuted ? '🔇' : '🔊';
+  if(audioMuted) audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+}
+function playNarration(idx){
+  if(audioMuted || idx < 0 || idx >= audioClips.length) return;
+  audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+  audioClips[idx].play().catch(()=>{});
+}
+
+initGrid();
+document.getElementById('sidebar').classList.add('visible');
+setTimeout(()=>runScene(0),500);
+</script>
+</body>
+</html>

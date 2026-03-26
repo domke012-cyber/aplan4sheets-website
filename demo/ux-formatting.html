@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UX Board Formatting — aPlan4Sheets Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.site-nav{background:#1a2744;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px}
+.site-nav .logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;letter-spacing:-.3px}
+.site-nav .logo .sheets-icon{width:28px;height:28px;background:#0f9d58;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700}
+.site-nav-links{display:flex;gap:24px;font-size:14px;font-weight:500}
+.site-nav-links a{color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
+.site-nav-links a:hover{color:#fff}
+.site-nav .cta-btn{background:#0f9d58;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer}
+.demo-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 24px;background:#f8f9fa;border-bottom:1px solid #e5e7eb}
+.demo-controls button{border:none;border-radius:6px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.ctrl-play{background:#0f9d58;color:#fff}.ctrl-play:hover{background:#0b8a4a}
+.ctrl-restart{background:#e5e7eb;color:#374151}.ctrl-restart:hover{background:#d1d5db}
+.ctrl-mute{background:#e5e7eb;color:#374151;font-size:16px;padding:6px 12px}.ctrl-mute:hover{background:#d1d5db}
+.step-indicator{font-size:13px;color:#6b7280;font-weight:500}.step-indicator .current{color:#1a2744;font-weight:700}
+.global-progress{height:3px;background:#e5e7eb}.global-progress-fill{height:100%;background:linear-gradient(90deg,#0f9d58,#34a853);width:0%;transition:width .4s ease}
+.browser-frame{display:flex;flex-direction:column;height:calc(100vh - 56px);background:#fff;overflow:hidden}
+.sheets-toolbar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:#1e8e3e;height:40px;color:#fff;font-size:13px;font-weight:500}
+.sheets-toolbar .doc-icon{width:24px;height:24px;background:#fff;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#1e8e3e;font-size:14px;font-weight:700}
+.sheets-toolbar .doc-name{font-weight:600;margin-right:auto}
+.formula-bar{display:flex;align-items:center;height:28px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368}
+.formula-bar .cell-ref{background:#f1f3f4;border-radius:3px;padding:2px 8px;margin-right:8px;font-weight:500;min-width:48px;text-align:center}
+.formula-bar .fx{color:#5f6368;margin-right:6px;font-style:italic}
+.main-area{display:flex;flex:1;overflow:hidden}
+.grid-area{flex:1;position:relative;background:#fff;overflow:hidden}
+.sheet-tabs{display:flex;align-items:center;height:28px;background:#f1f3f4;border-top:1px solid #dadce0;padding:0 8px;gap:2px;font-size:12px;color:#5f6368}
+.sheet-tab{padding:4px 16px;border-radius:4px 4px 0 0;cursor:default;white-space:nowrap}
+.sheet-tab.active{background:#fff;font-weight:600;color:#1e8e3e;border:1px solid #dadce0;border-bottom:1px solid #fff;margin-bottom:-1px}
+.grid-container{position:absolute;top:0;left:0;right:0;bottom:28px;overflow:hidden}
+.grid-table{border-collapse:collapse;font-size:11px;font-family:'Inter',-apple-system,sans-serif}
+.grid-table th{background:#f8f9fa;border:1px solid #e0e0e0;padding:2px 6px;font-weight:500;color:#5f6368;position:sticky;top:0;z-index:2;white-space:nowrap;min-width:32px}
+.grid-table td{border:1px solid #e0e0e0;padding:2px 6px;white-space:nowrap;min-width:32px}
+.grid-table .row-header{background:#f8f9fa;font-weight:500;color:#5f6368;text-align:center;position:sticky;left:0;z-index:1}
+.grid-table .col-header{text-align:center}
+.grid-table .corner{background:#f8f9fa;position:sticky;left:0;top:0;z-index:3}
+.grid-table .num{text-align:right;font-variant-numeric:tabular-nums}
+.grid-table .neg{color:#c5221f}
+/* UX formatting classes */
+.grid-table .ux-h0{font-weight:700;font-size:12px;background:#1a2744;color:#fff}
+.grid-table .ux-h1{font-weight:700;background:#e8f0fe;color:#1a2744}
+.grid-table .ux-h2{font-weight:600;padding-left:12px;background:#f3f6fc}
+.grid-table .ux-detail{padding-left:24px;font-size:10px;color:#5f6368}
+.grid-table .ux-subtotal{font-weight:700;background:#e8f0fe;border-top:1px solid #1a2744}
+.grid-table .ux-total{font-weight:700;font-size:12px;background:#1a2744;color:#fff;border-top:2px solid #0f9d58}
+.grid-table .ux-pct{color:#6B7280;font-style:italic}
+.sidebar-area{width:360px;min-width:360px;border-left:1px solid #dadce0;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateX(20px);transition:all .4s cubic-bezier(.25,.46,.45,.94)}
+.sidebar-area.visible{opacity:1;transform:translateX(0)}
+.sidebar-inner{flex:1;overflow-y:auto;padding:8px}
+.connector-ui{
+  --ios-primary:#007AFF;--ios-success:#30D158;--ios-text-primary:rgba(0,0,0,1);--ios-text-secondary:rgba(60,60,67,0.85);--ios-text-tertiary:rgba(60,60,67,0.6);--ios-text-inverse:#fff;
+  --ios-border:rgba(60,60,67,0.25);--ios-border-light:rgba(60,60,67,0.15);--ios-separator:rgba(60,60,67,0.18);
+  --ios-shadow-sm:0 2px 8px rgba(0,0,0,0.06);--ios-radius-sm:8px;--ios-radius-md:12px;
+  --ios-ease:cubic-bezier(0.25,0.46,0.45,0.94);--ios-transition:all 0.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  --ios-glass-thick:rgba(248,248,248,0.92);--ios-bg-primary:#FFFFFF;--ios-surface:rgba(255,255,255,0.85);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:14px;color:var(--ios-text-primary);-webkit-font-smoothing:antialiased;
+  background:linear-gradient(135deg,#E8F4FD 0%,#FFF4E6 25%,#F3E7FF 50%,#E6F7FF 75%,#FFF0F5 100%);background-size:400% 400%;animation:meshGradient 15s ease infinite;line-height:1.4;
+}
+@keyframes meshGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.connector-ui .btn-primary{background:var(--ios-primary);color:var(--ios-text-inverse);padding:8px 16px;border-radius:var(--ios-radius-sm);font-size:13px;min-height:32px;font-weight:600;box-shadow:var(--ios-shadow-sm);width:100%;border:none;cursor:pointer;font-family:inherit}
+
+/* Widget cards */
+.widget-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:4px;background:#f9fafb;border:1px solid #e5e7eb;cursor:pointer;transition:all .2s}
+.widget-card:hover{border-color:#FF453A;background:#fff5f5}
+.widget-card.selected{border-color:#FF453A;background:rgba(255,69,58,0.05);box-shadow:0 0 0 2px rgba(255,69,58,0.15)}
+.widget-card .wg-name{font-size:12px;font-weight:500;color:#374151;flex:1}
+.widget-card .wg-type{font-size:9px;color:#9ca3af;background:#f3f4f6;padding:1px 6px;border-radius:6px}
+
+/* Progress */
+.prog-bar-wrap{width:100%;height:6px;background:rgba(142,142,147,0.2);border-radius:100px;overflow:hidden;margin:8px 0}
+.prog-bar{height:100%;background:linear-gradient(135deg,#FF453A,#FF6961);border-radius:100px;width:0%;transition:width .5s ease}
+.prog-bar.complete{background:linear-gradient(135deg,#30D158,#34C759)}
+
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ios-spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="logo"><div class="sheets-icon">a4</div><span>aPlan4Sheets</span></div>
+  <div class="site-nav-links"><a href="/demos.html">← Back to Demos</a><a href="https://aplan4sheets.com">Home</a></div>
+  <button class="cta-btn">Install Free</button>
+</nav>
+
+<div class="demo-controls">
+  <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+  <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
+  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 6 — <span id="stepLabel">Board Widgets</span></div>
+</div>
+<div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
+
+<div class="browser-frame">
+  <div class="sheets-toolbar"><div class="doc-icon">📊</div><div class="doc-name">FY26 Financial Planning — Board Import</div></div>
+  <div class="formula-bar"><div class="cell-ref" id="cellRef">A1</div><span class="fx">fx</span><span id="formulaText"></span></div>
+  <div class="main-area">
+    <div class="grid-area">
+      <div class="grid-container"><table class="grid-table" id="gridTable"></table></div>
+      <div class="sheet-tabs" id="sheetTabs"><div class="sheet-tab active">Sheet1</div></div>
+    </div>
+    <div class="sidebar-area visible" id="sidebar">
+      <div class="sidebar-inner connector-ui" id="sidebarContent"></div>
+    </div>
+  </div>
+</div>
+
+<audio id="audio-1" src="audio/ux-formatting-1.mp3" preload="auto"></audio>
+<audio id="audio-2" src="audio/ux-formatting-2.mp3" preload="auto"></audio>
+<audio id="audio-3" src="audio/ux-formatting-3.mp3" preload="auto"></audio>
+<audio id="audio-4" src="audio/ux-formatting-4.mp3" preload="auto"></audio>
+<audio id="audio-5" src="audio/ux-formatting-5.mp3" preload="auto"></audio>
+<audio id="audio-6" src="audio/ux-formatting-6.mp3" preload="auto"></audio>
+<script>
+const SCENES=[
+  {name:'Board Widgets',duration:7000},
+  {name:'Select Widget',duration:6000},
+  {name:'Widget Config',duration:7000},
+  {name:'Execute & Write',duration:8000},
+  {name:'Apply Formatting',duration:10000},
+  {name:'Final Formatted P&L',duration:7000},
+];
+const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
+let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
+
+function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
+function restartDemo(){
+  playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
+  currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
+  initGrid();document.getElementById('sheetTabs').innerHTML='<div class="sheet-tab active">Sheet1</div>';
+  updateProgress();runScene(0);
+}
+function updateProgress(){
+  document.getElementById('globalProgress').style.width=Math.min((elapsed/TOTAL)*100,100)+'%';
+  document.getElementById('stepNum').textContent=currentScene+1;
+  document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete';
+}
+function runScene(idx){
+  if(idx>=SCENES.length){currentScene=SCENES.length-1;updateProgress();return}
+  currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);
+  [scene1,scene2,scene3,scene4,scene5,scene6][idx]();
+  sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);
+  const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;document.getElementById('globalProgress').style.width=Math.min(((elapsed+se)/TOTAL)*100,100)+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};
+  animFrameId=requestAnimationFrame(tick);
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+function initGrid(){
+  const t=document.getElementById('gridTable');const L='ABCDEFGHIJ'.split('');
+  let h='<thead><tr><th class="corner"></th>';L.forEach(l=>{h+=`<th class="col-header">${l}</th>`});
+  h+='</tr></thead><tbody>';for(let r=1;r<=30;r++){h+=`<tr><td class="row-header">${r}</td>`;L.forEach(()=>{h+='<td></td>'});h+='</tr>'}h+='</tbody>';t.innerHTML=h;
+}
+
+// Scene 1: Discovery tab showing board with widgets
+async function scene1(){
+  initGrid();
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div style="background:var(--ios-surface);padding:12px;border-radius:12px;border:1px solid var(--ios-border);margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:20px">🎨</span>
+        <div>
+          <div style="font-size:14px;font-weight:600">UX Board Import</div>
+          <div style="font-size:11px;color:var(--ios-text-secondary)">FY26 Executive Dashboard</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--ios-text-tertiary);margin-bottom:12px">Import Anaplan board widgets with their original formatting preserved.</div>
+      <div style="font-size:12px;font-weight:600;color:var(--ios-text-primary);margin-bottom:8px">Board Widgets:</div>
+      <div id="widgetList"></div>
+    </div>
+  `;
+  const widgets=[
+    {name:'OUTPUT: P&L Statement',type:'Grid',icon:'📊'},
+    {name:'OUTPUT: Revenue Waterfall',type:'Chart',icon:'📈'},
+    {name:'OUTPUT: HC Summary',type:'Grid',icon:'👥'},
+    {name:'OUTPUT: OpEx by Department',type:'Grid',icon:'💰'},
+    {name:'KPI: Gross Margin %',type:'KPI',icon:'📍'},
+  ];
+  const list=document.getElementById('widgetList');
+  for(const w of widgets){
+    await wait(300);
+    list.insertAdjacentHTML('beforeend',`
+      <div class="widget-card" data-name="${w.name}">
+        <span style="font-size:16px">${w.icon}</span>
+        <span class="wg-name">${w.name}</span>
+        <span class="wg-type">${w.type}</span>
+      </div>
+    `);
+  }
+}
+
+// Scene 2: Select OUTPUT: P&L Statement
+async function scene2(){
+  await wait(1500);
+  const cards=document.querySelectorAll('.widget-card');
+  cards[0].classList.add('selected');
+  await wait(1500);
+  // Show config for selected widget
+  const sb=document.getElementById('sidebarContent');
+  sb.insertAdjacentHTML('beforeend',`
+    <div id="widgetConfig" style="background:rgba(255,69,58,0.03);padding:12px;border-radius:12px;border:1px solid rgba(255,69,58,0.2);animation:slideDown .3s ease">
+      <div style="font-size:13px;font-weight:600;color:#1F2937;margin-bottom:8px">OUTPUT: P&L Statement</div>
+      <div style="font-size:11px;color:var(--ios-text-secondary);margin-bottom:4px">Source: P&L Summary module</div>
+      <div style="font-size:11px;color:var(--ios-text-secondary);margin-bottom:12px">Layout: Hierarchy rows, Time columns</div>
+    </div>
+  `);
+}
+
+// Scene 3: Widget config with Anaplan UX layout preserved
+async function scene3(){
+  const config=document.getElementById('widgetConfig');
+  config.insertAdjacentHTML('beforeend',`
+    <div style="background:white;border-radius:8px;border:1px solid #e5e7eb;padding:8px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:600;color:#6B7280;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Board Formatting Detected</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        <span style="font-size:9px;background:#e8f0fe;color:#1a2744;padding:2px 6px;border-radius:4px;font-weight:500">Hierarchy indentation</span>
+        <span style="font-size:9px;background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;font-weight:500">Summary bold</span>
+        <span style="font-size:9px;background:#d1fae5;color:#059669;padding:2px 6px;border-radius:4px;font-weight:500">Number formats</span>
+        <span style="font-size:9px;background:#ede9fe;color:#7c3aed;padding:2px 6px;border-radius:4px;font-weight:500">Header styles</span>
+        <span style="font-size:9px;background:#fee2e2;color:#dc2626;padding:2px 6px;border-radius:4px;font-weight:500">Negative (red)</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px">
+      <input type="checkbox" checked style="width:16px;height:16px;accent-color:#FF453A">
+      <span style="font-size:12px;color:var(--ios-text-primary)">Apply board formatting to sheet</span>
+    </div>
+    <button class="btn-primary" id="execWidgetBtn" style="background:linear-gradient(135deg,#FF453A,#FF6961)">Execute with Formatting</button>
+  `);
+  await wait(2000);
+  // Click execute
+  document.getElementById('execWidgetBtn').style.transform='scale(0.97)';
+  await wait(150);
+  document.getElementById('execWidgetBtn').style.transform='';
+}
+
+// Scene 4: Execute → data writes to sheet (plain first)
+async function scene4(){
+  document.getElementById('execWidgetBtn').disabled=true;
+  document.getElementById('execWidgetBtn').textContent='Writing data...';
+
+  // Show progress in sidebar
+  const config=document.getElementById('widgetConfig');
+  config.insertAdjacentHTML('beforeend',`
+    <div style="margin-top:12px" id="execProgress">
+      <div style="font-size:12px;font-weight:500;color:#374151;margin-bottom:4px" id="execLabel">Writing data...</div>
+      <div class="prog-bar-wrap"><div class="prog-bar" id="execBar"></div></div>
+      <div style="font-size:10px;color:#6B7280" id="execDetail">0%</div>
+    </div>
+  `);
+
+  // Update sheet tab
+  document.getElementById('sheetTabs').innerHTML='<div class="sheet-tab">Sheet1</div><div class="sheet-tab active">P&L Statement</div>';
+
+  // Write plain data first (no formatting yet)
+  const t=document.getElementById('gridTable');
+  const rows=[
+    {l:'P&L Statement',cls:'',v:['Q1 FY26','Q2 FY26','Q3 FY26','Q4 FY26','FY26']},
+    {l:'Revenue',cls:'',v:['','','','','']},
+    {l:'SaaS Revenue',cls:'',v:['11,760,000','12,930,000','13,640,000','14,420,000','52,750,000']},
+    {l:'  New ARR',cls:'',v:['1,350,000','1,625,000','1,800,000','1,950,000','6,725,000']},
+    {l:'  Expansion',cls:'',v:['585,000','723,000','810,000','900,000','3,018,000']},
+    {l:'  Churn',cls:'',v:['(195,000)','(185,000)','(170,000)','(160,000)','(710,000)']},
+    {l:'Services Revenue',cls:'',v:['1,380,000','1,480,000','1,560,000','1,630,000','6,050,000']},
+    {l:'Total Revenue',cls:'',v:['13,140,000','14,410,000','15,200,000','16,050,000','58,800,000']},
+    {l:'',cls:'',v:['','','','','']},
+    {l:'Cost of Revenue',cls:'',v:['','','','','']},
+    {l:'Hosting & Infra',cls:'',v:['(1,314,000)','(1,441,000)','(1,520,000)','(1,605,000)','(5,880,000)']},
+    {l:'Support Staff',cls:'',v:['(1,578,000)','(1,729,000)','(1,824,000)','(1,926,000)','(7,057,000)']},
+    {l:'CS & Onboarding',cls:'',v:['(1,050,000)','(1,153,000)','(1,216,000)','(1,284,000)','(4,703,000)']},
+    {l:'Total COGS',cls:'',v:['(3,942,000)','(4,323,000)','(4,560,000)','(4,815,000)','(17,640,000)']},
+    {l:'',cls:'',v:['','','','','']},
+    {l:'Gross Profit',cls:'',v:['9,198,000','10,087,000','10,640,000','11,235,000','41,160,000']},
+    {l:'Gross Margin %',cls:'',v:['70.0%','70.0%','70.0%','70.0%','70.0%']},
+  ];
+
+  let html='<thead><tr><th class="corner"></th>';
+  'ABCDEF'.split('').forEach(l=>{html+=`<th class="col-header">${l}</th>`});
+  html+='</tr></thead><tbody id="gridBody"></tbody>';
+  t.innerHTML=html;
+  const body=document.getElementById('gridBody');
+
+  for(let i=0;i<rows.length;i++){
+    await wait(150);
+    const r=rows[i];
+    let tr=`<tr id="row${i}"><td class="row-header">${i+1}</td><td>${r.l}</td>`;
+    r.v.forEach(v=>{tr+=`<td class="${v.startsWith('(')?'num neg':'num'}">${v}</td>`});
+    tr+='</tr>';body.insertAdjacentHTML('beforeend',tr);
+
+    const pct=Math.round(((i+1)/rows.length)*60);
+    document.getElementById('execBar').style.width=pct+'%';
+    document.getElementById('execDetail').textContent=pct+'% — Writing cells';
+  }
+  document.getElementById('execLabel').textContent='Data written, applying formatting...';
+}
+
+// Scene 5: Formatting applies with visual transformation
+async function scene5(){
+  const formatSteps=[
+    {label:'Applying header styles...',pct:65},
+    {label:'Applying hierarchy indentation...',pct:75},
+    {label:'Applying summary bold...',pct:85},
+    {label:'Applying number formats...',pct:92},
+    {label:'Applying colors...',pct:100},
+  ];
+
+  // Apply formatting row by row
+  // Row 0: Title header
+  await wait(400);
+  document.getElementById('row0').querySelectorAll('td')[0].className='ux-h0';
+  document.getElementById('row0').querySelectorAll('td').forEach((td,i)=>{if(i>0)td.className='ux-h0 num'});
+  document.getElementById('execBar').style.width='65%';document.getElementById('execDetail').textContent='65% — Header styles';
+
+  // Row 1: Section header
+  await wait(400);
+  document.getElementById('row1').querySelectorAll('td')[0].className='ux-h1';
+  document.getElementById('row1').querySelectorAll('td').forEach((td,i)=>{if(i>0)td.className='ux-h1'});
+
+  // Rows 2-6: Detail with hierarchy
+  await wait(400);
+  document.getElementById('row2').querySelectorAll('td')[0].className='ux-h2';
+  await wait(200);
+  document.getElementById('row3').querySelectorAll('td')[0].className='ux-detail';
+  await wait(200);
+  document.getElementById('row4').querySelectorAll('td')[0].className='ux-detail';
+  await wait(200);
+  document.getElementById('row5').querySelectorAll('td')[0].className='ux-detail';
+  document.getElementById('row5').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='num neg'});
+  await wait(200);
+  document.getElementById('row6').querySelectorAll('td')[0].className='ux-h2';
+  document.getElementById('execBar').style.width='75%';document.getElementById('execDetail').textContent='75% — Hierarchy';
+
+  // Row 7: Subtotal
+  await wait(400);
+  document.getElementById('row7').querySelectorAll('td')[0].className='ux-subtotal';
+  document.getElementById('row7').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='ux-subtotal num'});
+
+  // Row 9: Section header
+  await wait(300);
+  document.getElementById('row9').querySelectorAll('td')[0].className='ux-h1';
+  document.getElementById('row9').querySelectorAll('td').forEach((td,i)=>{if(i>0)td.className='ux-h1'});
+
+  // Rows 10-12: Detail
+  await wait(300);
+  [10,11,12].forEach(r=>{
+    document.getElementById('row'+r).querySelectorAll('td')[0].className='ux-detail';
+    document.getElementById('row'+r).querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='num neg'});
+  });
+
+  // Row 13: COGS subtotal
+  await wait(300);
+  document.getElementById('row13').querySelectorAll('td')[0].className='ux-subtotal';
+  document.getElementById('row13').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='ux-subtotal num neg'});
+  document.getElementById('execBar').style.width='90%';document.getElementById('execDetail').textContent='90% — Summary formatting';
+
+  // Row 15: Gross Profit total
+  await wait(400);
+  document.getElementById('row15').querySelectorAll('td')[0].className='ux-total';
+  document.getElementById('row15').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='ux-total num'});
+
+  // Row 16: percentage italic
+  await wait(300);
+  document.getElementById('row16').querySelectorAll('td')[0].className='ux-pct';
+  document.getElementById('row16').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='ux-pct num'});
+
+  document.getElementById('execBar').style.width='100%';
+  document.getElementById('execBar').classList.add('complete');
+  document.getElementById('execLabel').textContent='✓ Formatting applied!';
+  document.getElementById('execLabel').style.color='#059669';
+  document.getElementById('execDetail').textContent='100% — Complete';
+}
+
+// Scene 6: Show the final result
+async function scene6(){
+  await wait(800);
+  document.getElementById('execWidgetBtn').textContent='✓ Import Complete';
+  document.getElementById('execWidgetBtn').style.background='linear-gradient(135deg,#30D158,#34C759)';
+  document.getElementById('execWidgetBtn').disabled=false;
+
+  document.getElementById('cellRef').textContent='A16';
+  document.getElementById('formulaText').textContent='Gross Profit';
+
+  // Add a note in sidebar
+  const config=document.getElementById('widgetConfig');
+  config.insertAdjacentHTML('beforeend',`
+    <div style="background:#f0fdf4;border-radius:8px;padding:10px;margin-top:12px;font-size:11px;color:#059669;font-weight:500;animation:slideDown .3s ease">
+      ✓ Board formatting preserved:<br>
+      • Hierarchy indentation (3 levels)<br>
+      • Bold summaries & subtotals<br>
+      • Number formats with commas<br>
+      • Red negatives for COGS/churn<br>
+      • Section headers with backgrounds
+    </div>
+  `);
+}
+
+// === Audio Narration ===
+let audioMuted = false;
+const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5'),document.getElementById('audio-6')];
+function toggleMute(){
+  audioMuted = !audioMuted;
+  document.getElementById('muteBtn').textContent = audioMuted ? '🔇' : '🔊';
+  if(audioMuted) audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+}
+function playNarration(idx){
+  if(audioMuted || idx < 0 || idx >= audioClips.length) return;
+  audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+  audioClips[idx].play().catch(()=>{});
+}
+
+initGrid();
+document.getElementById('sidebar').classList.add('visible');
+setTimeout(()=>runScene(0),500);
+</script>
+</body>
+</html>

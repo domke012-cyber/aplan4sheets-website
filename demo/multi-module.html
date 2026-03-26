@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Module Pivots — aPlan4Sheets Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.site-nav{background:#1a2744;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px}
+.site-nav .logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;letter-spacing:-.3px}
+.site-nav .logo .sheets-icon{width:28px;height:28px;background:#0f9d58;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700}
+.site-nav-links{display:flex;gap:24px;font-size:14px;font-weight:500}
+.site-nav-links a{color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
+.site-nav-links a:hover{color:#fff}
+.site-nav .cta-btn{background:#0f9d58;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer}
+.demo-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 24px;background:#f8f9fa;border-bottom:1px solid #e5e7eb}
+.demo-controls button{border:none;border-radius:6px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.ctrl-play{background:#0f9d58;color:#fff}.ctrl-play:hover{background:#0b8a4a}
+.ctrl-restart{background:#e5e7eb;color:#374151}.ctrl-restart:hover{background:#d1d5db}
+.ctrl-mute{background:#e5e7eb;color:#374151;font-size:16px;padding:6px 12px}.ctrl-mute:hover{background:#d1d5db}
+.step-indicator{font-size:13px;color:#6b7280;font-weight:500}.step-indicator .current{color:#1a2744;font-weight:700}
+.global-progress{height:3px;background:#e5e7eb}.global-progress-fill{height:100%;background:linear-gradient(90deg,#0f9d58,#34a853);width:0%;transition:width .4s ease}
+.browser-frame{display:flex;flex-direction:column;height:calc(100vh - 56px);background:#fff;overflow:hidden}
+.sheets-toolbar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:#1e8e3e;height:40px;color:#fff;font-size:13px;font-weight:500}
+.sheets-toolbar .doc-icon{width:24px;height:24px;background:#fff;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#1e8e3e;font-size:14px;font-weight:700}
+.sheets-toolbar .doc-name{font-weight:600;margin-right:auto}
+.formula-bar{display:flex;align-items:center;height:28px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368}
+.formula-bar .cell-ref{background:#f1f3f4;border-radius:3px;padding:2px 8px;margin-right:8px;font-weight:500;min-width:48px;text-align:center}
+.formula-bar .fx{color:#5f6368;margin-right:6px;font-style:italic}
+.main-area{display:flex;flex:1;overflow:hidden}
+.grid-area{flex:1;position:relative;background:#fff;overflow:hidden}
+.sheet-tabs{display:flex;align-items:center;height:28px;background:#f1f3f4;border-top:1px solid #dadce0;padding:0 8px;gap:2px;font-size:12px;color:#5f6368}
+.sheet-tab{padding:4px 16px;border-radius:4px 4px 0 0;cursor:default;white-space:nowrap}
+.sheet-tab.active{background:#fff;font-weight:600;color:#1e8e3e;border:1px solid #dadce0;border-bottom:1px solid #fff;margin-bottom:-1px}
+.grid-container{position:absolute;top:0;left:0;right:0;bottom:28px;overflow:hidden}
+.grid-table{border-collapse:collapse;font-size:11px;font-family:'Inter',-apple-system,sans-serif}
+.grid-table th{background:#f8f9fa;border:1px solid #e0e0e0;padding:2px 6px;font-weight:500;color:#5f6368;position:sticky;top:0;z-index:2;white-space:nowrap;min-width:32px}
+.grid-table td{border:1px solid #e0e0e0;padding:2px 6px;white-space:nowrap;min-width:32px}
+.grid-table .row-header{background:#f8f9fa;font-weight:500;color:#5f6368;text-align:center;position:sticky;left:0;z-index:1}
+.grid-table .col-header{text-align:center}
+.grid-table .corner{background:#f8f9fa;position:sticky;left:0;top:0;z-index:3}
+.grid-table .h0{font-weight:700;font-size:12px;background:#e8f0fe}
+.grid-table .num{text-align:right;font-variant-numeric:tabular-nums}
+.grid-table .neg{color:#c5221f}
+.grid-table .total-row{font-weight:700;border-top:2px solid #1e8e3e}
+.grid-table .secondary{background:#f0fdf4;border-left:2px solid #0f9d58}
+.sidebar-area{width:360px;min-width:360px;border-left:1px solid #dadce0;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateX(20px);transition:all .4s cubic-bezier(.25,.46,.45,.94)}
+.sidebar-area.visible{opacity:1;transform:translateX(0)}
+.sidebar-inner{flex:1;overflow-y:auto;padding:8px}
+.connector-ui{
+  --ios-primary:#007AFF;--ios-success:#30D158;--ios-text-primary:rgba(0,0,0,1);--ios-text-secondary:rgba(60,60,67,0.85);--ios-text-tertiary:rgba(60,60,67,0.6);--ios-text-inverse:#fff;
+  --ios-border:rgba(60,60,67,0.25);--ios-border-light:rgba(60,60,67,0.15);--ios-separator:rgba(60,60,67,0.18);
+  --ios-shadow-sm:0 2px 8px rgba(0,0,0,0.06);--ios-radius-sm:8px;--ios-radius-md:12px;
+  --ios-ease:cubic-bezier(0.25,0.46,0.45,0.94);--ios-transition:all 0.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  --ios-glass-thick:rgba(248,248,248,0.92);--ios-bg-primary:#FFFFFF;--ios-surface:rgba(255,255,255,0.85);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:14px;color:var(--ios-text-primary);-webkit-font-smoothing:antialiased;
+  background:linear-gradient(135deg,#E8F4FD 0%,#FFF4E6 25%,#F3E7FF 50%,#E6F7FF 75%,#FFF0F5 100%);background-size:400% 400%;animation:meshGradient 15s ease infinite;line-height:1.4;
+}
+@keyframes meshGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.connector-ui .btn-primary{background:var(--ios-primary);color:var(--ios-text-inverse);padding:8px 16px;border-radius:var(--ios-radius-sm);font-size:13px;min-height:32px;font-weight:600;box-shadow:var(--ios-shadow-sm);width:100%;border:none;cursor:pointer;font-family:inherit}
+.connector-ui .btn-primary:disabled{background:#e5e7eb;color:#9ca3af;cursor:not-allowed;box-shadow:none}
+
+/* Module picker overlay */
+.module-picker-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.module-picker-overlay.visible{opacity:1;pointer-events:auto}
+.module-picker{width:500px;max-width:90vw;background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.25);padding:24px;transform:scale(0.95);transition:transform .3s cubic-bezier(.68,-.55,.265,1.55);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
+.module-picker-overlay.visible .module-picker{transform:scale(1)}
+.module-picker h3{font-size:17px;font-weight:600;margin-bottom:4px;color:#1F2937}
+.module-picker .subtitle{font-size:12px;color:#6B7280;margin-bottom:16px}
+.compat-module{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:4px;background:#f9fafb;border:1px solid #e5e7eb;cursor:pointer;transition:all .2s}
+.compat-module:hover{border-color:#007AFF;background:#eff6ff}
+.compat-module.selected{border-color:#007AFF;background:rgba(0,122,255,0.08);box-shadow:0 0 0 2px rgba(0,122,255,0.2)}
+.compat-module .mod-name{font-size:13px;font-weight:500;color:#374151;flex:1}
+.compat-module .mod-dims{font-size:10px;color:#9ca3af}
+.compat-badge{font-size:9px;font-weight:600;background:#d1fae5;color:#059669;padding:2px 6px;border-radius:8px;text-transform:uppercase}
+
+/* Progress overlay */
+.progress-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.progress-overlay.visible{opacity:1;pointer-events:auto}
+.progress-modal{width:480px;max-width:90vw;background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.25);padding:24px;transform:scale(0.95);transition:transform .3s cubic-bezier(.68,-.55,.265,1.55);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif}
+.progress-overlay.visible .progress-modal{transform:scale(1)}
+.prog-bar-wrap{width:100%;height:6px;background:rgba(142,142,147,0.2);border-radius:100px;overflow:hidden;margin:8px 0}
+.prog-bar{height:100%;background:linear-gradient(135deg,#5E5CE6,#007AFF);border-radius:100px;width:0%;transition:width .5s ease}
+.prog-bar.complete{background:linear-gradient(135deg,#30D158,#34C759)}
+
+.item-check{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:6px;font-size:12px;cursor:pointer;transition:background .15s}
+.item-check:hover{background:rgba(0,0,0,0.03)}
+.item-check input{width:16px;height:16px;accent-color:#007AFF}
+.item-check.checked{color:#007AFF;font-weight:600}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ios-spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="logo"><div class="sheets-icon">a4</div><span>aPlan4Sheets</span></div>
+  <div class="site-nav-links"><a href="/demos.html">← Back to Demos</a><a href="https://aplan4sheets.com">Home</a></div>
+  <button class="cta-btn">Install Free</button>
+</nav>
+
+<div class="demo-controls">
+  <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+  <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
+  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 7 — <span id="stepLabel">Existing HC Pivot</span></div>
+</div>
+<div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
+
+<div class="browser-frame">
+  <div class="sheets-toolbar"><div class="doc-icon">📊</div><div class="doc-name">FY26 Headcount Planning</div></div>
+  <div class="formula-bar"><div class="cell-ref" id="cellRef">A1</div><span class="fx">fx</span><span id="formulaText"></span></div>
+  <div class="main-area">
+    <div class="grid-area">
+      <div class="grid-container"><table class="grid-table" id="gridTable"></table></div>
+      <div class="sheet-tabs" id="sheetTabs"><div class="sheet-tab active">[P] HC Number</div></div>
+    </div>
+    <div class="sidebar-area visible" id="sidebar">
+      <div class="sidebar-inner connector-ui" id="sidebarContent"></div>
+    </div>
+  </div>
+</div>
+
+<div class="module-picker-overlay" id="pickerOverlay">
+  <div class="module-picker" id="pickerContent"></div>
+</div>
+
+<div class="progress-overlay" id="progOverlay">
+  <div class="progress-modal" id="progContent"></div>
+</div>
+
+<audio id="audio-1" src="audio/multi-module-1.mp3" preload="auto"></audio>
+<audio id="audio-2" src="audio/multi-module-2.mp3" preload="auto"></audio>
+<audio id="audio-3" src="audio/multi-module-3.mp3" preload="auto"></audio>
+<audio id="audio-4" src="audio/multi-module-4.mp3" preload="auto"></audio>
+<audio id="audio-5" src="audio/multi-module-5.mp3" preload="auto"></audio>
+<audio id="audio-6" src="audio/multi-module-6.mp3" preload="auto"></audio>
+<audio id="audio-7" src="audio/multi-module-7.mp3" preload="auto"></audio>
+<script>
+const SCENES=[
+  {name:'Existing HC Pivot',duration:6000},
+  {name:'Click Add Module',duration:5000},
+  {name:'Compatible Modules List',duration:7000},
+  {name:'Load Second Module Dims',duration:6000},
+  {name:'Select Line Item',duration:6000},
+  {name:'Execute Combined Pivot',duration:10000},
+  {name:'Formatted Output',duration:10000},
+];
+const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
+let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
+
+function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
+function restartDemo(){
+  playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
+  currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
+  document.getElementById('pickerOverlay').classList.remove('visible');
+  document.getElementById('progOverlay').classList.remove('visible');
+  fillInitialGrid();updateProgress();runScene(0);
+}
+function updateProgress(){
+  document.getElementById('globalProgress').style.width=Math.min((elapsed/TOTAL)*100,100)+'%';
+  document.getElementById('stepNum').textContent=currentScene+1;
+  document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete';
+}
+function runScene(idx){
+  if(idx>=SCENES.length){currentScene=SCENES.length-1;updateProgress();return}
+  currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);
+  [scene1,scene2,scene3,scene4,scene5,scene6,scene7][idx]();
+  sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);
+  const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;document.getElementById('globalProgress').style.width=Math.min(((elapsed+se)/TOTAL)*100,100)+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};
+  animFrameId=requestAnimationFrame(tick);
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+const hcData=[
+  {owner:'CEO',beg:1,new:0,term:0,end:1},
+  {owner:'CTO',beg:42,new:8,term:2,end:48},
+  {owner:'CFO',beg:18,new:3,term:1,end:20},
+  {owner:'CRO',beg:35,new:12,term:3,end:44},
+  {owner:'VP Engineering',beg:28,new:5,term:1,end:32},
+  {owner:'VP Product',beg:15,new:4,term:0,end:19},
+  {owner:'VP Marketing',beg:22,new:6,term:2,end:26},
+  {owner:'Total',beg:161,new:38,term:9,end:190},
+];
+
+function fillInitialGrid(){
+  const t=document.getElementById('gridTable');
+  const cols=['Executive Owner','Beginning HC','New Hires','Terminations','Ending HC'];
+  let html='<thead><tr><th class="corner"></th>';
+  'ABCDE'.split('').forEach(l=>{html+=`<th class="col-header">${l}</th>`});
+  html+='</tr><tr><th class="row-header">1</th>';
+  cols.forEach(c=>{html+=`<th style="font-size:10px;font-weight:600;padding:3px 8px">${c}</th>`});
+  html+='</tr></thead><tbody>';
+  hcData.forEach((r,i)=>{
+    const cls=r.owner==='Total'?'total-row':'';
+    html+=`<tr><td class="row-header">${i+2}</td><td class="${cls}" style="font-weight:${r.owner==='Total'?700:500}">${r.owner}</td>`;
+    html+=`<td class="${cls} num">${r.beg}</td><td class="${cls} num">${r.new}</td><td class="${cls} num${r.term>0?' neg':''}">${r.term>0?'('+r.term+')':r.term}</td><td class="${cls} num">${r.end}</td></tr>`;
+  });
+  for(let r=hcData.length+2;r<=20;r++){html+=`<tr><td class="row-header">${r}</td><td></td><td></td><td></td><td></td><td></td></tr>`}
+  html+='</tbody>';t.innerHTML=html;
+}
+
+// Scene 1: Show existing HC grid
+async function scene1(){
+  fillInitialGrid();
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div style="background:var(--ios-surface);padding:12px;border-radius:12px;margin-bottom:8px;border:1px solid var(--ios-border)">
+      <div style="font-size:13px;font-weight:600;color:var(--ios-text-primary);margin-bottom:8px">Active Pivot: HC Number</div>
+      <div style="font-size:11px;color:var(--ios-text-secondary);margin-bottom:4px">Module: HC01 Headcount Tracker</div>
+      <div style="font-size:11px;color:var(--ios-text-secondary);margin-bottom:8px">Rows: Executive Owner • Cols: Line Items</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-primary" style="flex:1;font-size:12px;background:linear-gradient(135deg,#00C7BE,#0891B2)" id="addModuleBtn">+ Add Module</button>
+        <button class="btn-primary" style="flex:1;font-size:12px" disabled>Execute</button>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--ios-text-tertiary);text-align:center;padding:8px">Multi-module pivots combine data from multiple Anaplan modules with compatible dimensions.</div>
+  `;
+  await wait(2000);
+  // Highlight a cell
+  document.getElementById('cellRef').textContent='E3';
+  document.getElementById('formulaText').textContent='48';
+}
+
+// Scene 2: Click Add Module
+async function scene2(){
+  const btn=document.getElementById('addModuleBtn');
+  btn.style.transform='scale(0.97)';await wait(150);btn.style.transform='';
+  await wait(600);
+  // Open module picker
+  const picker=document.getElementById('pickerContent');
+  picker.innerHTML=`
+    <h3>Add Compatible Module</h3>
+    <div class="subtitle">Showing modules with matching dimension: Executive Owner</div>
+    <div id="compatList" style="max-height:320px;overflow-y:auto"></div>
+  `;
+  document.getElementById('pickerOverlay').classList.add('visible');
+  await wait(800);
+  // Show loading
+  document.getElementById('compatList').innerHTML='<div style="text-align:center;padding:24px;color:#9ca3af"><div style="width:24px;height:24px;border:3px solid #e5e7eb;border-top-color:#007AFF;border-radius:50%;animation:ios-spin .8s linear infinite;margin:0 auto 12px"></div>Finding compatible modules...</div>';
+}
+
+// Scene 3: Show 7 compatible modules
+async function scene3(){
+  const mods=[
+    {name:'HC Number Version Comp',dims:'Executive Owner, Line Items, Versions',badge:'Compatible'},
+    {name:'HC FTE Tracker',dims:'Executive Owner, Line Items, Time',badge:'Compatible'},
+    {name:'HC Cost Allocation',dims:'Executive Owner, Cost Center, Time',badge:'Compatible'},
+    {name:'HC Open Positions',dims:'Executive Owner, Req Status, Time',badge:'Compatible'},
+    {name:'HC Attrition Model',dims:'Executive Owner, Line Items',badge:'Compatible'},
+    {name:'HC Compensation Plan',dims:'Executive Owner, Pay Grade, Time',badge:'Compatible'},
+    {name:'HC Org Chart',dims:'Executive Owner, Department, Region',badge:'Compatible'},
+  ];
+  const list=document.getElementById('compatList');
+  list.innerHTML='';
+  for(const m of mods){
+    await wait(200);
+    list.insertAdjacentHTML('beforeend',`
+      <div class="compat-module" data-name="${m.name}">
+        <div style="width:8px;height:8px;background:#30D158;border-radius:50%;flex-shrink:0"></div>
+        <div style="flex:1"><div class="mod-name">${m.name}</div><div class="mod-dims">${m.dims}</div></div>
+        <span class="compat-badge">${m.badge}</span>
+      </div>
+    `);
+  }
+  // Select first one
+  await wait(1200);
+  list.querySelector('[data-name="HC Number Version Comp"]').classList.add('selected');
+}
+
+// Scene 4: Close picker, load second module dims in sidebar
+async function scene4(){
+  await wait(800);
+  document.getElementById('pickerOverlay').classList.remove('visible');
+  await wait(500);
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div style="background:var(--ios-surface);padding:12px;border-radius:12px;margin-bottom:8px;border:1px solid var(--ios-border)">
+      <div style="font-size:13px;font-weight:600;color:var(--ios-text-primary);margin-bottom:4px">Primary: HC Number</div>
+      <div style="font-size:11px;color:var(--ios-text-secondary);margin-bottom:2px">Rows: Executive Owner • Cols: Line Items</div>
+    </div>
+    <div style="background:rgba(0,122,255,0.05);padding:12px;border-radius:12px;margin-bottom:8px;border:1px solid rgba(0,122,255,0.2)">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <div style="width:8px;height:8px;background:#007AFF;border-radius:50%"></div>
+        <span style="font-size:13px;font-weight:600;color:#007AFF">Secondary: HC Number Version Comp</span>
+      </div>
+      <div style="font-size:11px;color:var(--ios-text-secondary);margin-bottom:8px">Dimensions: Executive Owner, Line Items, Versions</div>
+      <div style="font-size:12px;font-weight:500;color:var(--ios-text-primary);margin-bottom:6px">Select Line Items:</div>
+      <div id="secLineItems" style="max-height:140px;overflow-y:auto;background:white;border-radius:8px;border:1px solid var(--ios-border);padding:4px"></div>
+    </div>
+    <button class="btn-primary" id="execBtn" disabled style="margin-top:8px">Execute Combined Pivot</button>
+  `;
+  // Show line items loading
+  await wait(800);
+  const lis=document.getElementById('secLineItems');
+  lis.innerHTML=`
+    <div class="item-check" id="sli0"><input type="checkbox"><span>Beginning HC Variance</span></div>
+    <div class="item-check" id="sli1"><input type="checkbox"><span>New Hire Variance</span></div>
+    <div class="item-check" id="sli2"><input type="checkbox"><span>Termination Variance</span></div>
+    <div class="item-check" id="sli3"><input type="checkbox"><span>Ending HC Variance</span></div>
+    <div class="item-check" id="sli4"><input type="checkbox"><span>Net Change Variance</span></div>
+  `;
+}
+
+// Scene 5: Select "Ending HC Variance"
+async function scene5(){
+  await wait(1500);
+  const el=document.getElementById('sli3');
+  el.querySelector('input').checked=true;
+  el.classList.add('checked');
+  await wait(800);
+  document.getElementById('execBtn').disabled=false;
+  await wait(1000);
+  document.getElementById('execBtn').style.transform='scale(0.97)';
+  await wait(150);
+  document.getElementById('execBtn').style.transform='';
+}
+
+// Scene 6: Execute → progress
+async function scene6(){
+  document.getElementById('execBtn').disabled=true;
+  document.getElementById('execBtn').textContent='Executing...';
+  const prog=document.getElementById('progContent');
+  prog.innerHTML=`
+    <h3 style="font-size:17px;font-weight:600;margin-bottom:16px;color:#1F2937">Executing Combined Pivot</h3>
+    <div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span id="progLabel">Fetching HC Number...</span><span id="progPct">0%</span></div>
+      <div class="prog-bar-wrap"><div class="prog-bar" id="progBar"></div></div>
+    </div>
+    <div style="font-size:11px;color:#6B7280" id="progDetail">Loading primary module data</div>
+  `;
+  document.getElementById('progOverlay').classList.add('visible');
+
+  const stages=[
+    {pct:25,label:'Fetching HC Number...',detail:'190 cells from primary module'},
+    {pct:50,label:'Fetching HC Number Version Comp...',detail:'Loading secondary module data'},
+    {pct:75,label:'Merging data...',detail:'Combining by Executive Owner dimension'},
+    {pct:100,label:'Writing to sheet...',detail:'Combined grid: 8 rows × 6 columns'},
+  ];
+  for(const s of stages){
+    await wait(1500);
+    document.getElementById('progBar').style.width=s.pct+'%';
+    document.getElementById('progPct').textContent=s.pct+'%';
+    document.getElementById('progLabel').textContent=s.label;
+    document.getElementById('progDetail').textContent=s.detail;
+  }
+  await wait(800);
+  document.getElementById('progBar').classList.add('complete');
+  document.getElementById('progLabel').textContent='✓ Combined pivot complete!';
+  document.getElementById('progLabel').style.color='#059669';
+  await wait(1000);
+  document.getElementById('progOverlay').classList.remove('visible');
+}
+
+// Scene 7: Show combined grid with both modules
+async function scene7(){
+  const t=document.getElementById('gridTable');
+  const variances=[3,-2,1,5,2,3,0,12];
+  const cols=['Executive Owner','Beginning HC','New Hires','Terminations','Ending HC','','Ending HC Δ'];
+  let html='<thead><tr><th class="corner"></th>';
+  'ABCDEFG'.split('').forEach(l=>{html+=`<th class="col-header">${l}</th>`});
+  html+='</tr><tr><th class="row-header">1</th>';
+  cols.forEach((c,i)=>{
+    const style=i===6?'font-size:10px;font-weight:600;padding:3px 8px;background:#f0fdf4;border-left:2px solid #0f9d58':'font-size:10px;font-weight:600;padding:3px 8px';
+    html+=`<th style="${style}">${c}</th>`;
+  });
+  html+='</tr></thead><tbody>';
+  hcData.forEach((r,i)=>{
+    const cls=r.owner==='Total'?'total-row':'';
+    const v=variances[i];
+    html+=`<tr><td class="row-header">${i+2}</td><td class="${cls}" style="font-weight:${r.owner==='Total'?700:500}">${r.owner}</td>`;
+    html+=`<td class="${cls} num">${r.beg}</td><td class="${cls} num">${r.new}</td><td class="${cls} num${r.term>0?' neg':''}">${r.term>0?'('+r.term+')':r.term}</td><td class="${cls} num">${r.end}</td>`;
+    html+=`<td class="${cls}" style="border-left:2px solid #dadce0"></td>`;
+    html+=`<td class="${cls} num secondary">${v>0?'+'+v:v===0?'—':v}</td></tr>`;
+  });
+  html+='</tbody>';
+
+  // Animate rows appearing
+  t.innerHTML='';
+  const tmp=document.createElement('div');tmp.innerHTML=html;
+  const thead=tmp.querySelector('thead');
+  t.appendChild(thead);
+  const tbody=document.createElement('tbody');t.appendChild(tbody);
+  const bodyRows=tmp.querySelectorAll('tbody tr');
+  for(const row of bodyRows){
+    await wait(300);
+    tbody.appendChild(row);
+  }
+  document.getElementById('cellRef').textContent='G3';
+  document.getElementById('formulaText').textContent='-2';
+
+  // Update sidebar
+  await wait(500);
+  document.getElementById('execBtn').disabled=false;
+  document.getElementById('execBtn').textContent='Execute Combined Pivot';
+  document.getElementById('execBtn').style.background='linear-gradient(135deg,#30D158,#34C759)';
+  document.getElementById('execBtn').textContent='✓ Combined pivot active';
+}
+
+// === Audio Narration ===
+let audioMuted = false;
+const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5'),document.getElementById('audio-6'),document.getElementById('audio-7')];
+function toggleMute(){
+  audioMuted = !audioMuted;
+  document.getElementById('muteBtn').textContent = audioMuted ? '🔇' : '🔊';
+  if(audioMuted) audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+}
+function playNarration(idx){
+  if(audioMuted || idx < 0 || idx >= audioClips.length) return;
+  audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+  audioClips[idx].play().catch(()=>{});
+}
+
+fillInitialGrid();
+document.getElementById('sidebar').classList.add('visible');
+setTimeout(()=>runScene(0),500);
+</script>
+</body>
+</html>

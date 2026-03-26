@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scheduled Refresh — aPlan4Sheets Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.site-nav{background:#1a2744;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px}
+.site-nav .logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;letter-spacing:-.3px}
+.site-nav .logo .sheets-icon{width:28px;height:28px;background:#0f9d58;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700}
+.site-nav-links{display:flex;gap:24px;font-size:14px;font-weight:500}
+.site-nav-links a{color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
+.site-nav-links a:hover{color:#fff}
+.site-nav .cta-btn{background:#0f9d58;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer}
+.demo-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 24px;background:#f8f9fa;border-bottom:1px solid #e5e7eb}
+.demo-controls button{border:none;border-radius:6px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.ctrl-play{background:#0f9d58;color:#fff}.ctrl-play:hover{background:#0b8a4a}
+.ctrl-restart{background:#e5e7eb;color:#374151}.ctrl-restart:hover{background:#d1d5db}
+.ctrl-mute{background:#e5e7eb;color:#374151;font-size:16px;padding:6px 12px}.ctrl-mute:hover{background:#d1d5db}
+.step-indicator{font-size:13px;color:#6b7280;font-weight:500}.step-indicator .current{color:#1a2744;font-weight:700}
+.global-progress{height:3px;background:#e5e7eb}.global-progress-fill{height:100%;background:linear-gradient(90deg,#0f9d58,#34a853);width:0%;transition:width .4s ease}
+.browser-frame{display:flex;flex-direction:column;height:calc(100vh - 56px);background:#fff;overflow:hidden}
+.sheets-toolbar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:#1e8e3e;height:40px;color:#fff;font-size:13px;font-weight:500}
+.sheets-toolbar .doc-icon{width:24px;height:24px;background:#fff;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#1e8e3e;font-size:14px;font-weight:700}
+.sheets-toolbar .doc-name{font-weight:600;margin-right:auto}
+.formula-bar{display:flex;align-items:center;height:28px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368}
+.formula-bar .cell-ref{background:#f1f3f4;border-radius:3px;padding:2px 8px;margin-right:8px;font-weight:500;min-width:48px;text-align:center}
+.formula-bar .fx{color:#5f6368;margin-right:6px;font-style:italic}
+.main-area{display:flex;flex:1;overflow:hidden}
+.grid-area{flex:1;position:relative;background:#fff;overflow:hidden}
+.sheet-tabs{display:flex;align-items:center;height:28px;background:#f1f3f4;border-top:1px solid #dadce0;padding:0 8px;gap:2px;font-size:12px;color:#5f6368}
+.sheet-tab{padding:4px 16px;border-radius:4px 4px 0 0;cursor:default;white-space:nowrap}
+.sheet-tab.active{background:#fff;font-weight:600;color:#1e8e3e;border:1px solid #dadce0;border-bottom:1px solid #fff;margin-bottom:-1px}
+.grid-container{position:absolute;top:0;left:0;right:0;bottom:28px;overflow:hidden}
+.grid-table{border-collapse:collapse;font-size:11px;font-family:'Inter',-apple-system,sans-serif}
+.grid-table th{background:#f8f9fa;border:1px solid #e0e0e0;padding:2px 6px;font-weight:500;color:#5f6368;position:sticky;top:0;z-index:2;white-space:nowrap;min-width:32px}
+.grid-table td{border:1px solid #e0e0e0;padding:2px 6px;white-space:nowrap;min-width:32px}
+.grid-table .row-header{background:#f8f9fa;font-weight:500;color:#5f6368;text-align:center;position:sticky;left:0;z-index:1}
+.grid-table .col-header{text-align:center}
+.grid-table .corner{background:#f8f9fa;position:sticky;left:0;top:0;z-index:3}
+.sidebar-area{width:360px;min-width:360px;border-left:1px solid #dadce0;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateX(20px);transition:all .4s cubic-bezier(.25,.46,.45,.94)}
+.sidebar-area.visible{opacity:1;transform:translateX(0)}
+.sidebar-inner{flex:1;overflow-y:auto;padding:8px}
+.connector-ui{
+  --ios-primary:#007AFF;--ios-success:#30D158;--ios-warning:#FF9F0A;--ios-text-primary:rgba(0,0,0,1);--ios-text-secondary:rgba(60,60,67,0.85);--ios-text-tertiary:rgba(60,60,67,0.6);--ios-text-inverse:#fff;
+  --ios-border:rgba(60,60,67,0.25);--ios-border-light:rgba(60,60,67,0.15);--ios-separator:rgba(60,60,67,0.18);
+  --ios-shadow-sm:0 2px 8px rgba(0,0,0,0.06);--ios-radius-xs:6px;--ios-radius-sm:8px;--ios-radius-md:12px;
+  --ios-ease:cubic-bezier(0.25,0.46,0.45,0.94);--ios-transition:all 0.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  --ios-glass-thick:rgba(248,248,248,0.92);--ios-bg-primary:#FFFFFF;--ios-surface:rgba(255,255,255,0.85);--ios-surface-elevated:rgba(255,255,255,0.95);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:14px;color:var(--ios-text-primary);-webkit-font-smoothing:antialiased;
+  background:linear-gradient(135deg,#E8F4FD 0%,#FFF4E6 25%,#F3E7FF 50%,#E6F7FF 75%,#FFF0F5 100%);background-size:400% 400%;animation:meshGradient 15s ease infinite;line-height:1.4;
+}
+@keyframes meshGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.connector-ui .nav-card{background:var(--ios-glass-thick);border:1px solid var(--ios-border);border-radius:var(--ios-radius-md);margin-bottom:4px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08),inset 0 1px 0 0 rgba(255,255,255,0.8);transition:var(--ios-transition)}
+.connector-ui .nav-card-header{padding:6px 8px;cursor:pointer;font-size:13px;font-weight:600;background:rgba(255,255,255,0.6);border-bottom:1px solid var(--ios-border);display:flex;justify-content:space-between;align-items:center;min-height:38px}
+.connector-ui .nav-card-content{display:none;padding:8px}
+.connector-ui .nav-card.active .nav-card-content{display:block}
+.connector-ui .nav-icon-container{display:inline-flex;align-items:center;gap:8px}
+.connector-ui .nav-icon-circle{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.5);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.connector-ui .btn-primary{background:var(--ios-primary);color:var(--ios-text-inverse);padding:8px 16px;border-radius:var(--ios-radius-sm);font-size:13px;min-height:32px;font-weight:600;box-shadow:var(--ios-shadow-sm);width:100%;border:none;cursor:pointer;font-family:inherit}
+
+/* Schedule form */
+.sched-form{background:white;border-radius:12px;border:1px solid rgba(60,60,67,0.15);padding:12px;margin-bottom:12px}
+.sched-form label{font-size:12px;font-weight:500;color:var(--ios-text-secondary);display:block;margin-bottom:4px}
+.sched-form select,.sched-form input[type="time"]{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--ios-separator);font-size:13px;font-family:inherit;background:white;color:var(--ios-text-primary);margin-bottom:10px;appearance:auto}
+.sched-form select:focus,.sched-form input:focus{outline:none;border-color:var(--ios-primary);box-shadow:0 0 0 3px rgba(0,122,255,0.1)}
+
+/* Schedule list item */
+.sched-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:6px;border:1px solid #e5e7eb;background:#f9fafb;transition:all .3s}
+.sched-item.running{border-color:#2563eb;background:#eff6ff}
+.sched-item .sched-name{flex:1;font-size:13px;font-weight:500;color:#374151}
+.sched-item .sched-freq{font-size:10px;color:#6B7280;background:#f3f4f6;padding:2px 6px;border-radius:8px}
+.sched-item .sched-next{font-size:10px;color:#9ca3af}
+
+/* Sheet refresh status */
+.refresh-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;margin-bottom:4px;background:#f9fafb;border:1px solid #e5e7eb;transition:all .3s}
+.refresh-item.done{border-color:#059669;background:#f0fdf4}
+.refresh-item.running{border-color:#2563eb;background:#eff6ff}
+.refresh-item .rf-name{flex:1;font-size:12px;font-weight:500}
+.refresh-item .rf-status{font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px}
+
+.checkbox-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:12px;cursor:pointer}
+.checkbox-item input{width:16px;height:16px;accent-color:#FF9F0A}
+
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ios-spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="logo"><div class="sheets-icon">a4</div><span>aPlan4Sheets</span></div>
+  <div class="site-nav-links"><a href="/demos.html">← Back to Demos</a><a href="https://aplan4sheets.com">Home</a></div>
+  <button class="cta-btn">Install Free</button>
+</nav>
+
+<div class="demo-controls">
+  <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+  <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
+  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 6 — <span id="stepLabel">Schedule Tab</span></div>
+</div>
+<div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
+
+<div class="browser-frame">
+  <div class="sheets-toolbar"><div class="doc-icon">📊</div><div class="doc-name">FY26 Financial Planning</div></div>
+  <div class="formula-bar"><div class="cell-ref">A1</div><span class="fx">fx</span><span></span></div>
+  <div class="main-area">
+    <div class="grid-area">
+      <div class="grid-container"><table class="grid-table" id="gridTable"></table></div>
+      <div class="sheet-tabs"><div class="sheet-tab active">[P] Full Year P&L</div><div class="sheet-tab">Revenue by Product</div><div class="sheet-tab">HC Tracker</div></div>
+    </div>
+    <div class="sidebar-area visible" id="sidebar">
+      <div class="sidebar-inner connector-ui" id="sidebarContent"></div>
+    </div>
+  </div>
+</div>
+
+<audio id="audio-1" src="audio/schedule-1.mp3" preload="auto"></audio>
+<audio id="audio-2" src="audio/schedule-2.mp3" preload="auto"></audio>
+<audio id="audio-3" src="audio/schedule-3.mp3" preload="auto"></audio>
+<audio id="audio-4" src="audio/schedule-4.mp3" preload="auto"></audio>
+<audio id="audio-5" src="audio/schedule-5.mp3" preload="auto"></audio>
+<audio id="audio-6" src="audio/schedule-6.mp3" preload="auto"></audio>
+<script>
+const SCENES=[
+  {name:'Schedule Tab',duration:6000},
+  {name:'Add Schedule Form',duration:7000},
+  {name:'Configure Frequency',duration:7000},
+  {name:'Select Sheets',duration:7000},
+  {name:'Save Schedule',duration:6000},
+  {name:'Schedule Executing',duration:12000},
+];
+const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
+let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
+
+function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
+function restartDemo(){
+  playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
+  currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
+  updateProgress();runScene(0);
+}
+function updateProgress(){
+  document.getElementById('globalProgress').style.width=Math.min((elapsed/TOTAL)*100,100)+'%';
+  document.getElementById('stepNum').textContent=currentScene+1;
+  document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete';
+}
+function runScene(idx){
+  if(idx>=SCENES.length){currentScene=SCENES.length-1;updateProgress();return}
+  currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);
+  [scene1,scene2,scene3,scene4,scene5,scene6][idx]();
+  sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);
+  const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;document.getElementById('globalProgress').style.width=Math.min(((elapsed+se)/TOTAL)*100,100)+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};
+  animFrameId=requestAnimationFrame(tick);
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+function initGrid(){
+  const t=document.getElementById('gridTable');const L='ABCDEFGHIJ'.split('');
+  let h='<thead><tr><th class="corner"></th>';L.forEach(l=>{h+=`<th class="col-header">${l}</th>`});
+  h+='</tr></thead><tbody>';for(let r=1;r<=25;r++){h+=`<tr><td class="row-header">${r}</td>`;L.forEach(()=>{h+='<td></td>'});h+='</tr>'}h+='</tbody>';t.innerHTML=h;
+}
+
+// Scene 1: Show schedule tab in sidebar
+async function scene1(){
+  initGrid();
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div class="nav-card" data-section="runTab"><div class="nav-card-header"><div class="nav-icon-container"><div class="nav-icon-circle"><svg viewBox="0 0 16 16" style="width:16px;height:16px"><path d="M8 2.5v7" stroke="#0A84FF" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M5.5 5L8 2.5L10.5 5" stroke="#0A84FF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10.5v2c0 .828.672 1.5 1.5 1.5h7c.828 0 1.5-.672 1.5-1.5v-2" stroke="#0A84FF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Exports</span></div></div></div>
+    <div class="nav-card" data-section="pivotTab"><div class="nav-card-header"><div class="nav-icon-container"><div class="nav-icon-circle"><svg viewBox="0 0 16 16" style="width:16px;height:16px"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx=".8" stroke="#BF5AF2" stroke-width="1.6" fill="none"/><rect x="9" y="2.5" width="4.5" height="4.5" rx=".8" stroke="#BF5AF2" stroke-width="1.6" fill="none" opacity=".6"/><rect x="2.5" y="9" width="4.5" height="4.5" rx=".8" stroke="#BF5AF2" stroke-width="1.6" fill="none" opacity=".6"/><rect x="9" y="9" width="4.5" height="4.5" rx=".8" stroke="#BF5AF2" stroke-width="1.6" fill="none" opacity=".35"/></svg></div><span>Pivot Views</span></div></div></div>
+    <div class="nav-card active" data-section="scheduleTab" id="schedCard">
+      <div class="nav-card-header">
+        <div class="nav-icon-container">
+          <div class="nav-icon-circle"><svg viewBox="0 0 16 16" style="width:16px;height:16px"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5" stroke="#FF9F0A" stroke-width="1.6" fill="none"/><path d="M2.5 6h11M5.5 2v2.5M10.5 2v2.5" stroke="#FF9F0A" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="10.5" r="2.8" stroke="#FF9F0A" stroke-width="1.6" fill="none"/><path d="M10 9v1.5h1.3" stroke="#FF9F0A" stroke-width="1.3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span>Schedule</span>
+        </div>
+      </div>
+      <div class="nav-card-content" id="schedContent">
+        <div style="text-align:center;padding:20px;color:var(--ios-text-tertiary);font-size:12px">
+          <div style="font-size:24px;margin-bottom:8px">⏰</div>
+          No schedules configured yet.<br>Set up automatic data refreshes.
+        </div>
+        <button class="btn-primary" id="addSchedBtn" style="background:linear-gradient(135deg,#FF9F0A,#FFCC00);color:#1F2937">+ Add Schedule</button>
+      </div>
+    </div>
+  `;
+  await wait(2000);
+  // Highlight the schedule card
+  document.getElementById('schedCard').style.boxShadow='0 2px 12px rgba(255,159,10,0.2)';
+}
+
+// Scene 2: Click Add Schedule → form appears
+async function scene2(){
+  await wait(800);
+  const btn=document.getElementById('addSchedBtn');
+  btn.style.transform='scale(0.97)';await wait(150);btn.style.transform='';
+  await wait(600);
+  document.getElementById('schedContent').innerHTML=`
+    <div class="sched-form" id="schedForm" style="animation:slideDown .3s ease">
+      <div style="font-size:14px;font-weight:600;margin-bottom:12px;color:#1F2937">New Schedule</div>
+      <label>Frequency</label>
+      <select id="freqSelect"><option value="">Select frequency...</option><option>Hourly</option><option>Daily</option><option>Weekly</option></select>
+      <div id="freqOptions" style="display:none"></div>
+      <div id="sheetSelect" style="display:none"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button style="flex:1;padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;color:#6B7280;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit">Cancel</button>
+        <button class="btn-primary" id="saveSchedBtn" style="flex:1;background:linear-gradient(135deg,#FF9F0A,#FFCC00);color:#1F2937" disabled>Save Schedule</button>
+      </div>
+    </div>
+  `;
+}
+
+// Scene 3: Select Hourly
+async function scene3(){
+  await wait(1200);
+  const sel=document.getElementById('freqSelect');
+  sel.value='Hourly';
+  sel.style.borderColor='#FF9F0A';
+  await wait(800);
+  document.getElementById('freqOptions').style.display='block';
+  document.getElementById('freqOptions').innerHTML=`
+    <label>Run every</label>
+    <select id="intervalSelect" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(60,60,67,0.18);font-size:13px;font-family:inherit;margin-bottom:10px">
+      <option>1 hour</option><option selected>2 hours</option><option>4 hours</option><option>6 hours</option>
+    </select>
+    <label>Starting at</label>
+    <input type="time" value="06:00" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(60,60,67,0.18);font-size:13px;font-family:inherit;margin-bottom:10px">
+  `;
+  await wait(1500);
+  document.getElementById('intervalSelect').value='1 hour';
+  document.getElementById('intervalSelect').style.borderColor='#FF9F0A';
+}
+
+// Scene 4: Select sheets
+async function scene4(){
+  await wait(800);
+  document.getElementById('sheetSelect').style.display='block';
+  document.getElementById('sheetSelect').innerHTML=`
+    <label style="font-size:12px;font-weight:500;color:rgba(60,60,67,0.85);display:block;margin-bottom:6px">Include Sheets:</label>
+    <div style="background:white;border:1px solid rgba(60,60,67,0.15);border-radius:8px;padding:4px">
+      <div class="checkbox-item" id="cb1"><input type="checkbox"><span>[P] Full Year P&L</span></div>
+      <div class="checkbox-item" id="cb2"><input type="checkbox"><span>Revenue by Product</span></div>
+      <div class="checkbox-item" id="cb3"><input type="checkbox"><span>HC Tracker</span></div>
+    </div>
+  `;
+  // Check them one by one
+  await wait(800);
+  document.getElementById('cb1').querySelector('input').checked=true;
+  await wait(600);
+  document.getElementById('cb2').querySelector('input').checked=true;
+  await wait(600);
+  document.getElementById('cb3').querySelector('input').checked=true;
+  await wait(500);
+  document.getElementById('saveSchedBtn').disabled=false;
+}
+
+// Scene 5: Save → schedule appears in list
+async function scene5(){
+  await wait(800);
+  document.getElementById('saveSchedBtn').style.transform='scale(0.97)';
+  await wait(150);
+  document.getElementById('saveSchedBtn').style.transform='';
+  await wait(600);
+  document.getElementById('schedContent').innerHTML=`
+    <div style="animation:slideDown .3s ease">
+      <div class="sched-item" id="schedItem1">
+        <div style="width:8px;height:8px;background:#FF9F0A;border-radius:50%;flex-shrink:0"></div>
+        <div style="flex:1">
+          <div class="sched-name">Hourly Refresh</div>
+          <div class="sched-next">Next run: Today at 7:00 AM CDT</div>
+        </div>
+        <div class="sched-freq">Every 1hr</div>
+      </div>
+      <div style="text-align:center;margin:12px 0">
+        <span style="font-size:11px;color:#059669;font-weight:600">✓ Schedule saved successfully</span>
+      </div>
+      <div style="font-size:11px;color:var(--ios-text-tertiary);text-align:center;margin-top:8px">3 sheets will refresh automatically every hour</div>
+      <button class="btn-primary" id="addSchedBtn2" style="background:linear-gradient(135deg,#FF9F0A,#FFCC00);color:#1F2937;margin-top:12px">+ Add Another Schedule</button>
+    </div>
+  `;
+}
+
+// Scene 6: Simulate schedule executing
+async function scene6(){
+  await wait(1000);
+  document.getElementById('schedItem1').classList.add('running');
+  document.getElementById('schedItem1').querySelector('.sched-next').textContent='Running now...';
+  document.getElementById('schedItem1').querySelector('.sched-next').style.color='#2563eb';
+  await wait(600);
+
+  // Show refresh progress in sidebar
+  const addBtn=document.getElementById('addSchedBtn2');
+  if(addBtn)addBtn.style.display='none';
+
+  const schedContent=document.getElementById('schedContent');
+  const refreshDiv=document.createElement('div');
+  refreshDiv.style.marginTop='12px';
+  refreshDiv.innerHTML=`
+    <div style="font-size:12px;font-weight:600;color:#1F2937;margin-bottom:8px">Refreshing sheets...</div>
+    <div class="refresh-item" id="rf1"><div style="width:14px;height:14px;border:2px solid #e5e7eb;border-top-color:#2563eb;border-radius:50%;flex-shrink:0" id="rf1icon"></div><div class="rf-name">[P] Full Year P&L</div><span class="rf-status" style="background:#dbeafe;color:#2563eb" id="rf1status">Running</span></div>
+    <div class="refresh-item" id="rf2"><div style="width:14px;height:14px;border-radius:50%;background:#e5e7eb;flex-shrink:0" id="rf2icon"></div><div class="rf-name">Revenue by Product</div><span class="rf-status" style="background:#f3f4f6;color:#9ca3af" id="rf2status">Pending</span></div>
+    <div class="refresh-item" id="rf3"><div style="width:14px;height:14px;border-radius:50%;background:#e5e7eb;flex-shrink:0" id="rf3icon"></div><div class="rf-name">HC Tracker</div><span class="rf-status" style="background:#f3f4f6;color:#9ca3af" id="rf3status">Pending</span></div>
+  `;
+  schedContent.appendChild(refreshDiv);
+  document.getElementById('rf1icon').style.animation='ios-spin .8s linear infinite';
+
+  // Sheet 1 done
+  await wait(2500);
+  document.getElementById('rf1').classList.add('done');
+  document.getElementById('rf1icon').style.animation='none';
+  document.getElementById('rf1icon').style.background='#d1fae5';
+  document.getElementById('rf1icon').style.border='none';
+  document.getElementById('rf1icon').innerHTML='<svg viewBox="0 0 14 14" style="width:14px;height:14px"><path d="M3 7l3 3 5-5" stroke="#059669" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  document.getElementById('rf1status').style.background='#d1fae5';
+  document.getElementById('rf1status').style.color='#059669';
+  document.getElementById('rf1status').textContent='Done';
+
+  // Sheet 2 running
+  document.getElementById('rf2').classList.add('running');
+  document.getElementById('rf2icon').style.border='2px solid #e5e7eb';
+  document.getElementById('rf2icon').style.borderTopColor='#2563eb';
+  document.getElementById('rf2icon').style.background='transparent';
+  document.getElementById('rf2icon').style.animation='ios-spin .8s linear infinite';
+  document.getElementById('rf2status').style.background='#dbeafe';
+  document.getElementById('rf2status').style.color='#2563eb';
+  document.getElementById('rf2status').textContent='Running';
+
+  await wait(2000);
+  document.getElementById('rf2').classList.remove('running');
+  document.getElementById('rf2').classList.add('done');
+  document.getElementById('rf2icon').style.animation='none';
+  document.getElementById('rf2icon').style.background='#d1fae5';
+  document.getElementById('rf2icon').style.border='none';
+  document.getElementById('rf2icon').innerHTML='<svg viewBox="0 0 14 14" style="width:14px;height:14px"><path d="M3 7l3 3 5-5" stroke="#059669" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  document.getElementById('rf2status').style.background='#d1fae5';
+  document.getElementById('rf2status').style.color='#059669';
+  document.getElementById('rf2status').textContent='Done';
+
+  // Sheet 3 running
+  document.getElementById('rf3').classList.add('running');
+  document.getElementById('rf3icon').style.border='2px solid #e5e7eb';
+  document.getElementById('rf3icon').style.borderTopColor='#2563eb';
+  document.getElementById('rf3icon').style.background='transparent';
+  document.getElementById('rf3icon').style.animation='ios-spin .8s linear infinite';
+  document.getElementById('rf3status').style.background='#dbeafe';
+  document.getElementById('rf3status').style.color='#2563eb';
+  document.getElementById('rf3status').textContent='Running';
+
+  await wait(2000);
+  document.getElementById('rf3').classList.remove('running');
+  document.getElementById('rf3').classList.add('done');
+  document.getElementById('rf3icon').style.animation='none';
+  document.getElementById('rf3icon').style.background='#d1fae5';
+  document.getElementById('rf3icon').style.border='none';
+  document.getElementById('rf3icon').innerHTML='<svg viewBox="0 0 14 14" style="width:14px;height:14px"><path d="M3 7l3 3 5-5" stroke="#059669" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  document.getElementById('rf3status').style.background='#d1fae5';
+  document.getElementById('rf3status').style.color='#059669';
+  document.getElementById('rf3status').textContent='Done';
+
+  // Update schedule item
+  await wait(500);
+  document.getElementById('schedItem1').classList.remove('running');
+  document.getElementById('schedItem1').querySelector('.sched-next').textContent='Last run: Just now • Next: Today at 8:00 AM';
+  document.getElementById('schedItem1').querySelector('.sched-next').style.color='#059669';
+}
+
+// === Audio Narration ===
+let audioMuted = false;
+const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5'),document.getElementById('audio-6')];
+function toggleMute(){
+  audioMuted = !audioMuted;
+  document.getElementById('muteBtn').textContent = audioMuted ? '🔇' : '🔊';
+  if(audioMuted) audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+}
+function playNarration(idx){
+  if(audioMuted || idx < 0 || idx >= audioClips.length) return;
+  audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+  audioClips[idx].play().catch(()=>{});
+}
+
+initGrid();
+document.getElementById('sidebar').classList.add('visible');
+setTimeout(()=>runScene(0),500);
+</script>
+</body>
+</html>

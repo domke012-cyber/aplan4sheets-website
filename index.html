@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>aPlan4Sheets — Anaplan Connector for Google Sheets</title>
+  <meta name="description" content="Connect Anaplan to Google Sheets. Browser-native, Mac-compatible. Pull Anaplan data into Google Sheets with one click.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1a2744',
+            'navy-light': '#243352',
+            'sheets-green': '#0f9d58',
+            'sheets-green-dark': '#0b8043',
+            'green-light': '#e8f5e9',
+            'text-dark': '#1a1a2e',
+            'text-muted': '#6b7280',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+    .faq-answer.open {
+      max-height: 400px;
+    }
+    .faq-icon {
+      transition: transform 0.3s ease;
+    }
+    .faq-icon.rotate {
+      transform: rotate(45deg);
+    }
+  </style>
+</head>
+<body class="font-sans text-text-dark bg-white antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="8" fill="#1a2744"/>
+          <rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/>
+          <rect x="18" y="6" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+          <rect x="6" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+          <rect x="18" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.35"/>
+        </svg>
+        <span class="text-lg font-bold text-navy">aPlan4Sheets</span>
+      </a>
+      <div class="flex items-center gap-3">
+        <a href="/demos" class="hidden sm:inline-flex items-center px-4 py-2.5 text-navy text-sm font-semibold hover:text-sheets-green transition-colors">
+          Demos
+        </a>
+        <a href="/guide" class="hidden sm:inline-flex items-center px-4 py-2.5 text-navy text-sm font-semibold hover:text-sheets-green transition-colors">
+          Setup Guide
+        </a>
+        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
+          Install Free
+        </a>
+        <a href="/demo" class="sm:hidden inline-flex items-center px-4 py-2 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
+          Demo
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-20 md:pt-40 md:pb-28 bg-gradient-to-br from-navy via-navy-light to-navy">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <div class="fade-in">
+        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white/10 text-green-light text-sm font-medium px-4 py-1.5 rounded-full mb-8 hover:bg-white/20 transition-colors">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          Available on Google Workspace Marketplace
+        </a>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight max-w-4xl mx-auto">
+          Anaplan, meet <span class="text-sheets-green">Google Sheets</span>
+        </h1>
+        <p class="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          The browser-native connector that brings your Anaplan models directly into Google Sheets. Works on Mac, PC, and Chromebook — no Excel required.
+        </p>
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/demo" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors text-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Watch Demo
+          </a>
+          <a href="#contact" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors text-lg border border-white/20">
+            Request a Demo
+          </a>
+          <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-lg">
+            Install Free
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="py-14 bg-gray-50 border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <p class="text-sm font-medium text-text-muted uppercase tracking-wider mb-8">Battle-tested in production at</p>
+      <div class="flex flex-wrap items-center justify-center gap-8 md:gap-14">
+        <div class="flex items-center gap-3 text-gray-500">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12h8M12 8v8"/></svg>
+          <span class="text-xl font-bold tracking-tight">AppFolio</span>
+        </div>
+      </div>
+      <p class="mt-6 text-sm text-text-muted">Used by Anaplan teams managing real forecasts, budgets, and reports — every day.</p>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="py-20 md:py-28 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-navy">How it works</h2>
+        <p class="mt-4 text-text-muted text-lg max-w-xl mx-auto">Get your Anaplan data into Google Sheets in three simple steps.</p>
+      </div>
+      <div class="mt-16 grid md:grid-cols-3 gap-10 md:gap-8">
+        <!-- Step 1 -->
+        <div class="fade-in text-center">
+          <div class="w-16 h-16 mx-auto bg-green-light rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+          </div>
+          <div class="text-xs font-bold text-sheets-green uppercase tracking-wider mb-2">Step 1</div>
+          <h3 class="text-xl font-bold text-navy mb-2">Connect your Anaplan workspace</h3>
+          <p class="text-text-muted leading-relaxed">Sign in with your Anaplan credentials via secure OAuth. Your workspace, models, and modules appear instantly.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="fade-in text-center">
+          <div class="w-16 h-16 mx-auto bg-green-light rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+            </svg>
+          </div>
+          <div class="text-xs font-bold text-sheets-green uppercase tracking-wider mb-2">Step 2</div>
+          <h3 class="text-xl font-bold text-navy mb-2">Map your data to Google Sheets</h3>
+          <p class="text-text-muted leading-relaxed">Select views, modules, and dimensions. Configure layouts, filters, and page selectors — just like you would in Anaplan.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="fade-in text-center">
+          <div class="w-16 h-16 mx-auto bg-green-light rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </div>
+          <div class="text-xs font-bold text-sheets-green uppercase tracking-wider mb-2">Step 3</div>
+          <h3 class="text-xl font-bold text-navy mb-2">Refresh with one click</h3>
+          <p class="text-text-muted leading-relaxed">Pull live data on demand or set up scheduled auto-refreshes. Your sheets are always up to date.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20 md:py-28 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-navy">Built for Anaplan power users</h2>
+        <p class="mt-4 text-text-muted text-lg max-w-xl mx-auto">Everything you need to work with Anaplan data in Google Sheets.</p>
+      </div>
+      <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
+          <div class="w-11 h-11 bg-green-light rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 6h18M3 14h10"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy mb-2">Saved views &amp; exports</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Pull from pre-defined exports, saved views, or default module views — exactly as configured in Anaplan. No manual mapping required.</p>
+        </div>
+        <!-- Feature 2 -->
+        <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
+          <div class="w-11 h-11 bg-green-light rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy mb-2">Powerful pivot engine</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Transpose rows and columns, apply page selectors, and explore multi-dimensional Anaplan data in flexible pivot layouts — all inside Sheets.</p>
+        </div>
+        <!-- Feature 3 -->
+        <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
+          <div class="w-11 h-11 bg-green-light rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy mb-2">Anaplan UX formatting</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Preserve Anaplan's cell formatting, conditional styling, and summary rows in Sheets. Build dashboards fast — no reformatting from scratch.</p>
+        </div>
+        <!-- Feature 4 -->
+        <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
+          <div class="w-11 h-11 bg-green-light rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy mb-2">Scheduled auto-refresh</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Set it and forget it. Schedule automatic data refreshes so your reports are always current — no manual intervention needed.</p>
+        </div>
+        <!-- Feature 5 -->
+        <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
+          <div class="w-11 h-11 bg-green-light rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy mb-2">Enterprise AI exploration</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Explore your Anaplan modules with enterprise-grade Gemini AI. Ask questions about your data in plain English — and your data is never used for model training.</p>
+        </div>
+        <!-- Feature 6 -->
+        <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
+          <div class="w-11 h-11 bg-green-light rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-sheets-green" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-navy mb-2">Linked configs &amp; cloning</h3>
+          <p class="text-text-muted text-sm leading-relaxed">Sync page dimensions across multiple connections via linked configs. Clone existing connections to spin up new views in seconds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why aPlan4Sheets -->
+  <section class="py-20 md:py-28 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-navy">Why aPlan4Sheets</h2>
+        <p class="mt-4 text-text-muted text-lg max-w-xl mx-auto">Built for Anaplan teams who live in Google Sheets.</p>
+      </div>
+      <div class="mt-14 grid md:grid-cols-3 gap-8 max-w-4xl mx-auto fade-in">
+        <div class="text-center p-6">
+          <div class="w-12 h-12 bg-green-light rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-sheets-green text-2xl">🌐</span>
+          </div>
+          <h3 class="font-bold text-navy mb-2">Works everywhere</h3>
+          <p class="text-text-muted text-sm">Mac, PC, Chromebook — runs entirely in your browser. No desktop software to install.</p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-12 h-12 bg-green-light rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-sheets-green text-2xl">⚡</span>
+          </div>
+          <h3 class="font-bold text-navy mb-2">Fast & familiar</h3>
+          <p class="text-text-muted text-sm">Pivot, filter, and format Anaplan data directly in Google Sheets. Scheduled auto-refresh keeps data fresh.</p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-12 h-12 bg-green-light rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-sheets-green text-2xl">👥</span>
+          </div>
+          <h3 class="font-bold text-navy mb-2">Real-time collaboration</h3>
+          <p class="text-text-muted text-sm">Share Anaplan-connected sheets with your team. Everyone sees the same live data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshots -->
+  <section class="py-20 md:py-28 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-navy">See it in action</h2>
+        <p class="mt-4 text-text-muted text-lg max-w-xl mx-auto">A familiar spreadsheet experience with Anaplan data at your fingertips.</p>
+      </div>
+      <div class="mt-14 grid md:grid-cols-3 gap-6">
+        <!-- Screenshot 1 -->
+        <div class="fade-in">
+          <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
+            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
+              <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+              <span class="ml-2 text-xs text-text-muted">Google Sheets</span>
+            </div>
+            <div class="h-56 bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3 p-6">
+              <svg class="w-12 h-12 text-sheets-green/50" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
+              </svg>
+              <span class="text-sm font-medium text-text-muted">Anaplan module sidebar</span>
+            </div>
+          </div>
+        </div>
+        <!-- Screenshot 2 -->
+        <div class="fade-in">
+          <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
+            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
+              <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+              <span class="ml-2 text-xs text-text-muted">Google Sheets</span>
+            </div>
+            <div class="h-56 bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3 p-6">
+              <svg class="w-12 h-12 text-sheets-green/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M10.875 12c-.621 0-1.125.504-1.125 1.125M12 12c.621 0 1.125.504 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 0v1.5c0 .621-.504 1.125-1.125 1.125m0-3.75c-.621 0-1.125.504-1.125 1.125"/>
+              </svg>
+              <span class="text-sm font-medium text-text-muted">Data mapping configuration</span>
+            </div>
+          </div>
+        </div>
+        <!-- Screenshot 3 -->
+        <div class="fade-in">
+          <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
+            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
+              <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+              <span class="ml-2 text-xs text-text-muted">Google Sheets</span>
+            </div>
+            <div class="h-56 bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3 p-6">
+              <svg class="w-12 h-12 text-sheets-green/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+              <span class="text-sm font-medium text-text-muted">One-click data refresh</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials (removed - placeholder content) -->
+  <section class="py-20 md:py-28 bg-white" style="display:none">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-navy">Loved by finance teams</h2>
+      </div>
+      <div class="mt-14 grid md:grid-cols-3 gap-8">
+        <div class="fade-in bg-gray-50 rounded-xl p-8 border border-gray-100">
+          <div class="flex gap-1 mb-4">
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-text-dark leading-relaxed">"We switched our entire FP&A team off Excel-based connectors. aPlan4Sheets just works — on every machine, every OS. It's been a game changer for our monthly close."</p>
+          <div class="mt-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-navy flex items-center justify-center text-white text-sm font-bold">SK</div>
+            <div>
+              <div class="text-sm font-semibold text-navy">Sarah Kim</div>
+              <div class="text-xs text-text-muted">Director of FP&A, Meridian Group</div>
+            </div>
+          </div>
+        </div>
+        <div class="fade-in bg-gray-50 rounded-xl p-8 border border-gray-100">
+          <div class="flex gap-1 mb-4">
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-text-dark leading-relaxed">"Finally, an Anaplan connector that works on my MacBook. No Windows VM needed — it just works in Google Sheets."</p>
+          <div class="mt-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-sheets-green flex items-center justify-center text-white text-sm font-bold">MR</div>
+            <div>
+              <div class="text-sm font-semibold text-navy">Marcus Reeves</div>
+              <div class="text-xs text-text-muted">Anaplan Model Builder, NovaCorp</div>
+            </div>
+          </div>
+        </div>
+        <div class="fade-in bg-gray-50 rounded-xl p-8 border border-gray-100">
+          <div class="flex gap-1 mb-4">
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-text-dark leading-relaxed">"The scheduled refresh feature alone saves our team hours every week. We set up our board reporting sheets once and they update automatically before every meeting."</p>
+          <div class="mt-6 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-navy-light flex items-center justify-center text-white text-sm font-bold">JT</div>
+            <div>
+              <div class="text-sm font-semibold text-navy">Jessica Torres</div>
+              <div class="text-xs text-text-muted">VP Finance, Stratton & Co</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beta Banner -->
+  <section class="py-20 md:py-28 bg-gray-50">
+    <div class="max-w-3xl mx-auto px-6 text-center fade-in">
+      <div class="inline-flex items-center gap-2 bg-sheets-green/10 text-sheets-green text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
+        <span class="w-2 h-2 bg-sheets-green rounded-full animate-pulse"></span>
+        Free during beta
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold text-navy">Get started for free</h2>
+      <p class="mt-4 text-text-muted text-lg max-w-xl mx-auto">aPlan4Sheets is currently in beta. Install it today and start pulling Anaplan data into Google Sheets — completely free.</p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-8 py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
+          Install from Marketplace
+        </a>
+        <a href="/guide" class="inline-flex items-center justify-center px-8 py-3.5 border border-navy/20 text-navy font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+          Setup Guide →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 md:py-28 bg-white">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-navy">Frequently asked questions</h2>
+      </div>
+      <div class="mt-14 space-y-3 fade-in">
+        <!-- FAQ 1 -->
+        <div class="border border-gray-200 rounded-xl">
+          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+            <span class="font-semibold text-navy pr-4">What is aPlan4Sheets?</span>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">aPlan4Sheets is a Google Sheets add-on that connects directly to your Anaplan workspace. It lets you pull Anaplan model data into Google Sheets, configure views and layouts, and refresh data with a single click — all from your browser.</p>
+          </div>
+        </div>
+        <!-- FAQ 2 -->
+        <div class="border border-gray-200 rounded-xl">
+          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+            <span class="font-semibold text-navy pr-4">Is aPlan4Sheets free?</span>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">Yes! aPlan4Sheets is currently in beta and completely free to use. Install it from the Google Workspace Marketplace and start connecting your Anaplan data to Google Sheets today.</p>
+          </div>
+        </div>
+        <!-- FAQ 3 -->
+        <div class="border border-gray-200 rounded-xl">
+          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+            <span class="font-semibold text-navy pr-4">Does it work on Mac?</span>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">Yes. Since aPlan4Sheets runs in your browser through Google Sheets, it works on any operating system — macOS, Windows, ChromeOS, and Linux. No virtual machines or workarounds needed.</p>
+          </div>
+        </div>
+        <!-- FAQ 4 -->
+        <div class="border border-gray-200 rounded-xl">
+          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+            <span class="font-semibold text-navy pr-4">How do I get started?</span>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">Request a demo using the form below, and our team will walk you through setup and onboarding. Once approved, you can install aPlan4Sheets directly from the Google Workspace Marketplace and connect your Anaplan workspace in minutes.</p>
+          </div>
+        </div>
+        <!-- FAQ 5 -->
+        <div class="border border-gray-200 rounded-xl">
+          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+            <span class="font-semibold text-navy pr-4">Is my Anaplan data secure?</span>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">Absolutely. aPlan4Sheets uses Anaplan's official OAuth authentication. Your credentials are never stored by our add-on. All data transfers happen over encrypted connections, and your data lives only in your own Google Sheets — we never store or access it on our servers.</p>
+          </div>
+        </div>
+        <!-- FAQ 6 -->
+        <div class="border border-gray-200 rounded-xl">
+          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+            <span class="font-semibold text-navy pr-4">What Anaplan modules are supported?</span>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">aPlan4Sheets supports all standard Anaplan modules, saved views, and list views. You can work with pivot layouts, page selectors, and line item subsets. We support both read and write-back operations across all module types.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / CTA -->
+  <section id="contact" class="py-20 md:py-28 bg-navy">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="max-w-xl mx-auto text-center fade-in">
+        <h2 class="text-3xl md:text-4xl font-bold text-white">Ready to bring Anaplan into Google Sheets?</h2>
+        <p class="mt-4 text-gray-300 text-lg">Fill out the form below and we'll reach out within 1 business day.</p>
+      </div>
+      <div class="mt-12 max-w-lg mx-auto fade-in">
+        <form class="space-y-5" onsubmit="handleSubmit(event)">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-300 mb-1.5">Name</label>
+            <input type="text" id="name" name="name" required placeholder="Your full name" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sheets-green focus:border-transparent">
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-300 mb-1.5">Work Email</label>
+            <input type="email" id="email" name="email" required placeholder="you@company.com" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sheets-green focus:border-transparent">
+          </div>
+          <div>
+            <label for="company" class="block text-sm font-medium text-gray-300 mb-1.5">Company</label>
+            <input type="text" id="company" name="company" required placeholder="Your company name" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sheets-green focus:border-transparent">
+          </div>
+          <div>
+            <label for="message" class="block text-sm font-medium text-gray-300 mb-1.5">Message <span class="text-gray-500">(optional)</span></label>
+            <textarea id="message" name="message" rows="3" placeholder="Tell us about your Anaplan setup..." class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sheets-green focus:border-transparent resize-none"></textarea>
+          </div>
+          <button type="submit" id="submit-btn" class="w-full py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors text-lg">
+            Request a Demo
+          </button>
+          <p class="text-center text-gray-400 text-xs mt-3">We'll reach out within 1 business day. No spam, ever.</p>
+        </form>
+        <div id="success-msg" class="hidden text-center py-8">
+          <div class="w-16 h-16 mx-auto bg-sheets-green/20 rounded-full flex items-center justify-center mb-4">
+            <svg class="w-8 h-8 text-sheets-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-white">Thanks! We'll be in touch.</h3>
+          <p class="mt-2 text-gray-300">Expect to hear from us within 1 business day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-navy border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2.5">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="8" fill="#243352"/>
+            <rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/>
+            <rect x="18" y="6" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+            <rect x="6" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+            <rect x="18" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.35"/>
+          </svg>
+          <span class="text-white font-bold">aPlan4Sheets</span>
+          <span class="text-gray-400 text-sm ml-1">| Anaplan for Google Sheets</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-gray-400">
+          <a class='hover:text-white transition-colors' href='/privacy'>Privacy Policy</a>
+          <a class='hover:text-white transition-colors' href='/terms'>Terms of Service</a>
+        </div>
+      </div>
+      <div class="mt-8 text-center text-xs text-gray-500">
+        &copy; 2026 aPlan4Sheets. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector('.faq-icon');
+        const isOpen = answer.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+        document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('rotate'));
+        document.querySelectorAll('.faq-toggle').forEach(b => b.setAttribute('aria-expanded', 'false'));
+
+        // Open clicked (if it was closed)
+        if (!isOpen) {
+          answer.classList.add('open');
+          icon.classList.add('rotate');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // Form submission
+    function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('submit-btn');
+      const success = document.getElementById('success-msg');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+      setTimeout(() => {
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started — aPlan4Sheets</title>
+  <meta name="description" content="Step-by-step setup guide for aPlan4Sheets — the Anaplan connector for Google Sheets. Install, connect, and start pulling data in minutes.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1a2744',
+            'navy-light': '#243352',
+            'sheets-green': '#0f9d58',
+            'sheets-green-dark': '#0b8043',
+            'green-light': '#e8f5e9',
+            'text-dark': '#1a1a2e',
+            'text-muted': '#6b7280',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .step-number {
+      width: 48px;
+      height: 48px;
+      min-width: 48px;
+      background: #0f9d58;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .step-number-sm {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      background: #0f9d58;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      line-height: 1;
+    }
+    .callout {
+      background: #e8f5e9;
+      border-left: 4px solid #0f9d58;
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+    }
+    .callout-icon {
+      color: #0f9d58;
+    }
+    .screenshot-placeholder {
+      background: #f3f4f6;
+      border: 2px dashed #d1d5db;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 0.875rem;
+      min-height: 240px;
+    }
+    .guide-connector {
+      position: absolute;
+      left: 23px;
+      top: 48px;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #0f9d58 0%, #e8f5e9 100%);
+    }
+    @media (max-width: 640px) {
+      .step-number {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        font-size: 1.1rem;
+      }
+      .guide-connector {
+        left: 19px;
+      }
+    }
+  </style>
+</head>
+<body class="font-sans text-text-dark bg-white antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="https://aplan4sheets.com" class="flex items-center gap-2.5">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="8" fill="#1a2744"/>
+            <rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/>
+            <rect x="18" y="6" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+            <rect x="6" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+            <rect x="18" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.35"/>
+          </svg>
+          <span class="text-lg font-bold text-navy">aPlan4Sheets</span>
+        </a>
+        <a href="https://aplan4sheets.com" class="hidden sm:inline-flex items-center gap-1 text-sm text-text-muted hover:text-sheets-green transition-colors ml-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          Back to Home
+        </a>
+      </div>
+      <a href="https://aplan4sheets.com#contact" class="hidden sm:inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
+        Get Started
+      </a>
+      <a href="https://aplan4sheets.com#contact" class="sm:hidden inline-flex items-center px-4 py-2 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
+        Get Started
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-28 pb-14 md:pt-36 md:pb-20 bg-gradient-to-br from-navy via-navy-light to-navy">
+    <div class="max-w-4xl mx-auto px-6 text-center fade-in">
+      <a href="https://aplan4sheets.com" class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors mb-6 sm:hidden">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        Back to Home
+      </a>
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
+        Getting Started with <span class="text-sheets-green">aPlan4Sheets</span>
+      </h1>
+      <p class="mt-5 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+        From install to your first data pull in under 10 minutes. Follow this step-by-step guide to connect Anaplan to Google Sheets.
+      </p>
+    </div>
+  </section>
+
+  <!-- Table of Contents -->
+  <section class="py-10 bg-gray-50 border-b border-gray-100">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-sm font-bold text-text-muted uppercase tracking-wider mb-4">In this guide</h2>
+      <div class="grid sm:grid-cols-2 gap-2">
+        <a href="#step-1" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
+          <span class="step-number-sm">1</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Install from Google Workspace Marketplace</span>
+        </a>
+        <a href="#step-2" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
+          <span class="step-number-sm">2</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Open the Sidebar</span>
+        </a>
+        <a href="#step-3" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
+          <span class="step-number-sm">3</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Connect to Anaplan</span>
+        </a>
+        <a href="#step-4" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
+          <span class="step-number-sm">4</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Configure Your Model</span>
+        </a>
+        <a href="#step-5" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
+          <span class="step-number-sm">5</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Create Your First Pivot</span>
+        </a>
+        <a href="#step-6" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
+          <span class="step-number-sm">6</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Export Anaplan Views</span>
+        </a>
+        <a href="#step-7" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
+          <span class="step-number-sm">7</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Refresh Your Data</span>
+        </a>
+        <a href="#step-8" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
+          <span class="step-number-sm">8</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Tips &amp; Troubleshooting</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guide Content -->
+  <section class="py-16 md:py-24 bg-white">
+    <div class="max-w-4xl mx-auto px-6">
+
+      <!-- Step 1: Install -->
+      <div id="step-1" class="mb-20 fade-in scroll-mt-24">
+        <div class="flex items-start gap-5 mb-6">
+          <div class="step-number">1</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Install from Google Workspace Marketplace</h2>
+            <p class="mt-1 text-text-muted">Add aPlan4Sheets to your Google Sheets in one click.</p>
+          </div>
+        </div>
+        <div class="ml-0 sm:ml-[68px]">
+          <p class="text-text-dark leading-relaxed mb-4">
+            aPlan4Sheets is a Google Sheets add-on available on the <strong>Google Workspace Marketplace</strong>. It installs directly into your Google Sheets — no desktop software, no downloads, no IT tickets.
+          </p>
+          <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
+            <li>Visit the <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="text-sheets-green font-semibold hover:underline">aPlan4Sheets Marketplace listing</a></li>
+            <li>Click <strong>"Install"</strong> and grant the required permissions</li>
+            <li>Open any Google Sheet — the add-on is now available</li>
+          </ol>
+          <div class="screenshot-placeholder mb-6">
+            <img src="screenshots/step-1.png" alt="Google Workspace Marketplace listing for aPlan4Sheets" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Marketplace listing — coming soon</span>';">
+          </div>
+          <div class="callout">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <p class="text-sm text-text-dark"><strong>Google Workspace Admin?</strong> You can install aPlan4Sheets domain-wide from the Admin Console, so every user in your organization has access automatically.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Open the Sidebar -->
+      <div id="step-2" class="mb-20 fade-in scroll-mt-24">
+        <div class="flex items-start gap-5 mb-6">
+          <div class="step-number">2</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Open the Sidebar</h2>
+            <p class="mt-1 text-text-muted">Launch the aPlan4Sheets interface inside Google Sheets.</p>
+          </div>
+        </div>
+        <div class="ml-0 sm:ml-[68px]">
+          <p class="text-text-dark leading-relaxed mb-4">
+            Once installed, the connector lives in your Extensions menu. Open it to reveal the sidebar where all the magic happens.
+          </p>
+          <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
+            <li>Open any Google Sheet</li>
+            <li>Go to <strong>Extensions</strong> → <strong>Anaplan Connector for Sheets™</strong> → <strong>Open Sidebar</strong></li>
+            <li>The aPlan4Sheets sidebar will appear on the right side of your spreadsheet</li>
+          </ol>
+          <div class="screenshot-placeholder mb-6">
+            <img src="screenshots/step-2.png" alt="Opening the aPlan4Sheets sidebar from the Extensions menu" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Extensions menu — coming soon</span>';">
+          </div>
+          <div class="callout">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              <p class="text-sm text-text-dark"><strong>Tip:</strong> The sidebar will remember your last session. If you've previously logged in, you may already be connected when you reopen it.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Connect to Anaplan -->
+      <div id="step-3" class="mb-20 fade-in scroll-mt-24">
+        <div class="flex items-start gap-5 mb-6">
+          <div class="step-number">3</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Connect to Anaplan</h2>
+            <p class="mt-1 text-text-muted">Authenticate with your Anaplan account — two options available.</p>
+          </div>
+        </div>
+        <div class="ml-0 sm:ml-[68px]">
+          <p class="text-text-dark leading-relaxed mb-6">
+            aPlan4Sheets supports two authentication methods. Choose the one that matches your organization's Anaplan setup.
+          </p>
+
+          <!-- Option A -->
+          <div class="bg-green-light/50 rounded-xl p-6 mb-6 border border-sheets-green/20">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-sheets-green text-white">Recommended</span>
+              <h3 class="text-lg font-bold text-navy">Option A: OAuth / SSO</h3>
+            </div>
+            <p class="text-text-dark text-sm leading-relaxed mb-3">
+              Best for organizations using Anaplan SSO (single sign-on). This is the most secure method — your credentials are never stored by the add-on.
+            </p>
+            <ol class="list-decimal list-inside space-y-2 text-sm text-text-dark">
+              <li>Click the <strong>"Login with Anaplan SSO"</strong> button in the sidebar</li>
+              <li>A popup window will open — complete your organization's SSO login</li>
+              <li>After successful authentication, the popup closes automatically</li>
+              <li>You'll see <strong>"Authentication Successful"</strong> in the sidebar</li>
+            </ol>
+          </div>
+
+          <!-- Option B -->
+          <div class="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
+            <h3 class="text-lg font-bold text-navy mb-3">Option B: Email &amp; Password</h3>
+            <p class="text-text-dark text-sm leading-relaxed mb-3">
+              For Anaplan accounts that use direct email/password authentication (no SSO configured).
+            </p>
+            <ol class="list-decimal list-inside space-y-2 text-sm text-text-dark">
+              <li>Enter your <strong>Anaplan email address</strong> in the email field</li>
+              <li>Enter your <strong>Anaplan password</strong></li>
+              <li>Click <strong>"Login"</strong></li>
+              <li>You'll see a confirmation that you're connected</li>
+            </ol>
+          </div>
+
+          <div class="screenshot-placeholder mb-6">
+            <img src="screenshots/step-3.png" alt="Anaplan authentication options in the sidebar" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Login screen — coming soon</span>';">
+          </div>
+
+          <div class="callout">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              <p class="text-sm text-text-dark"><strong>Security note:</strong> aPlan4Sheets never stores your credentials on external servers. All authentication uses Anaplan's official API, and tokens are stored securely in your browser session.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Configure Your Model -->
+      <div id="step-4" class="mb-20 fade-in scroll-mt-24">
+        <div class="flex items-start gap-5 mb-6">
+          <div class="step-number">4</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Configure Your Model</h2>
+            <p class="mt-1 text-text-muted">Select which Anaplan workspace and model to connect.</p>
+          </div>
+        </div>
+        <div class="ml-0 sm:ml-[68px]">
+          <p class="text-text-dark leading-relaxed mb-4">
+            After logging in, you'll need to add at least one Anaplan model to start working with data.
+          </p>
+          <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
+            <li>Click the <strong>"Add Model"</strong> button in the sidebar</li>
+            <li>Select your <strong>Workspace</strong> from the dropdown — all workspaces you have access to will appear</li>
+            <li>Select the <strong>Model</strong> from the second dropdown</li>
+            <li>Click <strong>"Save"</strong> to add the model to your configuration</li>
+          </ol>
+          <div class="screenshot-placeholder mb-6">
+            <img src="screenshots/step-4.png" alt="Adding an Anaplan model in the sidebar" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Model configuration — coming soon</span>';">
+          </div>
+          <div class="callout">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <p class="text-sm text-text-dark"><strong>Multi-model support:</strong> You can add multiple models from different workspaces. This is great for teams that pull data from several Anaplan models into a single reporting sheet. Just repeat the steps above for each model.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: Create Your First Pivot -->
+      <div id="step-5" class="mb-20 fade-in scroll-mt-24">
+        <div class="flex items-start gap-5 mb-6">
+          <div class="step-number">5</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Create Your First Pivot</h2>
+            <p class="mt-1 text-text-muted">Pull Anaplan data into a custom pivot layout.</p>
+          </div>
+        </div>
+        <div class="ml-0 sm:ml-[68px]">
+          <p class="text-text-dark leading-relaxed mb-4">
+            The Pivot feature lets you pull data from any Anaplan module view and arrange dimensions exactly how you need them — rows, columns, and page filters.
+          </p>
+          <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
+            <li>Navigate to the <strong>"Pivot"</strong> tab in the sidebar</li>
+            <li><strong>Search or browse</strong> the available modules in your connected model</li>
+            <li>Select a <strong>saved view</strong> (or use the default view) and click <strong>"Configure"</strong></li>
+            <li><strong>Drag dimensions</strong> to arrange them:
+              <ul class="list-disc list-inside ml-6 mt-2 space-y-1 text-text-muted text-sm">
+                <li><strong>Rows</strong> — dimensions that appear as row headers</li>
+                <li><strong>Columns</strong> — dimensions that appear as column headers</li>
+                <li><strong>Pages</strong> — dimensions used as filters (select specific items)</li>
+              </ul>
+            </li>
+            <li><strong>Select items</strong> for each page dimension to filter your data</li>
+            <li>Click <strong>"Execute"</strong> to pull the data into your sheet</li>
+          </ol>
+          <div class="screenshot-placeholder mb-6">
+            <img src="screenshots/step-5.png" alt="Configuring a pivot view in aPlan4Sheets" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Pivot configuration — coming soon</span>';">
+          </div>
+          <div class="callout">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              <p class="text-sm text-text-dark"><strong>Tip:</strong> The pivot layout mirrors what you'd see in Anaplan's own UI. If you've used page selectors in Anaplan, you'll feel right at home.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: Export Anaplan Views -->
+      <div id="step-6" class="mb-20 fade-in scroll-mt-24">
+        <div class="flex items-start gap-5 mb-6">
+          <div class="step-number">6</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Export Anaplan Views</h2>
+            <p class="mt-1 text-text-muted">Pull pre-configured Anaplan exports directly into Sheets.</p>
+          </div>
+        </div>
+        <div class="ml-0 sm:ml-[68px]">
+          <p class="text-text-dark leading-relaxed mb-4">
+            If your Anaplan model has pre-defined export actions, you can run them directly from Google Sheets and land the output in your spreadsheet.
+          </p>
+          <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
+            <li>Switch to the <strong>"Exports"</strong> tab in the sidebar</li>
+            <li>Click <strong>"Fetch"</strong> to load the available export definitions from your model</li>
+            <li>Select the <strong>export</strong> you want to run from the list</li>
+            <li>Click <strong>"Export"</strong> to execute it and pull the data into your sheet</li>
+          </ol>
+          <div class="screenshot-placeholder mb-6">
+            <img src="screenshots/step-6.png" alt="Running an Anaplan export from the sidebar" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Exports tab — coming soon</span>';">
+          </div>
+          <div class="callout">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              <p class="text-sm text-text-dark"><strong>Tip:</strong> Exports use the same definitions configured by your Anaplan model builder. Great for standard reports that don't need custom pivot layouts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7: Refresh Your Data -->
+      <div id="step-7" class="mb-20 fade-in scroll-mt-24">
+        <div class="flex items-start gap-5 mb-6">
+          <div class="step-number">7</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Refresh Your Data</h2>
+            <p class="mt-1 text-text-muted">Update all your configured sheets with fresh Anaplan data.</p>
+          </div>
+        </div>
+        <div class="ml-0 sm:ml-[68px]">
+          <p class="text-text-dark leading-relaxed mb-4">
+            Once you've set up your pivot views and exports, you can refresh everything at once — no need to reconfigure each connection.
+          </p>
+          <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
+            <li>Use the <strong>"Refresh Sheets"</strong> feature in the sidebar</li>
+            <li>All configured connections in the current spreadsheet will re-pull data from Anaplan</li>
+            <li>Your data updates in place — formatting and formulas you've added around the data are preserved</li>
+          </ol>
+          <div class="screenshot-placeholder mb-6">
+            <img src="screenshots/step-7.png" alt="Refreshing all sheets at once" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Refresh feature — coming soon</span>';">
+          </div>
+          <div class="callout">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <p class="text-sm text-text-dark"><strong>Auto-refresh:</strong> Enterprise users can schedule automatic refreshes so reports are always up to date — no manual clicks required. Contact us to learn more.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 8: Tips & Troubleshooting -->
+      <div id="step-8" class="fade-in scroll-mt-24">
+        <div class="flex items-start gap-5 mb-6">
+          <div class="step-number">8</div>
+          <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Tips &amp; Troubleshooting</h2>
+            <p class="mt-1 text-text-muted">Common questions and quick fixes.</p>
+          </div>
+        </div>
+        <div class="ml-0 sm:ml-[68px]">
+          <div class="space-y-4">
+            <!-- Issue 1 -->
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+              <h3 class="font-bold text-navy mb-2 flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                Session expired / token error
+              </h3>
+              <p class="text-sm text-text-muted leading-relaxed">Anaplan authentication tokens expire after a period of inactivity. If you see an authentication error, simply <strong>log in again</strong> using the same method (SSO or email/password). Your configurations are preserved — you won't lose any setup.</p>
+            </div>
+
+            <!-- Issue 2 -->
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+              <h3 class="font-bold text-navy mb-2 flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                "Unverified app" warning screen
+              </h3>
+              <p class="text-sm text-text-muted leading-relaxed">When first authorizing the add-on, Google may show an "unverified app" warning. This is normal during the verification process. Click <strong>"Advanced"</strong> at the bottom left, then click <strong>"Go to Anaplan Connector for Sheets™ (unsafe)"</strong> to proceed. The app is safe — this screen appears for all new Workspace add-ons.</p>
+            </div>
+
+            <!-- Issue 3 -->
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+              <h3 class="font-bold text-navy mb-2 flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Slow first load
+              </h3>
+              <p class="text-sm text-text-muted leading-relaxed">The first time you open the sidebar or load a model's modules, it may take a few extra seconds. This is normal — aPlan4Sheets is fetching metadata from Anaplan's API. <strong>Subsequent loads will be faster</strong> as the data is cached locally.</p>
+            </div>
+
+            <!-- Issue 4 -->
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+              <h3 class="font-bold text-navy mb-2 flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Need help?
+              </h3>
+              <p class="text-sm text-text-muted leading-relaxed">Can't find what you need? <a href="https://aplan4sheets.com#contact" class="text-sheets-green font-semibold hover:underline">Contact our team</a> — we typically respond within one business day and can help with setup, configuration, or any issues you encounter.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-gradient-to-br from-navy via-navy-light to-navy">
+    <div class="max-w-4xl mx-auto px-6 text-center fade-in">
+      <h2 class="text-3xl md:text-4xl font-bold text-white">Ready to get started?</h2>
+      <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">Install aPlan4Sheets from the Google Workspace Marketplace and connect your Anaplan data in minutes.</p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-8 py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors text-lg">
+          Install Now — Free
+        </a>
+        <a href="https://aplan4sheets.com#contact" class="inline-flex items-center justify-center px-8 py-3.5 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-lg">
+          Request a Demo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-navy border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2.5">
+          <svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="8" fill="#243352"/>
+            <rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/>
+            <rect x="18" y="6" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+            <rect x="6" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+            <rect x="18" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.35"/>
+          </svg>
+          <span class="text-white font-bold">aPlan4Sheets</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-gray-400">
+          <a href="https://aplan4sheets.com" class="hover:text-white transition-colors">Home</a>
+          <a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="/terms" class="hover:text-white transition-colors">Terms of Service</a>
+        </div>
+      </div>
+      <div class="mt-8 pt-6 border-t border-white/10 text-center">
+        <p class="text-sm text-gray-500">&copy; 2025 aPlan4Sheets. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll animations -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
