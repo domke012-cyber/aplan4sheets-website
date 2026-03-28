@@ -126,6 +126,14 @@ if(new URLSearchParams(location.search).has('embed')){
     const ctrl=document.querySelector('.demo-controls');if(ctrl)ctrl.style.display='none';
     const prog=document.querySelector('.global-progress');if(prog)prog.style.display='none';
     document.body.style.overflow='hidden';
+    // Start muted in embed mode
+    if(typeof audioMuted!=='undefined'){audioMuted=true}
+    else{window.addEventListener('load',()=>{if(typeof audioMuted!=='undefined')audioMuted=true})}
+    // Listen for hover messages from parent
+    window.addEventListener('message',(e)=>{
+      if(e.data==='hover-enter'){audioMuted=false}
+      if(e.data==='hover-leave'){audioMuted=true;if(typeof audioClips!=='undefined')audioClips.forEach(a=>{a.pause();a.currentTime=0})}
+    });
   });
 }
 </script>

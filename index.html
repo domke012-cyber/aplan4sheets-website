@@ -319,6 +319,15 @@
         </div>
       </div>
     </div>
+    <script>
+      // Hover-to-unmute: send messages to demo iframes
+      document.querySelectorAll('a[href^="/demo/"]').forEach(card => {
+        const iframe = card.querySelector('iframe');
+        if (!iframe) return;
+        card.addEventListener('mouseenter', () => iframe.contentWindow?.postMessage('hover-enter', '*'));
+        card.addEventListener('mouseleave', () => iframe.contentWindow?.postMessage('hover-leave', '*'));
+      });
+    </script>
   </section>
 
   <!-- Testimonials (removed - placeholder content) -->
