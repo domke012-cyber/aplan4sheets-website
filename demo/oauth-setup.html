@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OAuth Setup — aPlan4Sheets Demo</title>
+<meta name="description" content="Step-by-step walkthrough of the OAuth setup process for aPlan4Sheets. See how IT administrators and end users configure Anaplan OAuth credentials.">
+<link rel="canonical" href="https://aplan4sheets.com/demo/oauth-setup.html">
+<meta property="og:title" content="OAuth Setup — aPlan4Sheets Demo">
+<meta property="og:description" content="Step-by-step walkthrough of the OAuth setup process for aPlan4Sheets. See how IT administrators and end users configure Anaplan OAuth credentials.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aplan4sheets.com/demo/oauth-setup.html">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.site-nav{background:#1a2744;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;font-family:'Inter',sans-serif}
+.site-nav .logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700;letter-spacing:-0.3px}
+.site-nav .logo .sheets-icon{width:28px;height:28px;background:#0f9d58;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700}
+.site-nav-links{display:flex;gap:24px;font-size:14px;font-weight:500}
+.site-nav-links a{color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
+.site-nav-links a:hover{color:#fff}
+.site-nav .cta-btn{background:#0f9d58;color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer}
+.demo-controls{display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 24px;background:#f8f9fa;border-bottom:1px solid #e5e7eb}
+.demo-controls button{border:none;border-radius:6px;padding:6px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.ctrl-play{background:#0f9d58;color:#fff}.ctrl-play:hover{background:#0b8a4a}
+.ctrl-restart{background:#e5e7eb;color:#374151}.ctrl-restart:hover{background:#d1d5db}
+.ctrl-mute{background:#e5e7eb;color:#374151;font-size:16px;padding:6px 12px}.ctrl-mute:hover{background:#d1d5db}
+.step-indicator{font-size:13px;color:#6b7280;font-weight:500}.step-indicator .current{color:#1a2744;font-weight:700}
+.global-progress{height:3px;background:#e5e7eb;position:relative}
+.global-progress-fill{height:100%;background:linear-gradient(90deg,#0f9d58,#34a853);width:0%;transition:width .4s ease}
+.browser-frame{display:flex;flex-direction:column;height:calc(100vh - 56px);background:#fff;overflow:hidden}
+.sheets-toolbar{display:flex;align-items:center;gap:8px;padding:4px 12px;background:#1e8e3e;height:40px;color:#fff;font-size:13px;font-weight:500}
+.sheets-toolbar .doc-icon{width:24px;height:24px;background:#fff;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#1e8e3e;font-size:14px;font-weight:700}
+.sheets-toolbar .doc-name{font-weight:600;margin-right:auto}
+.sheets-toolbar .toolbar-btn{background:rgba(255,255,255,.15);border:none;border-radius:4px;padding:4px 10px;color:#fff;font-size:12px;cursor:default}
+.formula-bar{display:flex;align-items:center;height:28px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368}
+.formula-bar .cell-ref{background:#f1f3f4;border-radius:3px;padding:2px 8px;margin-right:8px;font-weight:500;min-width:48px;text-align:center}
+.formula-bar .fx{color:#5f6368;margin-right:6px;font-style:italic}
+.main-area{display:flex;flex:1;overflow:hidden}
+.grid-area{flex:1;position:relative;background:#fff;overflow:hidden}
+.sheet-tabs{display:flex;align-items:center;height:28px;background:#f1f3f4;border-top:1px solid #dadce0;padding:0 8px;gap:2px;font-size:12px;color:#5f6368}
+.sheet-tab{padding:4px 16px;border-radius:4px 4px 0 0;cursor:default;white-space:nowrap}
+.sheet-tab.active{background:#fff;font-weight:600;color:#1e8e3e;border:1px solid #dadce0;border-bottom:1px solid #fff;margin-bottom:-1px}
+.grid-container{position:absolute;top:0;left:0;right:0;bottom:28px;overflow:hidden}
+.grid-table{border-collapse:collapse;font-size:11px;font-family:'Inter',-apple-system,sans-serif}
+.grid-table th{background:#f8f9fa;border:1px solid #e0e0e0;padding:2px 6px;font-weight:500;color:#5f6368;position:sticky;top:0;z-index:2;white-space:nowrap;min-width:32px}
+.grid-table td{border:1px solid #e0e0e0;padding:2px 6px;white-space:nowrap;min-width:32px}
+.grid-table .row-header{background:#f8f9fa;font-weight:500;color:#5f6368;text-align:center;position:sticky;left:0;z-index:1}
+.grid-table .col-header{text-align:center}
+.grid-table .corner{background:#f8f9fa;position:sticky;left:0;top:0;z-index:3}
+.sidebar-area{width:360px;min-width:360px;border-left:1px solid #dadce0;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateX(20px);transition:all .4s cubic-bezier(.25,.46,.45,.94)}
+.sidebar-area.visible{opacity:1;transform:translateX(0)}
+.sidebar-inner{flex:1;overflow-y:auto;padding:8px}
+
+/* Extensions menu dropdown */
+.ext-menu{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:50}
+.ext-dropdown{position:absolute;background:#fff;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.18);border:1px solid #dadce0;font-size:13px;color:#202124;min-width:220px;overflow:hidden;opacity:0;transform:translateY(-8px);transition:all .25s ease;pointer-events:auto}
+.ext-dropdown.show{opacity:1;transform:translateY(0)}
+.ext-item{padding:8px 16px;cursor:default;transition:background .15s}
+.ext-item:hover,.ext-item.highlighted{background:#e8f0fe}
+.ext-item-sub{padding:6px 24px;cursor:default;transition:background .15s;font-size:12px}
+.ext-item-sub:hover,.ext-item-sub.highlighted{background:#e8f0fe}
+.ext-separator{border-top:1px solid #e0e0e0;margin:4px 0}
+
+/* Connector UI */
+.connector-ui{
+  --ios-primary:#007AFF;--ios-success:#30D158;--ios-warning:#FF9F0A;--ios-danger:#FF453A;
+  --ios-bg-primary:#FFFFFF;--ios-surface:rgba(255,255,255,0.85);--ios-surface-elevated:rgba(255,255,255,0.95);
+  --ios-glass:rgba(255,255,255,0.78);--ios-glass-thick:rgba(248,248,248,0.92);
+  --ios-text-primary:rgba(0,0,0,1);--ios-text-secondary:rgba(60,60,67,0.85);--ios-text-tertiary:rgba(60,60,67,0.6);--ios-text-inverse:rgba(255,255,255,1);
+  --ios-border:rgba(60,60,67,0.25);--ios-border-light:rgba(60,60,67,0.15);--ios-separator:rgba(60,60,67,0.18);
+  --ios-shadow-sm:0 2px 8px rgba(0,0,0,0.06);--ios-shadow-md:0 4px 20px rgba(0,0,0,0.10);
+  --ios-radius-xs:6px;--ios-radius-sm:8px;--ios-radius-md:12px;--ios-radius-pill:100px;
+  --ios-ease:cubic-bezier(0.25,0.46,0.45,0.94);--ios-transition:all 0.2s cubic-bezier(0.25,0.46,0.45,0.94);
+  --ios-blue-gradient:linear-gradient(135deg,#5E5CE6,#007AFF);
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:14px;color:var(--ios-text-primary);-webkit-font-smoothing:antialiased;
+  background:linear-gradient(135deg,#E8F4FD 0%,#FFF4E6 25%,#F3E7FF 50%,#E6F7FF 75%,#FFF0F5 100%);background-size:400% 400%;animation:meshGradient 15s ease infinite;line-height:1.4;
+}
+@keyframes meshGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.connector-ui .ios-toggle-menu{margin:12px 0;background:var(--ios-surface-elevated);border-radius:var(--ios-radius-md);border:1px solid var(--ios-border);overflow:hidden;box-shadow:var(--ios-shadow-sm);transition:var(--ios-transition)}
+.connector-ui .ios-toggle-header{padding:8px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.8);border-bottom:1px solid transparent;transition:var(--ios-transition);min-height:32px}
+.connector-ui .ios-toggle-title{display:flex;justify-content:space-between;align-items:center;flex:1;gap:12px}
+.connector-ui .ios-toggle-label{font-size:12px;font-weight:500;color:var(--ios-text-secondary)}
+.connector-ui .ios-toggle-value{font-size:12px;font-weight:600;color:var(--ios-primary)}
+.connector-ui .ios-toggle-chevron{width:10px;height:10px;transition:transform .2s var(--ios-ease);color:var(--ios-text-tertiary);margin-left:8px}
+.connector-ui .ios-toggle-chevron::after{content:'';display:block;width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin-top:-2px}
+.connector-ui .ios-toggle-menu.expanded .ios-toggle-chevron{transform:rotate(180deg)}
+.connector-ui .ios-toggle-menu.expanded .ios-toggle-header{border-bottom:1px solid var(--ios-border)}
+.connector-ui .ios-toggle-dropdown{display:none;background:var(--ios-glass);max-height:0;overflow:hidden;transition:max-height .3s var(--ios-ease)}
+.connector-ui .ios-toggle-menu.expanded .ios-toggle-dropdown{display:block;max-height:200px}
+.connector-ui .ios-toggle-option{padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:var(--ios-transition);border-bottom:1px solid var(--ios-border-light)}
+.connector-ui .ios-toggle-option:last-child{border-bottom:none}
+.connector-ui .ios-toggle-option-text{font-size:12px;font-weight:500;color:var(--ios-text-primary);flex:1}
+.connector-ui .ios-toggle-option-badge{font-size:10px;font-weight:600;color:var(--ios-success);text-transform:uppercase;letter-spacing:.5px;margin-right:12px}
+.connector-ui .ios-toggle-option-check{width:20px;height:20px;color:var(--ios-primary);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.connector-ui .ios-toggle-option.selected{background:rgba(0,122,255,0.05)}
+.connector-ui .ios-login-button{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;min-width:200px;min-height:44px;font-family:inherit;font-size:15px;font-weight:600;letter-spacing:-.2px;color:white;background:linear-gradient(135deg,#007AFF 0%,#5E5CE6 100%);border:none;border-radius:12px;margin:8px auto 20px auto;cursor:pointer;overflow:hidden;transition:all .3s var(--ios-ease);box-shadow:0 4px 15px rgba(0,122,255,0.3),inset 0 1px 0 rgba(255,255,255,0.2)}
+.connector-ui .ios-login-button.loading{pointer-events:none;animation:subtle-pulse 2s cubic-bezier(.4,0,.6,1) infinite}
+@keyframes subtle-pulse{0%,100%{opacity:1}50%{opacity:.85}}
+.connector-ui .ios-login-spinner{display:inline-block;width:14px;height:14px;border:2px solid transparent;border-top-color:white;border-radius:50%;animation:ios-spin .8s linear infinite}
+@keyframes ios-spin{to{transform:rotate(360deg)}}
+.connector-ui .ios-user-banner{display:none;background:linear-gradient(135deg,#F3F4F6 0%,#E5E7EB 100%);border:1px solid rgba(0,0,0,0.08);border-radius:16px;padding:12px 16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.8);animation:slideDown .4s var(--ios-ease)}
+.connector-ui .ios-user-banner.show{display:flex;align-items:center;gap:12px;justify-content:space-between}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.connector-ui .user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3B82F6 0%,#8B5CF6 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(59,130,246,0.25)}
+.connector-ui .user-initial{color:white;font-size:16px;font-weight:600;text-transform:uppercase}
+.connector-ui .user-details{flex:1;display:flex;flex-direction:column;gap:2px}
+.connector-ui .user-name-line{display:flex;align-items:center;gap:6px}
+.connector-ui .user-name{font-size:15px;font-weight:600;color:#1F2937;letter-spacing:-.2px}
+.connector-ui .inline-checkmark{width:14px;height:14px;fill:#10B981;filter:drop-shadow(0 1px 2px rgba(16,185,129,0.2))}
+.connector-ui .user-email{font-size:12px;color:#6B7280}
+.connector-ui .banner-logout-btn{background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.1);border-radius:8px;padding:6px 12px;color:#374151;font-size:12px;font-weight:500;cursor:pointer;flex-shrink:0}
+.connector-ui .btn-primary{background:var(--ios-primary);color:var(--ios-text-inverse);padding:8px 16px;border-radius:var(--ios-radius-sm);font-size:13px;min-height:32px;font-weight:600;box-shadow:var(--ios-shadow-sm),inset 0 1px 0 rgba(255,255,255,0.15);width:100%;border:none;cursor:pointer;font-family:inherit}
+.connector-ui .btn-secondary{background:linear-gradient(135deg,#00C7BE,#0891B2);color:white;padding:6px 12px;border-radius:var(--ios-radius-xs);font-size:12px;min-height:28px;font-weight:600;box-shadow:0 2px 8px rgba(0,199,190,0.3);border:none;cursor:pointer;width:100%;font-family:inherit}
+.connector-ui .btn-text{background:none;border:none;color:var(--ios-primary);font-size:12px;font-weight:500;cursor:pointer;padding:6px 8px;border-radius:var(--ios-radius-xs)}
+.connector-ui hr{border:0;border-top:1px solid #e8e8e8;margin:15px 0}
+.fade-in{animation:fadeIn .4s ease forwards}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.type-cursor{border-right:2px solid var(--ios-primary);animation:blink 1s step-end infinite}
+@keyframes blink{50%{border-color:transparent}}
+.success-badge{display:inline-flex;align-items:center;gap:6px;background:#d1fae5;color:#059669;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;animation:slideDown .4s var(--ios-ease)}
+
+/* Wizard-specific styles */
+.wizard-progress{display:flex;align-items:center;justify-content:center;gap:0;padding:16px 12px 12px;position:relative}
+.wizard-step{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:1;flex:1}
+.wizard-step-circle{width:28px;height:28px;border-radius:50%;border:2px solid #d1d5db;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#9ca3af;transition:all .3s ease}
+.wizard-step-circle.active{border-color:#007AFF;background:#007AFF;color:#fff}
+.wizard-step-circle.completed{border-color:#10B981;background:#10B981;color:#fff}
+.wizard-step-label{font-size:10px;font-weight:500;color:#9ca3af;transition:color .3s ease}
+.wizard-step-label.active{color:#007AFF;font-weight:600}
+.wizard-step-label.completed{color:#10B981}
+.wizard-connector{flex:1;height:2px;background:#d1d5db;margin:0 -8px;margin-top:-18px;z-index:0;transition:background .3s ease}
+.wizard-connector.active{background:#007AFF}
+.wizard-connector.completed{background:#10B981}
+
+.radio-card{border:2px solid #e5e7eb;border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .2s ease;display:flex;align-items:flex-start;gap:10px;background:#fff}
+.radio-card:hover{border-color:#c7d2fe}
+.radio-card.selected{border-color:#007AFF;background:rgba(0,122,255,0.03)}
+.radio-circle{width:18px;height:18px;border-radius:50%;border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .2s ease}
+.radio-circle.selected{border-color:#007AFF}
+.radio-circle-inner{width:10px;height:10px;border-radius:50%;background:#007AFF;transform:scale(0);transition:transform .2s ease}
+.radio-circle.selected .radio-circle-inner{transform:scale(1)}
+.radio-card-title{font-size:13px;font-weight:600;color:#1F2937;margin-bottom:2px}
+.radio-card-desc{font-size:11px;color:#6B7280;line-height:1.4}
+
+.info-box-blue{background:rgba(0,122,255,0.06);border:1px solid rgba(0,122,255,0.15);border-radius:8px;padding:10px 12px;margin:12px 0;font-size:11px;color:#1e40af;line-height:1.5}
+.info-box-blue a{color:#007AFF;text-decoration:none;font-weight:500}
+.info-box-orange{background:rgba(255,159,10,0.08);border:1px solid rgba(255,159,10,0.25);border-radius:8px;padding:10px 12px;margin:0 0 12px;font-size:11px;color:#92400e;line-height:1.5}
+.info-box-green{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:10px 12px;margin:12px 0;font-size:11px;color:#065f46;line-height:1.5}
+
+.form-group{margin-bottom:10px}
+.form-label{display:block;font-size:11px;font-weight:600;color:#374151;margin-bottom:4px}
+.form-input{width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;font-family:inherit;color:#1F2937;background:#fff;transition:border-color .2s ease;outline:none}
+.form-input:focus{border-color:#007AFF;box-shadow:0 0 0 2px rgba(0,122,255,0.1)}
+.form-select{width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;font-family:inherit;color:#1F2937;background:#fff;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%236B7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+
+.loading-spinner{width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:#007AFF;border-radius:50%;animation:ios-spin .8s linear infinite;margin:0 auto}
+.loading-spinner.success{border-color:#10B981;border-top-color:#10B981;animation:none;position:relative}
+.loading-spinner.success::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;color:#10B981;font-weight:700}
+
+.wizard-transition{animation:wizardSlideIn .35s ease forwards}
+@keyframes wizardSlideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.wizard-slide-out{animation:wizardSlideOut .25s ease forwards}
+@keyframes wizardSlideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-20px)}}
+
+.expandable-section{border:1px solid #e5e7eb;border-radius:8px;margin-bottom:12px;overflow:hidden}
+.expandable-header{padding:8px 12px;background:#f9fafb;cursor:pointer;font-size:12px;font-weight:600;color:#374151;display:flex;align-items:center;gap:6px}
+.expandable-content{padding:10px 12px;font-size:11px;color:#4b5563;line-height:1.6}
+.copy-uri-box{background:#fff3cd;border:1px solid #ffc107;border-radius:6px;padding:8px 10px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.copy-uri-box code{font-size:10px;word-break:break-all;flex:1;font-family:'SF Mono',Monaco,monospace;color:#92400e}
+.copy-btn{background:#007AFF;color:#fff;border:none;border-radius:4px;padding:4px 8px;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+
+.btn-wizard{padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .2s ease;font-family:inherit}
+.btn-wizard-primary{background:#007AFF;color:#fff;box-shadow:0 2px 8px rgba(0,122,255,0.25)}
+.btn-wizard-primary:hover{background:#0066d6}
+.btn-wizard-primary.pulse{animation:btnPulse 1.5s ease infinite}
+@keyframes btnPulse{0%,100%{box-shadow:0 2px 8px rgba(0,122,255,0.25)}50%{box-shadow:0 2px 16px rgba(0,122,255,0.5)}}
+.btn-wizard-success{background:#10B981;color:#fff;box-shadow:0 2px 8px rgba(16,185,129,0.25)}
+.btn-wizard-gray{background:#e5e7eb;color:#374151}
+.btn-wizard-gray:hover{background:#d1d5db}
+
+.wizard-buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #f0f0f0}
+</style>
+
+<script>
+(function(){
+  const params=new URLSearchParams(location.search);
+  if(!params.has('embed'))return;
+  document.addEventListener('DOMContentLoaded',()=>{
+    const nav=document.querySelector('.site-nav');if(nav)nav.style.display='none';
+    const ctrl=document.querySelector('.demo-controls');if(ctrl)ctrl.style.display='none';
+    const prog=document.querySelector('.global-progress');if(prog)prog.style.display='none';
+    document.body.style.overflow='hidden';
+  });
+})();
+</script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="logo"><div class="sheets-icon">a4</div><span>aPlan4Sheets</span></div>
+  <div class="site-nav-links">
+    <a href="/demos.html">← Back to Demos</a>
+    <a href="https://aplan4sheets.com">Home</a>
+  </div>
+  <button class="cta-btn" onclick="window.open('https://workspace.google.com/marketplace/app/appname/id')">Install Free</button>
+</nav>
+
+<div class="demo-controls">
+  <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+  <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
+  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 7 — <span id="stepLabel">Opening Extensions Menu</span></div>
+</div>
+
+<div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
+
+<div class="browser-frame">
+  <div class="sheets-toolbar">
+    <div class="doc-icon">📊</div>
+    <div class="doc-name">FY26 Financial Planning — aPlan4Sheets</div>
+    <div class="toolbar-btn">Share</div>
+  </div>
+
+  <!-- Menu bar -->
+  <div style="display:flex;align-items:center;height:24px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368;gap:12px">
+    <span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Data</span><span>Tools</span>
+    <span id="extMenuLabel" style="cursor:default;padding:2px 6px;border-radius:3px;transition:background .15s">Extensions</span>
+    <span>Help</span>
+  </div>
+
+  <div class="formula-bar">
+    <div class="cell-ref">A1</div><span class="fx">fx</span><span></span>
+  </div>
+
+  <div class="main-area">
+    <div class="grid-area">
+      <div class="grid-container"><table class="grid-table" id="gridTable"></table></div>
+      <div class="sheet-tabs"><div class="sheet-tab active">Sheet1</div><div class="sheet-tab-add" style="padding:4px 8px;font-size:14px;cursor:default;color:#5f6368">+</div></div>
+      <!-- Extensions dropdown overlay -->
+      <div class="ext-menu" id="extMenu">
+        <div class="ext-dropdown" id="extDrop" style="top:0;left:340px">
+          <div class="ext-item">Apps Script</div>
+          <div class="ext-item">Add-ons</div>
+          <div class="ext-separator"></div>
+          <div class="ext-item" id="extConnector" style="font-weight:500">Anaplan Connector for Sheets ▸</div>
+          <div class="ext-separator"></div>
+          <div class="ext-item" style="color:#9ca3af">Manage add-ons</div>
+        </div>
+        <div class="ext-dropdown" id="extSubDrop" style="top:60px;left:560px;min-width:180px">
+          <div class="ext-item-sub" id="extOpenSidebar" style="font-weight:500">📊 Open Sidebar</div>
+          <div class="ext-item-sub">📖 Documentation</div>
+          <div class="ext-item-sub">📧 Contact Support</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-area" id="sidebar">
+      <div class="sidebar-inner connector-ui" id="sidebarContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCENES=[
+  {name:'Opening Extensions Menu',duration:6000},
+  {name:'OAuth Setup Wizard Appears',duration:7000},
+  {name:'Enter OAuth Credentials',duration:10000},
+  {name:'Validating Connection',duration:6000},
+  {name:'Next Steps & Finish',duration:6000},
+  {name:'Main Connector - Login',duration:7000},
+  {name:'Connected & Ready',duration:5000},
+];
+const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
+let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
+
+const checkSVG=`<svg class="inline-checkmark" viewBox="0 0 16 16" style="width:14px;height:14px"><path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-1.5 12L3 8.5l1.06-1.06L6.5 9.88l5.44-5.44L13 5.5l-6.5 6.5z"/></svg>`;
+
+function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
+function toggleMute(){
+  const btn=document.getElementById('muteBtn');
+  btn.textContent=btn.textContent==='🔊'?'🔇':'🔊';
+}
+function restartDemo(){
+  playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
+  currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
+  document.getElementById('sidebar').classList.remove('visible');
+  document.getElementById('sidebarContent').innerHTML='';
+  document.getElementById('extDrop').classList.remove('show');
+  document.getElementById('extSubDrop').classList.remove('show');
+  document.getElementById('extMenuLabel').style.background='';
+  document.getElementById('extConnector').classList.remove('highlighted');
+  document.getElementById('extOpenSidebar').classList.remove('highlighted');
+  updateProgress();runScene(0);
+}
+function updateProgress(){
+  const pct=Math.min((elapsed/TOTAL)*100,100);
+  document.getElementById('globalProgress').style.width=pct+'%';
+  document.getElementById('stepNum').textContent=currentScene+1;
+  document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete';
+}
+function runScene(idx){
+  if(idx>=SCENES.length){
+    currentScene=SCENES.length-1;updateProgress();
+    if(new URLSearchParams(location.search).has('loop')){setTimeout(()=>restartDemo(),2000)}
+    return}
+  currentScene=idx;sceneStart=Date.now();updateProgress();
+  [scene1,scene2,scene3,scene4,scene5,scene6,scene7][idx]();
+  sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);
+  const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;const pct=Math.min(((elapsed+se)/TOTAL)*100,100);document.getElementById('globalProgress').style.width=pct+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};
+  animFrameId=requestAnimationFrame(tick);
+}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+function initGrid(){
+  const t=document.getElementById('gridTable');const L='ABCDEFGHIJKLMNO'.split('');
+  let h='<thead><tr><th class="corner"></th>';L.forEach(l=>{h+=`<th class="col-header">${l}</th>`});
+  h+='</tr></thead><tbody>';for(let r=1;r<=30;r++){h+=`<tr><td class="row-header">${r}</td>`;L.forEach(()=>{h+='<td></td>'});h+='</tr>'}
+  h+='</tbody>';t.innerHTML=h;
+}
+
+function wizardProgressHTML(activeStep){
+  const steps=[{num:1,label:'Role'},{num:2,label:'Credentials'},{num:3,label:'Verify'}];
+  let html='<div class="wizard-progress">';
+  steps.forEach((s,i)=>{
+    const isActive=s.num===activeStep;
+    const isCompleted=s.num<activeStep;
+    const circleClass=isCompleted?'completed':isActive?'active':'';
+    const labelClass=isCompleted?'completed':isActive?'active':'';
+    html+=`<div class="wizard-step">
+      <div class="wizard-step-circle ${circleClass}">${isCompleted?'✓':s.num}</div>
+      <div class="wizard-step-label ${labelClass}">${s.label}</div>
+    </div>`;
+    if(i<steps.length-1){
+      const connClass=isCompleted?'completed':isActive?'':'';
+      html+=`<div class="wizard-connector ${connClass}"></div>`;
+    }
+  });
+  html+='</div>';
+  return html;
+}
+
+async function typeText(elementId, text, duration){
+  const el=document.getElementById(elementId);
+  if(!el)return;
+  const chars=text.split('');
+  const interval=duration/chars.length;
+  el.value='';el.classList.add('type-cursor');
+  for(let i=0;i<chars.length;i++){
+    el.value+=chars[i];
+    await wait(interval);
+  }
+  el.classList.remove('type-cursor');
+}
+
+// Scene 1: Extensions menu opens
+async function scene1(){
+  await wait(800);
+  document.getElementById('extMenuLabel').style.background='#e8f0fe';
+  await wait(600);
+  document.getElementById('extDrop').classList.add('show');
+  await wait(1500);
+  document.getElementById('extConnector').classList.add('highlighted');
+  await wait(1000);
+  document.getElementById('extSubDrop').classList.add('show');
+  await wait(800);
+  document.getElementById('extOpenSidebar').classList.add('highlighted');
+  await wait(800);
+  document.getElementById('extDrop').classList.remove('show');
+  document.getElementById('extSubDrop').classList.remove('show');
+  document.getElementById('extMenuLabel').style.background='';
+}
+
+// Scene 2: OAuth Setup Wizard appears
+async function scene2(){
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div id="wizardStep1" class="wizard-transition">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 4px 4px">
+        <div style="font-size:16px;font-weight:700;color:#1F2937">OAuth Setup Wizard</div>
+        <div style="font-size:18px;color:#9ca3af;cursor:pointer;padding:2px 6px;line-height:1">×</div>
+      </div>
+      ${wizardProgressHTML(1)}
+      <hr style="margin:8px 0 12px">
+      <div class="radio-card" id="radioAdmin">
+        <div class="radio-circle" id="radioCircleAdmin"><div class="radio-circle-inner"></div></div>
+        <div>
+          <div class="radio-card-title">IT Administrator</div>
+          <div class="radio-card-desc">I have access to Anaplan OAuth credentials and I'm setting this up for my organization</div>
+        </div>
+      </div>
+      <div class="radio-card" id="radioUser">
+        <div class="radio-circle" id="radioCircleUser"><div class="radio-circle-inner"></div></div>
+        <div>
+          <div class="radio-card-title">End User</div>
+          <div class="radio-card-desc">I need to connect to Anaplan and have been provided OAuth credentials by my IT team</div>
+        </div>
+      </div>
+      <div class="info-box-blue">
+        <strong>Note:</strong> This setup requires OAuth application credentials from Anaplan. These are different from your regular Anaplan username and password.<br>
+        <a href="#" style="margin-top:4px;display:inline-block">Learn how to create an OAuth client in Anaplan →</a>
+      </div>
+      <div style="text-align:right;margin-top:12px">
+        <button class="btn-wizard btn-wizard-primary" id="continueBtn1">Continue</button>
+      </div>
+    </div>
+  `;
+  await wait(300);
+  document.getElementById('sidebar').classList.add('visible');
+  await wait(2000);
+  // Select IT Administrator
+  document.getElementById('radioAdmin').classList.add('selected');
+  document.getElementById('radioCircleAdmin').classList.add('selected');
+}
+
+// Scene 3: Enter OAuth Credentials
+async function scene3(){
+  const step1=document.getElementById('wizardStep1');
+  if(step1)step1.classList.add('wizard-slide-out');
+  await wait(300);
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div id="wizardStep2" class="wizard-transition">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 4px 4px">
+        <div style="font-size:16px;font-weight:700;color:#1F2937">OAuth Setup Wizard</div>
+        <div style="font-size:18px;color:#9ca3af;cursor:pointer;padding:2px 6px;line-height:1">×</div>
+      </div>
+      ${wizardProgressHTML(2)}
+      <hr style="margin:8px 0 12px">
+      <div class="info-box-orange">
+        ⚠️ <strong>Organization-Wide Setup</strong> — You're setting up credentials that will be available to all users with email addresses ending in <strong>@acmecorp.com</strong>
+      </div>
+      <div class="expandable-section">
+        <div class="expandable-header">📖 OAuth Client Setup Instructions</div>
+        <div class="expandable-content">
+          <div class="copy-uri-box">
+            <code>https://aplan4sheets-488017.uc.r.appspot.com/oauth/callback</code>
+            <button class="copy-btn">📋 Copy</button>
+          </div>
+          <ol style="margin:0;padding-left:16px;font-size:11px;line-height:1.8;color:#4b5563">
+            <li>Go to Anaplan Administration</li>
+            <li>Navigate to OAuth Clients</li>
+            <li>Create a new OAuth client</li>
+            <li>Set the Redirect URI above</li>
+            <li>Copy the Client ID and Secret</li>
+          </ol>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Client ID <span style="color:#EF4444">*</span></label>
+        <input class="form-input" type="text" id="clientIdInput" placeholder="Enter Client ID" readonly>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Client Secret <span style="color:#EF4444">*</span></label>
+        <input class="form-input" type="password" id="clientSecretInput" placeholder="Enter Client Secret" readonly>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Anaplan Region</label>
+        <select class="form-select" disabled>
+          <option>US1A - Americas</option>
+        </select>
+      </div>
+      <div class="wizard-buttons">
+        <button class="btn-wizard btn-wizard-gray">Back</button>
+        <button class="btn-wizard btn-wizard-primary" id="validateBtn">Validate & Continue</button>
+      </div>
+    </div>
+  `;
+  await wait(800);
+  // Type client ID
+  await typeText('clientIdInput','a1b2c3d4-e5f6-7890-abcd-ef1234567890',1500);
+  await wait(400);
+  // Type client secret (dots)
+  await typeText('clientSecretInput','••••••••••••••••••••••••',1500);
+  await wait(600);
+  // Pulse the validate button
+  const vBtn=document.getElementById('validateBtn');
+  if(vBtn)vBtn.classList.add('pulse');
+}
+
+// Scene 4: Validating Connection
+async function scene4(){
+  const step2=document.getElementById('wizardStep2');
+  if(step2)step2.classList.add('wizard-slide-out');
+  await wait(300);
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div id="wizardStep3" class="wizard-transition">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 4px 4px">
+        <div style="font-size:16px;font-weight:700;color:#1F2937">OAuth Setup Wizard</div>
+        <div style="font-size:18px;color:#9ca3af;cursor:pointer;padding:2px 6px;line-height:1">×</div>
+      </div>
+      ${wizardProgressHTML(3)}
+      <hr style="margin:8px 0 12px">
+      <div id="validationArea" style="text-align:center;padding:24px 0">
+        <div class="loading-spinner" id="valSpinner"></div>
+        <div style="font-size:14px;font-weight:600;color:#374151;margin-top:12px" id="valText">Testing connection to Anaplan...</div>
+        <div style="font-size:12px;color:#9ca3af;margin-top:4px" id="valSubtext">This may take a few seconds</div>
+      </div>
+      <div id="validationResult" style="display:none"></div>
+    </div>
+  `;
+  await wait(3000);
+  // Success
+  const spinner=document.getElementById('valSpinner');
+  spinner.classList.add('success');
+  document.getElementById('valText').innerHTML='<span style="color:#059669">Connection Successful!</span>';
+  document.getElementById('valSubtext').style.display='none';
+  await wait(500);
+  const result=document.getElementById('validationResult');
+  result.style.display='block';
+  result.innerHTML=`
+    <div class="info-box-green fade-in">
+      <strong>Domain Configuration Saved</strong><br>
+      All users with email addresses ending in <strong>@acmecorp.com</strong> can now use these credentials.
+    </div>
+  `;
+}
+
+// Scene 5: Next Steps & Finish
+async function scene5(){
+  const result=document.getElementById('validationResult');
+  if(!result)return;
+  const nextHtml=`
+    <div class="info-box-blue fade-in" style="margin-top:12px">
+      <strong>Next Steps:</strong>
+      <ol style="margin:6px 0 0;padding-left:16px;line-height:1.8">
+        <li>Click "Finish Setup" below</li>
+        <li>You'll be redirected to the main connector</li>
+        <li>Click "Login with Anaplan SSO" to authenticate with your personal account</li>
+      </ol>
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <button class="btn-wizard btn-wizard-success" id="finishBtn" style="padding:10px 32px;font-size:14px">Finish Setup</button>
+    </div>
+  `;
+  result.insertAdjacentHTML('beforeend',nextHtml);
+  await wait(2000);
+  // Click animation
+  const btn=document.getElementById('finishBtn');
+  if(btn){
+    btn.style.transform='scale(0.93)';
+    await wait(150);
+    btn.style.transform='scale(1)';
+  }
+}
+
+// Scene 6: Main Connector - Login
+async function scene6(){
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div class="wizard-transition">
+      <div style="text-align:center;padding:16px 0 8px">
+        <div style="width:48px;height:48px;background:#0f9d58;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:700;margin:0 auto 8px">a4</div>
+        <div style="font-size:16px;font-weight:700;color:#1F2937">aPlan4Sheets</div>
+        <div style="font-size:11px;color:#6B7280">Anaplan Connector for Google Sheets</div>
+      </div>
+      <hr>
+      <div class="ios-toggle-menu" id="authToggle6">
+        <div class="ios-toggle-header">
+          <div class="ios-toggle-title">
+            <span class="ios-toggle-label">Login Method</span>
+            <span class="ios-toggle-value">OAuth/SSO</span>
+          </div>
+          <span class="ios-toggle-chevron"></span>
+        </div>
+      </div>
+      <button class="ios-login-button" id="loginBtn6"><span class="button-text">Login with Anaplan SSO</span></button>
+      <div class="ios-user-banner" id="userBanner6">
+        <div class="user-avatar"><span class="user-initial">S</span></div>
+        <div class="user-details">
+          <div class="user-name-line"><span class="user-name">Sarah Chen</span>${checkSVG}</div>
+          <div class="user-email">sarah.chen@acmecorp.com</div>
+        </div>
+        <button class="banner-logout-btn">Logout</button>
+      </div>
+      <div id="postLoginArea" style="display:none"></div>
+    </div>
+  `;
+  await wait(2000);
+  // Click login
+  const btn=document.getElementById('loginBtn6');
+  btn.style.transform='scale(0.97)';await wait(150);btn.style.transform='';
+  btn.classList.add('loading');
+  btn.innerHTML='<span class="ios-login-spinner"></span> <span class="button-text">Authenticating...</span>';
+  await wait(2000);
+  btn.innerHTML='<span class="button-text">✓ Authentication Successful</span>';
+  btn.style.background='linear-gradient(135deg,#30D158 0%,#34C759 100%)';
+  btn.classList.remove('loading');
+}
+
+// Scene 7: Connected & Ready
+async function scene7(){
+  const btn=document.getElementById('loginBtn6');
+  if(btn)btn.style.display='none';
+  const toggle=document.getElementById('authToggle6');
+  if(toggle)toggle.style.display='none';
+  await wait(400);
+  const banner=document.getElementById('userBanner6');
+  if(banner)banner.classList.add('show');
+  await wait(600);
+  const area=document.getElementById('postLoginArea');
+  if(area){
+    area.style.display='block';
+    area.innerHTML=`
+      <div class="success-badge fade-in" style="margin:0 auto 12px;width:fit-content">✓ Connected to Anaplan</div>
+      <hr>
+      <div style="text-align:center;margin:12px 0" class="fade-in">
+        <button class="btn-primary" style="width:auto;padding:10px 24px;background:linear-gradient(135deg,#5E5CE6,#007AFF)">+ Add Model</button>
+      </div>
+    `;
+  }
+}
+
+initGrid();
+setTimeout(()=>runScene(0),500);
+</script>
+</body>
+</html>

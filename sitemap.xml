@@ -49,6 +49,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://aplan4sheets.com/demo/oauth-setup.html</loc>
+    <lastmod>2026-03-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://aplan4sheets.com/guide.html</loc>
     <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
