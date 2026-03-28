@@ -135,22 +135,22 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 </style>
 
 <script>
-if(new URLSearchParams(location.search).has('embed')){
+(function(){
+  const params=new URLSearchParams(location.search);
+  if(!params.has('embed'))return;
+  // Remove all audio elements immediately to prevent any playback
   document.addEventListener('DOMContentLoaded',()=>{
+    document.querySelectorAll('audio').forEach(a=>a.remove());
     const nav=document.querySelector('.site-nav');if(nav)nav.style.display='none';
     const ctrl=document.querySelector('.demo-controls');if(ctrl)ctrl.style.display='none';
     const prog=document.querySelector('.global-progress');if(prog)prog.style.display='none';
     document.body.style.overflow='hidden';
-    // Start muted in embed mode
-    if(typeof audioMuted!=='undefined'){audioMuted=true}
-    else{window.addEventListener('load',()=>{if(typeof audioMuted!=='undefined')audioMuted=true})}
-    // Listen for hover messages from parent
-    window.addEventListener('message',(e)=>{
-      if(e.data==='hover-enter'){audioMuted=false}
-      if(e.data==='hover-leave'){audioMuted=true;if(typeof audioClips!=='undefined')audioClips.forEach(a=>{a.pause();a.currentTime=0})}
-    });
   });
-}
+  // Force audioMuted=true as soon as the main script sets it
+  Object.defineProperty(window,'audioMuted',{value:true,writable:true,configurable:true});
+  // Override playNarration to be a no-op in embed mode
+  window.addEventListener('load',()=>{window.playNarration=function(){}});
+})();
 </script>
 </head>
 <body>
