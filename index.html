@@ -283,7 +283,13 @@
           <a href="/demo/setup.html" class="block group">
             <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm transition-shadow group-hover:shadow-md">
               <div class="relative h-72 overflow-hidden">
-                <iframe src="/demo/setup.html?embed=1&loop=1" class="absolute inset-0 w-[200%] h-[200%] origin-top-left scale-50 pointer-events-none" loading="lazy" tabindex="-1"></iframe>
+                <div class="h-full bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3">
+                  <div class="w-16 h-16 rounded-full bg-sheets-green/90 flex items-center justify-center shadow-lg group-hover:bg-sheets-green transition-colors">
+                    <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span class="text-sm font-semibold text-navy/70">Getting Connected</span>
+                  <span class="text-xs text-text-muted">Click to watch demo</span>
+                </div>
               </div>
               <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
                 <span class="text-sm font-medium text-text-muted">Anaplan module sidebar</span>
@@ -296,7 +302,13 @@
           <a href="/demo/pivot.html" class="block group">
             <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm transition-shadow group-hover:shadow-md">
               <div class="relative h-72 overflow-hidden">
-                <iframe src="/demo/pivot.html?embed=1&loop=1" class="absolute inset-0 w-[200%] h-[200%] origin-top-left scale-50 pointer-events-none" loading="lazy" tabindex="-1"></iframe>
+                <div class="h-full bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3">
+                  <div class="w-16 h-16 rounded-full bg-sheets-green/90 flex items-center justify-center shadow-lg group-hover:bg-sheets-green transition-colors">
+                    <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span class="text-sm font-semibold text-navy/70">Pivot & Data Mapping</span>
+                  <span class="text-xs text-text-muted">Click to watch demo</span>
+                </div>
               </div>
               <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
                 <span class="text-sm font-medium text-text-muted">Data mapping configuration</span>
@@ -309,7 +321,13 @@
           <a href="/demo/schedule.html" class="block group">
             <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm transition-shadow group-hover:shadow-md">
               <div class="relative h-72 overflow-hidden">
-                <iframe src="/demo/schedule.html?embed=1&loop=1" class="absolute inset-0 w-[200%] h-[200%] origin-top-left scale-50 pointer-events-none" loading="lazy" tabindex="-1"></iframe>
+                <div class="h-full bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3">
+                  <div class="w-16 h-16 rounded-full bg-sheets-green/90 flex items-center justify-center shadow-lg group-hover:bg-sheets-green transition-colors">
+                    <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                  <span class="text-sm font-semibold text-navy/70">Scheduling & Refresh</span>
+                  <span class="text-xs text-text-muted">Click to watch demo</span>
+                </div>
               </div>
               <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
                 <span class="text-sm font-medium text-text-muted">One-click data refresh</span>
@@ -319,15 +337,7 @@
         </div>
       </div>
     </div>
-    <script>
-      // Hover-to-unmute: send messages to demo iframes
-      document.querySelectorAll('a[href^="/demo/"]').forEach(card => {
-        const iframe = card.querySelector('iframe');
-        if (!iframe) return;
-        card.addEventListener('mouseenter', () => iframe.contentWindow?.postMessage('hover-enter', '*'));
-        card.addEventListener('mouseleave', () => iframe.contentWindow?.postMessage('hover-leave', '*'));
-      });
-    </script>
+
   </section>
 
   <!-- Testimonials (removed - placeholder content) -->
