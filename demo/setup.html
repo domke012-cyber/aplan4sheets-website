@@ -118,6 +118,17 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 /* Success badge */
 .success-badge{display:inline-flex;align-items:center;gap:6px;background:#d1fae5;color:#059669;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;animation:slideDown .4s var(--ios-ease)}
 </style>
+
+<script>
+if(new URLSearchParams(location.search).has('embed')){
+  document.addEventListener('DOMContentLoaded',()=>{
+    const nav=document.querySelector('.site-nav');if(nav)nav.style.display='none';
+    const ctrl=document.querySelector('.demo-controls');if(ctrl)ctrl.style.display='none';
+    const prog=document.querySelector('.global-progress');if(prog)prog.style.display='none';
+    document.body.style.overflow='hidden';
+  });
+}
+</script>
 </head>
 <body>
 
@@ -219,7 +230,10 @@ function updateProgress(){
   document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete';
 }
 function runScene(idx){
-  if(idx>=SCENES.length){currentScene=SCENES.length-1;updateProgress();return}
+  if(idx>=SCENES.length){
+    currentScene=SCENES.length-1;updateProgress();
+    if(new URLSearchParams(location.search).has('loop')){setTimeout(()=>restartDemo(),2000)}
+    return}
   currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);
   [scene1,scene2,scene3,scene4,scene5][idx]();
   sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);

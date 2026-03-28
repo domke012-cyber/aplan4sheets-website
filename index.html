@@ -290,56 +290,44 @@
         <p class="mt-4 text-text-muted text-lg max-w-xl mx-auto">A familiar spreadsheet experience with Anaplan data at your fingertips.</p>
       </div>
       <div class="mt-14 grid md:grid-cols-3 gap-6">
-        <!-- Screenshot 1 -->
+        <!-- Demo 1: Setup / Sidebar -->
         <div class="fade-in">
-          <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
-            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
-              <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
-              <span class="ml-2 text-xs text-text-muted">Google Sheets</span>
+          <a href="/demo/setup.html" class="block group">
+            <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm transition-shadow group-hover:shadow-md">
+              <div class="relative h-72 overflow-hidden">
+                <iframe src="/demo/setup.html?embed=1&loop=1" class="absolute inset-0 w-[200%] h-[200%] origin-top-left scale-50 pointer-events-none" loading="lazy" tabindex="-1"></iframe>
+              </div>
+              <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+                <span class="text-sm font-medium text-text-muted">Anaplan module sidebar</span>
+              </div>
             </div>
-            <div class="h-56 bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3 p-6">
-              <svg class="w-12 h-12 text-sheets-green/50" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/>
-              </svg>
-              <span class="text-sm font-medium text-text-muted">Anaplan module sidebar</span>
-            </div>
-          </div>
+          </a>
         </div>
-        <!-- Screenshot 2 -->
+        <!-- Demo 2: Pivot / Data Mapping -->
         <div class="fade-in">
-          <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
-            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
-              <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
-              <span class="ml-2 text-xs text-text-muted">Google Sheets</span>
+          <a href="/demo/pivot.html" class="block group">
+            <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm transition-shadow group-hover:shadow-md">
+              <div class="relative h-72 overflow-hidden">
+                <iframe src="/demo/pivot.html?embed=1&loop=1" class="absolute inset-0 w-[200%] h-[200%] origin-top-left scale-50 pointer-events-none" loading="lazy" tabindex="-1"></iframe>
+              </div>
+              <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+                <span class="text-sm font-medium text-text-muted">Data mapping configuration</span>
+              </div>
             </div>
-            <div class="h-56 bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3 p-6">
-              <svg class="w-12 h-12 text-sheets-green/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M10.875 12c-.621 0-1.125.504-1.125 1.125M12 12c.621 0 1.125.504 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 0v1.5c0 .621-.504 1.125-1.125 1.125m0-3.75c-.621 0-1.125.504-1.125 1.125"/>
-              </svg>
-              <span class="text-sm font-medium text-text-muted">Data mapping configuration</span>
-            </div>
-          </div>
+          </a>
         </div>
-        <!-- Screenshot 3 -->
+        <!-- Demo 3: Schedule / Refresh -->
         <div class="fade-in">
-          <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm">
-            <div class="flex items-center gap-1.5 px-4 py-2.5 bg-gray-100 border-b border-gray-200">
-              <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
-              <span class="ml-2 text-xs text-text-muted">Google Sheets</span>
+          <a href="/demo/schedule.html" class="block group">
+            <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm transition-shadow group-hover:shadow-md">
+              <div class="relative h-72 overflow-hidden">
+                <iframe src="/demo/schedule.html?embed=1&loop=1" class="absolute inset-0 w-[200%] h-[200%] origin-top-left scale-50 pointer-events-none" loading="lazy" tabindex="-1"></iframe>
+              </div>
+              <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+                <span class="text-sm font-medium text-text-muted">One-click data refresh</span>
+              </div>
             </div>
-            <div class="h-56 bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3 p-6">
-              <svg class="w-12 h-12 text-sheets-green/50" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-              </svg>
-              <span class="text-sm font-medium text-text-muted">One-click data refresh</span>
-            </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
