@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://aplan4sheets.com/sitemap.xml
