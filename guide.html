@@ -2,6 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
+  <script>document.documentElement.classList.add('js')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Getting Started — aPlan4Sheets</title>
   <meta name="description" content="Step-by-step setup guide for aPlan4Sheets — the Anaplan connector for Google Sheets. Install, connect, and start pulling data in minutes.">
@@ -48,11 +49,15 @@
   </script>
   <style>
     .fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .js .fade-in {
       opacity: 0;
       transform: translateY(24px);
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .fade-in.visible {
+    .js .fade-in.visible {
       opacity: 1;
       transform: translateY(0);
     }
@@ -93,16 +98,26 @@
     .callout-icon {
       color: #0f9d58;
     }
-    .screenshot-placeholder {
-      background: #f3f4f6;
-      border: 2px dashed #d1d5db;
-      border-radius: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #9ca3af;
+    .guide-demo-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+    .guide-demo-frame {
+      width: 100%;
+      min-height: 320px;
+      border: 0;
+      background: #f8fafc;
+      display: block;
+    }
+    .guide-demo-caption {
+      padding: 0.875rem 1rem;
       font-size: 0.875rem;
-      min-height: 240px;
+      color: #6b7280;
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
     }
     .guide-connector {
       position: absolute;
@@ -234,8 +249,9 @@
             <li>Click <strong>"Install"</strong> and grant the required permissions</li>
             <li>Open any Google Sheet — the add-on is now available</li>
           </ol>
-          <div class="screenshot-placeholder mb-6">
-            <img src="screenshots/step-1.png" alt="Google Workspace Marketplace listing for aPlan4Sheets" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Marketplace listing — coming soon</span>';">
+          <div class="guide-demo-card mb-6">
+            <iframe src="/demo/setup.html?embed=1&loop=1" title="aPlan4Sheets setup demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption">Interactive HTML walkthrough of the install, sidebar, login, and model setup flow.</div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
@@ -261,11 +277,13 @@
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
             <li>Open any Google Sheet</li>
-            <li>Go to <strong>Extensions</strong> → <strong>Anaplan Connector for Sheets™</strong> → <strong>Open Sidebar</strong></li>
+            <li>Go to <strong>Extensions</strong> → <strong>Anaplan Connector for Sheets™</strong> → <strong>📊 Open Sidebar</strong></li>
+            <li>If needed, you can also access <strong>🔑 Login to Anaplan</strong> and <strong>🔧 Setup OAuth Credentials</strong> from the same menu</li>
             <li>The aPlan4Sheets sidebar will appear on the right side of your spreadsheet</li>
           </ol>
-          <div class="screenshot-placeholder mb-6">
-            <img src="screenshots/step-2.png" alt="Opening the aPlan4Sheets sidebar from the Extensions menu" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Extensions menu — coming soon</span>';">
+          <div class="guide-demo-card mb-6">
+            <iframe src="/demo/setup.html?embed=1&loop=1" title="Open the aPlan4Sheets sidebar demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption">Shows the Extensions menu path and the sidebar opening inside Google Sheets.</div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
@@ -282,53 +300,54 @@
           <div class="step-number">3</div>
           <div>
             <h2 class="text-2xl md:text-3xl font-bold text-navy">Connect to Anaplan</h2>
-            <p class="mt-1 text-text-muted">Authenticate with your Anaplan account — two options available.</p>
+            <p class="mt-1 text-text-muted">Choose a Login Method, then follow the path that matches your account.</p>
           </div>
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-6">
-            aPlan4Sheets supports two authentication methods. Choose the one that matches your organization's Anaplan setup.
+            The sidebar opens on a login-first screen with a <strong>Login Method</strong> selector. Start there, then use the branch below that matches your account setup.
           </p>
 
           <!-- Option A -->
           <div class="bg-green-light/50 rounded-xl p-6 mb-6 border border-sheets-green/20">
             <div class="flex items-center gap-2 mb-3">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-sheets-green text-white">Recommended</span>
-              <h3 class="text-lg font-bold text-navy">Option A: OAuth / SSO</h3>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-sheets-green text-white">Default</span>
+              <h3 class="text-lg font-bold text-navy">Option A: OAuth/SSO</h3>
             </div>
             <p class="text-text-dark text-sm leading-relaxed mb-3">
-              Best for organizations using Anaplan SSO (single sign-on). This is the most secure method — your credentials are never stored by the add-on.
+              This is the default <strong>Login Method</strong>. Most work accounts should use this path.
             </p>
             <ol class="list-decimal list-inside space-y-2 text-sm text-text-dark">
-              <li>Click the <strong>"Login with Anaplan SSO"</strong> button in the sidebar</li>
-              <li>A popup window will open — complete your organization's SSO login</li>
-              <li>After successful authentication, the popup closes automatically</li>
-              <li>You'll see <strong>"Authentication Successful"</strong> in the sidebar</li>
+              <li>Leave <strong>Login Method</strong> set to <strong>OAuth/SSO</strong></li>
+              <li>Click <strong>"Login with Anaplan SSO"</strong></li>
+              <li>A popup window will open so you can complete your organization's SSO login</li>
+              <li>After successful authentication, return to the sidebar and continue setup</li>
             </ol>
           </div>
 
           <!-- Option B -->
           <div class="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
-            <h3 class="text-lg font-bold text-navy mb-3">Option B: Email &amp; Password</h3>
+            <h3 class="text-lg font-bold text-navy mb-3">Option B: Gmail or personal-domain account</h3>
             <p class="text-text-dark text-sm leading-relaxed mb-3">
-              For Anaplan accounts that use direct email/password authentication (no SSO configured).
+              If you are using Gmail or another personal domain, SSO may need one extra setup step before login will work.
             </p>
             <ol class="list-decimal list-inside space-y-2 text-sm text-text-dark">
-              <li>Enter your <strong>Anaplan email address</strong> in the email field</li>
-              <li>Enter your <strong>Anaplan password</strong></li>
-              <li>Click <strong>"Login"</strong></li>
-              <li>You'll see a confirmation that you're connected</li>
+              <li>Open <strong>Extensions</strong> → <strong>Anaplan Connector for Sheets™</strong> → <strong>🔧 Setup OAuth Credentials</strong></li>
+              <li>Follow the guided setup shown in the sidebar for personal-domain access</li>
+              <li>Return to the login screen and click <strong>"Login with Anaplan SSO"</strong></li>
+              <li>If your Anaplan tenant uses a different authentication pattern, follow your organization's instructions</li>
             </ol>
           </div>
 
-          <div class="screenshot-placeholder mb-6">
-            <img src="screenshots/step-3.png" alt="Anaplan authentication options in the sidebar" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Login screen — coming soon</span>';">
+          <div class="guide-demo-card mb-6">
+            <iframe src="/demo/oauth-setup.html?embed=1&loop=1" title="Anaplan login and OAuth setup demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption">Covers the login-first sidebar flow and OAuth setup sequence.</div>
           </div>
 
           <div class="callout">
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-              <p class="text-sm text-text-dark"><strong>Security note:</strong> aPlan4Sheets never stores your credentials on external servers. All authentication uses Anaplan's official API, and tokens are stored securely in your browser session.</p>
+              <p class="text-sm text-text-dark"><strong>Security note:</strong> For the basic-auth path, credentials are encrypted and stored securely in Google infrastructure. OAuth/SSO continues to use Anaplan's official authentication flow.</p>
             </div>
           </div>
         </div>
@@ -345,7 +364,7 @@
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-4">
-            After logging in, you'll need to add at least one Anaplan model to start working with data.
+            After logging in, the empty state reads <strong>"No models configured yet. Click \"Add Model\" to get started."</strong> Add at least one model before using exports, saved views, or pivot views.
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
             <li>Click the <strong>"Add Model"</strong> button in the sidebar</li>
@@ -353,13 +372,14 @@
             <li>Select the <strong>Model</strong> from the second dropdown</li>
             <li>Click <strong>"Save"</strong> to add the model to your configuration</li>
           </ol>
-          <div class="screenshot-placeholder mb-6">
-            <img src="screenshots/step-4.png" alt="Adding an Anaplan model in the sidebar" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Model configuration — coming soon</span>';">
+          <div class="guide-demo-card mb-6">
+            <iframe src="/demo/setup.html?embed=1&loop=1" title="Add model configuration demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption">Demonstrates adding a workspace and model after authentication.</div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-              <p class="text-sm text-text-dark"><strong>Multi-model support:</strong> You can add multiple models from different workspaces. This is great for teams that pull data from several Anaplan models into a single reporting sheet. Just repeat the steps above for each model.</p>
+              <p class="text-sm text-text-dark"><strong>Note:</strong> You can add multiple models, but there is a known issue where the export list may not load correctly when several models are configured. If exports do not populate, try validating with a single selected model first.</p>
             </div>
           </div>
         </div>
@@ -371,17 +391,17 @@
           <div class="step-number">5</div>
           <div>
             <h2 class="text-2xl md:text-3xl font-bold text-navy">Create Your First Pivot</h2>
-            <p class="mt-1 text-text-muted">Pull Anaplan data into a custom pivot layout.</p>
+            <p class="mt-1 text-text-muted">Use Pivot Views to build a custom pivot layout.</p>
           </div>
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-4">
-            The Pivot feature lets you pull data from any Anaplan module view and arrange dimensions exactly how you need them — rows, columns, and page filters.
+            The <strong>Pivot Views</strong> section lets you pull data from an Anaplan view and arrange dimensions exactly how you need them, including rows, columns, and page filters.
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
-            <li>Navigate to the <strong>"Pivot"</strong> tab in the sidebar</li>
-            <li><strong>Search or browse</strong> the available modules in your connected model</li>
-            <li>Select a <strong>saved view</strong> (or use the default view) and click <strong>"Configure"</strong></li>
+            <li>Open the <strong>"Pivot Views"</strong> section in the sidebar</li>
+            <li><strong>Search or browse</strong> the available views in your connected model</li>
+            <li>Select a view and click <strong>"Configure Pivot"</strong></li>
             <li><strong>Drag dimensions</strong> to arrange them:
               <ul class="list-disc list-inside ml-6 mt-2 space-y-1 text-text-muted text-sm">
                 <li><strong>Rows</strong> — dimensions that appear as row headers</li>
@@ -390,10 +410,11 @@
               </ul>
             </li>
             <li><strong>Select items</strong> for each page dimension to filter your data</li>
-            <li>Click <strong>"Execute"</strong> to pull the data into your sheet</li>
+            <li>Use <strong>"Repivot Current Sheet"</strong> later if you want to rerun the current pivot with updated settings</li>
           </ol>
-          <div class="screenshot-placeholder mb-6">
-            <img src="screenshots/step-5.png" alt="Configuring a pivot view in aPlan4Sheets" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Pivot configuration — coming soon</span>';">
+          <div class="guide-demo-card mb-6">
+            <iframe src="/demo/pivot.html?embed=1&loop=1" title="Pivot configuration demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption">Walkthrough of selecting a Pivot View and configuring the pivot layout.</div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
@@ -409,27 +430,28 @@
         <div class="flex items-start gap-5 mb-6">
           <div class="step-number">6</div>
           <div>
-            <h2 class="text-2xl md:text-3xl font-bold text-navy">Export Anaplan Views</h2>
-            <p class="mt-1 text-text-muted">Pull pre-configured Anaplan exports directly into Sheets.</p>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Run Exports and Saved Views</h2>
+            <p class="mt-1 text-text-muted">Use the current sidebar labels to pull exports or saved views into Sheets.</p>
           </div>
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-4">
-            If your Anaplan model has pre-defined export actions, you can run them directly from Google Sheets and land the output in your spreadsheet.
+            The sidebar has separate <strong>Exports</strong> and <strong>Saved Views</strong> sections. Use the one that matches the object you want to run.
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
-            <li>Switch to the <strong>"Exports"</strong> tab in the sidebar</li>
-            <li>Click <strong>"Fetch"</strong> to load the available export definitions from your model</li>
-            <li>Select the <strong>export</strong> you want to run from the list</li>
-            <li>Click <strong>"Export"</strong> to execute it and pull the data into your sheet</li>
+            <li>Open the <strong>"Exports"</strong> section and use <strong>"Search exports..."</strong> if you need to filter the list</li>
+            <li>Select one or more exports, then click <strong>"Refresh Selected Exports"</strong></li>
+            <li>For saved views, switch to the <strong>"Saved Views"</strong> section</li>
+            <li>Select the view you want and click <strong>"Export View"</strong></li>
           </ol>
-          <div class="screenshot-placeholder mb-6">
-            <img src="screenshots/step-6.png" alt="Running an Anaplan export from the sidebar" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Exports tab — coming soon</span>';">
+          <div class="guide-demo-card mb-6">
+            <iframe src="/demo/discovery.html?embed=1" title="Exports and saved views demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption">Example of browsing model content and running data pulls from the sidebar.</div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-              <p class="text-sm text-text-dark"><strong>Tip:</strong> Exports use the same definitions configured by your Anaplan model builder. Great for standard reports that don't need custom pivot layouts.</p>
+              <p class="text-sm text-text-dark"><strong>Tip:</strong> If exports do not populate after adding more than one model, retry with a single configured model first. Saved Views and Pivot Views may be a better fallback while the multi-model export issue remains unresolved.</p>
             </div>
           </div>
         </div>
@@ -446,20 +468,22 @@
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-4">
-            Once you've set up your pivot views and exports, you can refresh everything at once — no need to reconfigure each connection.
+            Once you've set up your exports, saved views, or pivot views, you can refresh everything from the current spreadsheet without rebuilding each connection.
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
-            <li>Use the <strong>"Refresh Sheets"</strong> feature in the sidebar</li>
-            <li>All configured connections in the current spreadsheet will re-pull data from Anaplan</li>
-            <li>Your data updates in place — formatting and formulas you've added around the data are preserved</li>
+            <li>Click <strong>"Refresh Sheets"</strong> in the sidebar</li>
+            <li>To automate updates, open <strong>"Scheduled Refreshes"</strong> and click <strong>"+ Add Schedule"</strong></li>
+            <li>Choose the scope, such as <strong>"All Configured Sheets"</strong>, then click <strong>"Save Schedule"</strong></li>
+            <li>Use <strong>"Email Notification Settings"</strong> if you want schedule-related email updates</li>
           </ol>
-          <div class="screenshot-placeholder mb-6">
-            <img src="screenshots/step-7.png" alt="Refreshing all sheets at once" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.parentElement.innerHTML='<span>📸 Screenshot: Refresh feature — coming soon</span>';">
+          <div class="guide-demo-card mb-6">
+            <iframe src="/demo/schedule.html?embed=1&loop=1" title="Refresh and scheduled refresh demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption">Shows the refresh flow and scheduled refresh configuration pattern.</div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-              <p class="text-sm text-text-dark"><strong>Auto-refresh:</strong> Enterprise users can schedule automatic refreshes so reports are always up to date — no manual clicks required. Contact us to learn more.</p>
+              <p class="text-sm text-text-dark"><strong>Auto-refresh:</strong> Scheduled refreshes are configured directly in the sidebar under <strong>"Scheduled Refreshes"</strong>, so you can keep reports updated without reopening each setup flow.</p>
             </div>
           </div>
         </div>

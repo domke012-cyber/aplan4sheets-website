@@ -37,6 +37,9 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 .formula-bar{display:flex;align-items:center;height:28px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368}
 .formula-bar .cell-ref{background:#f1f3f4;border-radius:3px;padding:2px 8px;margin-right:8px;font-weight:500;min-width:48px;text-align:center}
 .formula-bar .fx{color:#5f6368;margin-right:6px;font-style:italic}
+body.embed-mode .formula-bar{display:none}
+body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
+body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
 .main-area{display:flex;flex:1;overflow:hidden}
 .grid-area{flex:1;position:relative;background:#fff;overflow:hidden}
 .sheet-tabs{display:flex;align-items:center;height:28px;background:#f1f3f4;border-top:1px solid #dadce0;padding:0 8px;gap:2px;font-size:12px;color:#5f6368}
@@ -188,11 +191,15 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
   const params=new URLSearchParams(location.search);
   if(!params.has('embed'))return;
   document.addEventListener('DOMContentLoaded',()=>{
+    document.body.classList.add('embed-mode');
+    document.querySelectorAll('audio').forEach(a=>a.remove());
     const nav=document.querySelector('.site-nav');if(nav)nav.style.display='none';
     const ctrl=document.querySelector('.demo-controls');if(ctrl)ctrl.style.display='none';
     const prog=document.querySelector('.global-progress');if(prog)prog.style.display='none';
     document.body.style.overflow='hidden';
   });
+  Object.defineProperty(window,'audioMuted',{value:true,writable:true,configurable:true});
+  window.addEventListener('load',()=>{window.playNarration=function(){};});
 })();
 </script>
 </head>
