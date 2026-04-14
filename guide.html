@@ -107,10 +107,15 @@
     }
     .guide-demo-frame {
       width: 100%;
-      min-height: 320px;
+      min-height: clamp(560px, 72vh, 880px);
       border: 0;
       background: #f8fafc;
       display: block;
+    }
+    @media (max-width: 768px) {
+      .guide-demo-frame {
+        min-height: 78vh;
+      }
     }
     .guide-demo-caption {
       padding: 0.875rem 1rem;
