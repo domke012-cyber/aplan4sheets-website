@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Connect Anaplan to Google Sheets (2026 Guide) | aPlan4Sheets</title>
+  <meta name="description" content="Step-by-step guide to connecting Anaplan to Google Sheets using aPlan4Sheets. Pull Anaplan data into Sheets with one click. Works on Mac, PC, and Chromebook.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://aplan4sheets.com/blog/connect-anaplan-to-google-sheets.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Connect Anaplan to Google Sheets (2026 Guide)">
+  <meta property="og:description" content="Step-by-step guide to connecting Anaplan to Google Sheets using aPlan4Sheets. Works on Mac, PC, and Chromebook.">
+  <meta property="og:url" content="https://aplan4sheets.com/blog/connect-anaplan-to-google-sheets.html">
+  <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1a2744',
+            'navy-light': '#243352',
+            'sheets-green': '#0f9d58',
+            'sheets-green-dark': '#0b8043',
+            'text-dark': '#1a1a2e',
+            'text-muted': '#6b7280',
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Connect Anaplan to Google Sheets",
+    "description": "Connect your Anaplan models to Google Sheets using the aPlan4Sheets add-on.",
+    "step": [
+      {"@type": "HowToStep", "name": "Install aPlan4Sheets", "text": "Install aPlan4Sheets from the Google Workspace Marketplace."},
+      {"@type": "HowToStep", "name": "Authenticate with Anaplan", "text": "Open the aPlan4Sheets sidebar and log in with your Anaplan credentials via OAuth or Basic Auth."},
+      {"@type": "HowToStep", "name": "Select a workspace and model", "text": "Choose your Anaplan workspace and model from the dropdown menus in the sidebar."},
+      {"@type": "HowToStep", "name": "Export or pivot your data", "text": "Select a saved view or module and click Export, or use the Pivot Engine for custom layouts."}
+    ]
+  }
+  </script>
+</head>
+<body class="font-sans text-text-dark bg-white antialiased">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="8" fill="#1a2744"/>
+          <rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/>
+          <rect x="18" y="6" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+          <rect x="6" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+          <rect x="18" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.35"/>
+        </svg>
+        <span class="text-lg font-bold text-navy">aPlan4Sheets</span>
+      </a>
+      <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">Install Now</a>
+    </div>
+  </nav>
+
+  <article class="pt-28 pb-20 max-w-3xl mx-auto px-6">
+    <p class="text-sm text-sheets-green font-semibold uppercase tracking-wide mb-3">Guide</p>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-navy leading-tight mb-6">How to Connect Anaplan to Google Sheets</h1>
+    <p class="text-lg text-text-muted mb-10">A step-by-step guide to pulling Anaplan data into Google Sheets using the aPlan4Sheets connector. No Excel, no desktop software, no VMs.</p>
+
+    <div class="prose prose-lg max-w-none">
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Why connect Anaplan to Google Sheets?</h2>
+      <p class="text-text-muted mb-4">Anaplan is the standard for enterprise planning, but many FP&A teams still need data in spreadsheets for ad-hoc analysis, board reporting, and collaboration with stakeholders who don't have Anaplan access.</p>
+      <p class="text-text-muted mb-4">Traditionally, this meant using AXL (Anaplan Excel Add-in) or Fluence XL on Windows. But if your team uses Macs, Chromebooks, or Google Workspace, those tools don't work. aPlan4Sheets solves this by bringing Anaplan data directly into Google Sheets through the browser.</p>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">What you'll need</h2>
+      <ul class="list-disc pl-6 text-text-muted mb-6 space-y-2">
+        <li>A Google Workspace account (Gmail works too)</li>
+        <li>An Anaplan account with workspace access</li>
+        <li>Google Chrome, Edge, or any modern browser</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 1: Install aPlan4Sheets</h2>
+      <p class="text-text-muted mb-4">Visit the <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" class="text-sheets-green hover:underline" target="_blank" rel="noopener">Google Workspace Marketplace listing</a> and click "Install." Grant the required permissions when prompted. The add-on will appear in your Google Sheets Extensions menu.</p>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 2: Authenticate with Anaplan</h2>
+      <p class="text-text-muted mb-4">Open any Google Sheet, go to <strong>Extensions > aPlan4Sheets > Open Sidebar</strong>. Click "Login" and authenticate with your Anaplan credentials. aPlan4Sheets supports both OAuth (SSO) and Basic Auth (email + password).</p>
+      <p class="text-text-muted mb-4">Your credentials are handled securely through Anaplan's official authentication endpoints. aPlan4Sheets never stores your password.</p>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 3: Select your workspace and model</h2>
+      <p class="text-text-muted mb-4">After logging in, the sidebar shows your available Anaplan tenants. Select a tenant, then choose a workspace and model. The sidebar loads all available modules and views.</p>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 4: Export or pivot your data</h2>
+      <p class="text-text-muted mb-4">You have two options:</p>
+      <ul class="list-disc pl-6 text-text-muted mb-6 space-y-2">
+        <li><strong>Quick Export:</strong> Click any saved view or module to export data directly to a new sheet. Data appears with Anaplan's formatting preserved.</li>
+        <li><strong>Pivot Engine:</strong> Click the pivot icon to open the full pivot dialogue. Drag dimensions between rows, columns, and page filters. Select specific items, apply filters, and execute. The result is a custom pivot view written to your sheet.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 5: Set up scheduled refreshes</h2>
+      <p class="text-text-muted mb-4">Once your data is in Sheets, you can schedule automatic refreshes. Go to the Refresh tab in the sidebar, select the sheets you want to refresh, and set a schedule (hourly, daily, or weekly). Your sheets will always have the latest Anaplan data.</p>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Works on every platform</h2>
+      <p class="text-text-muted mb-4">Because aPlan4Sheets runs entirely in the browser through Google Sheets, it works on Mac, PC, Chromebook, and Linux. No desktop software to install, no Windows VMs needed.</p>
+
+      <div class="mt-12 p-8 bg-gray-50 rounded-2xl text-center">
+        <h3 class="text-xl font-bold text-navy mb-3">Ready to get started?</h3>
+        <p class="text-text-muted mb-6">Install aPlan4Sheets from the Google Workspace Marketplace and connect your Anaplan data in minutes.</p>
+        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-6 py-3 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">Install from Marketplace</a>
+      </div>
+    </div>
+  </article>
+
+  <footer class="py-8 text-center text-sm text-text-muted border-t border-gray-100">
+    <p>aPlan4Sheets | <a href="/privacy" class="hover:underline">Privacy Policy</a> | <a href="/terms" class="hover:underline">Terms of Service</a> | &copy; 2026 aPlan4Sheets</p>
+  </footer>
+</body>
+</html>

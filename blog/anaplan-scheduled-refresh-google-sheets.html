@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anaplan Scheduled Refresh in Google Sheets: Automate Your Reporting | aPlan4Sheets</title>
+  <meta name="description" content="Automate Anaplan data refreshes in Google Sheets. Schedule hourly, daily, or weekly pulls so your reports are always current. No manual exports, no stale data.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://aplan4sheets.com/blog/anaplan-scheduled-refresh-google-sheets.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Automate Anaplan Data Refreshes in Google Sheets">
+  <meta property="og:description" content="Schedule automatic Anaplan data refreshes in Google Sheets. Hourly, daily, or weekly pulls for always-current reports.">
+  <meta property="og:url" content="https://aplan4sheets.com/blog/anaplan-scheduled-refresh-google-sheets.html">
+  <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1a2744',
+            'sheets-green': '#0f9d58',
+            'sheets-green-dark': '#0b8043',
+            'text-dark': '#1a1a2e',
+            'text-muted': '#6b7280',
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="font-sans text-text-dark bg-white antialiased">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+    <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="8" fill="#1a2744"/>
+          <rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/>
+          <rect x="18" y="6" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+          <rect x="6" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
+          <rect x="18" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.35"/>
+        </svg>
+        <span class="text-lg font-bold text-navy">aPlan4Sheets</span>
+      </a>
+      <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">Install Now</a>
+    </div>
+  </nav>
+
+  <article class="pt-28 pb-20 max-w-3xl mx-auto px-6">
+    <p class="text-sm text-sheets-green font-semibold uppercase tracking-wide mb-3">Feature</p>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-navy leading-tight mb-6">Automate Anaplan Data Refreshes in Google Sheets</h1>
+    <p class="text-lg text-text-muted mb-10">Stop manually pulling Anaplan data before every meeting. aPlan4Sheets scheduled refresh keeps your reports current automatically.</p>
+
+    <div class="prose prose-lg max-w-none">
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">The manual refresh problem</h2>
+      <p class="text-text-muted mb-4">Every FP&A team knows this workflow: open your reporting spreadsheet, manually connect to Anaplan, pull the latest data, reformat, and distribute. Repeat daily. If someone forgets, the board sees stale numbers.</p>
+      <p class="text-text-muted mb-4">With aPlan4Sheets, you set up your data connections once and schedule automatic refreshes. Your sheets are always current.</p>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">How scheduled refresh works</h2>
+      <p class="text-text-muted mb-4">aPlan4Sheets uses a persistent background trigger that checks your refresh schedule every hour. When it's time to refresh, it pulls fresh data from Anaplan, writes it to the correct sheets, and preserves all your formatting.</p>
+
+      <h3 class="text-xl font-bold text-navy mt-8 mb-3">Setting up a schedule</h3>
+      <ol class="list-decimal pl-6 text-text-muted mb-6 space-y-2">
+        <li>Open the aPlan4Sheets sidebar and go to the <strong>Refresh</strong> tab</li>
+        <li>Select the sheet connections you want to refresh</li>
+        <li>Choose a frequency: hourly, every few hours, daily, or weekly</li>
+        <li>Click "Schedule" and you're done</li>
+      </ol>
+
+      <h3 class="text-xl font-bold text-navy mt-8 mb-3">What gets refreshed</h3>
+      <p class="text-text-muted mb-4">Both saved view exports and pivot configurations are supported. The refresh pulls the latest data from Anaplan using your stored authentication, so it works even when you're not actively using the spreadsheet.</p>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Use cases</h2>
+      <ul class="list-disc pl-6 text-text-muted mb-6 space-y-2">
+        <li><strong>Board reporting:</strong> Set up your board deck sheets once and schedule daily refreshes. Walk into the meeting with current data.</li>
+        <li><strong>Weekly variance reports:</strong> Schedule Monday morning refreshes so the team starts the week with fresh actuals vs. budget.</li>
+        <li><strong>Executive dashboards:</strong> Connect a Google Sheet to multiple Anaplan views and schedule hourly refreshes for a real-time dashboard.</li>
+        <li><strong>Month-end close:</strong> During close, switch to hourly refreshes to track actuals as they're posted in Anaplan.</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Reliability and recovery</h2>
+      <p class="text-text-muted mb-4">The refresh system uses a persistent hourly trigger managed by Google. If a refresh fails (network issue, Anaplan maintenance), it automatically retries on the next cycle. Your authentication tokens are refreshed server-side, so the schedule survives even if your browser session expires.</p>
+
+      <div class="mt-12 p-8 bg-gray-50 rounded-2xl text-center">
+        <h3 class="text-xl font-bold text-navy mb-3">Set it and forget it</h3>
+        <p class="text-text-muted mb-6">Install aPlan4Sheets and schedule your first automatic refresh today.</p>
+        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-6 py-3 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">Install from Marketplace</a>
+      </div>
+    </div>
+  </article>
+
+  <footer class="py-8 text-center text-sm text-text-muted border-t border-gray-100">
+    <p>aPlan4Sheets | <a href="/privacy" class="hover:underline">Privacy Policy</a> | <a href="/terms" class="hover:underline">Terms of Service</a> | &copy; 2026 aPlan4Sheets</p>
+  </footer>
+</body>
+</html>
