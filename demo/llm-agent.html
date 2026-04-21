@@ -156,11 +156,41 @@ const SCENES=[
 const TOTAL=SCENES.reduce((s,x)=>s+x.duration,0);
 let playing=true,currentScene=0,sceneTimer=null,elapsed=0,sceneStart=0,animFrameId=null;
 let audioMuted=false;
+let audioUnlocked=false;
 const audioClips=[document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5'),document.getElementById('audio-6'),document.getElementById('audio-7')];
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
-function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
-function toggleMute(){audioMuted=!audioMuted;document.getElementById('muteBtn').textContent=audioMuted?'🔇':'🔊';if(audioMuted)audioClips.forEach(a=>{a.pause();a.currentTime=0;});}
-function playNarration(idx){if(audioMuted||idx<0||idx>=audioClips.length)return;audioClips.forEach(a=>{a.pause();a.currentTime=0;});audioClips[idx].play().catch(()=>{});}
+async function unlockAudio(){
+  if(audioUnlocked) return true;
+  try{
+    const clip=audioClips[0];
+    clip.muted=true;
+    await clip.play();
+    clip.pause();
+    clip.currentTime=0;
+    clip.muted=false;
+    audioUnlocked=true;
+    return true;
+  }catch(_){
+    return false;
+  }
+}
+async function togglePlay(){
+  playing=!playing;
+  document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';
+  if(playing){
+    await unlockAudio();
+    runScene(currentScene);
+  }else{
+    audioClips.forEach(a=>a.pause());
+  }
+}
+async function toggleMute(){
+  audioMuted=!audioMuted;
+  document.getElementById('muteBtn').textContent=audioMuted?'🔇':'🔊';
+  if(!audioMuted) await unlockAudio();
+  if(audioMuted) audioClips.forEach(a=>{a.pause();a.currentTime=0;});
+}
+function playNarration(idx){if(audioMuted||!audioUnlocked||idx<0||idx>=audioClips.length)return;audioClips.forEach(a=>{a.pause();a.currentTime=0;});audioClips[idx].play().catch(()=>{});}
 function restartDemo(){playing=true;document.getElementById('playBtn').textContent='⏸ Pause';currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);document.getElementById('chatMessages').innerHTML='';document.getElementById('inputText').textContent='';document.getElementById('toast').classList.remove('visible');document.getElementById('sheetCallout').classList.remove('visible');initGrid();updateProgress();runScene(0)}
 function updateProgress(){document.getElementById('globalProgress').style.width=Math.min((elapsed/TOTAL)*100,100)+'%';document.getElementById('stepNum').textContent=currentScene+1;document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete'}
 function runScene(idx){if(idx>=SCENES.length){currentScene=SCENES.length-1;updateProgress();if(new URLSearchParams(location.search).has('loop'))setTimeout(()=>restartDemo(),2200);return}currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);[scene1,scene2,scene3,scene4,scene5,scene6,scene7][idx]();sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;document.getElementById('globalProgress').style.width=Math.min(((elapsed+se)/TOTAL)*100,100)+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};animFrameId=requestAnimationFrame(tick)}
@@ -176,7 +206,7 @@ async function scene4(){addMsg('ai','<strong>Top findings</strong><ul><li>Revenu
 async function scene5(){document.getElementById('sheetCallout').classList.add('visible');addMsg('ai','Writing the executive summary and recommended next steps back to the sheet so the finance team can review or edit it.');await wait(1200);const targets=[['13-1','Q1 revenue exceeded budget by $0.6M, but higher marketing spend offset margin gains, leaving EBITDA flat to plan.'],['15-1','1) Tighten Q2 campaign pacing'],['16-1','2) Protect Sales momentum in enterprise segments'],['17-1','3) Use the Slides export to brief leaders quickly']];for(const [id,text] of targets){const cell=document.getElementById('cell-'+id);cell.classList.add('good');cell.textContent=text;await wait(950)} }
 async function scene6(){addMsg('ai','<strong>Slides-ready narrative</strong><ul><li><strong>Headline:</strong> Revenue ahead, EBITDA flat</li><li><strong>Main driver:</strong> Sales upside from enterprise expansion</li><li><strong>Main risk:</strong> Marketing overspend diluted margin improvement</li><li><strong>Recommended next slide:</strong> Department-level variance waterfall</li></ul>');await wait(1400);addMsg('ai','I can now hand this directly into the AI Deck Builder so your Google Slides output starts with the same storyline.');}
 async function scene7(){document.getElementById('toast').classList.add('visible');addMsg('ai','<strong>Ready.</strong> Your summary is in the sheet, the talking points are structured, and the next step is one click away in Slides export.');}
-window.addEventListener('DOMContentLoaded',()=>{initGrid();runScene(0)});
+window.addEventListener('DOMContentLoaded',()=>{initGrid();runScene(0);document.getElementById('playBtn').textContent='▶ Play';playing=false;});
 </script>
 </body>
 </html>
