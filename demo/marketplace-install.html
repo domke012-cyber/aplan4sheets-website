@@ -31,6 +31,7 @@ img{max-width:100%;display:block}
 @media (max-width:960px){.marketplace-appbar{height:auto;flex-wrap:wrap;padding:14px 18px}.search-box{max-width:none;width:100%;font-size:22px;height:52px}.hero{grid-template-columns:1fr;padding:42px 24px 24px 24px}.hero-title{font-size:38px;white-space:normal}.hero-sub{font-size:18px}.hero-action{justify-content:flex-start;padding-top:0}.works-rating{padding:24px;flex-direction:column;align-items:flex-start;gap:16px}.works-with{font-size:24px}.tabs{padding:0 18px}.tab{font-size:20px}.carousel{grid-template-columns:1fr;padding:18px;min-height:auto}.arrow-wrap{display:none}.slide-stage{min-height:auto}.bottom-space{height:56px}.dialog{position:static;width:auto;margin:20px 24px 0 24px}}
 
 </style>
+<link rel="stylesheet" href="../assets/demo-responsive.css">
 <script>
 (function(){
   const params=new URLSearchParams(location.search);
@@ -70,7 +71,7 @@ img{max-width:100%;display:block}
         <div class="listing-shell">
           <div class="scrollbar"></div>
           <div class="hero">
-            <img class="hero-icon" src="/assets/marketplace/og-icon.png" alt="Anaplan Connector for Sheets icon">
+            <img class="hero-icon" src="../assets/marketplace/og-icon.png" alt="Anaplan Connector for Sheets icon">
             <div class="hero-copy">
               <div class="hero-title">Anaplan Connector for Sheets™</div>
               <div class="hero-sub">Sync Anaplan data to Google Sheets™ with automated exports and scheduling</div>
@@ -86,7 +87,7 @@ img{max-width:100%;display:block}
           <div class="works-rating">
             <div class="works-with">
               <span>Works with:</span>
-              <img src="/assets/marketplace/icon.png" alt="Google Sheets">
+              <img src="../assets/marketplace/icon.png" alt="Google Sheets">
             </div>
             <div class="rating-meta">
               <span class="stars">★★★★★</span>
@@ -103,7 +104,7 @@ img{max-width:100%;display:block}
 
           <div class="carousel">
             <div class="arrow-wrap"><div class="arrow">‹</div></div>
-            <div class="slide-stage"><img id="slideImage" src="/assets/marketplace/shot1.png" alt="Actual Google Workspace Marketplace listing screenshot"></div>
+            <div class="slide-stage"><img id="slideImage" src="../assets/marketplace/shot1.png" alt="Actual Google Workspace Marketplace listing screenshot"></div>
             <div class="arrow-wrap"><div class="arrow">›</div></div>
           </div>
 
@@ -136,9 +137,9 @@ function setState(index){
   installBtn.classList.remove('pulse','done');
   installDialog.classList.remove('show');
   installBtn.textContent='Uninstall';
-  slideImage.src='/assets/marketplace/shot1.png';
+  slideImage.src='../assets/marketplace/shot1.png';
   if(index===1){installBtn.classList.add('pulse');}
-  if(index===2){installBtn.classList.add('done');slideImage.src='/assets/marketplace/shot2.png';installDialog.classList.add('show');}
+  if(index===2){installBtn.classList.add('done');slideImage.src='../assets/marketplace/shot2.png';installDialog.classList.add('show');}
   progress.style.width=`${((index+1)/scenes.length)*100}%`;
   stepNum.textContent=index+1;
   stepLabel.textContent=scenes[index].label;

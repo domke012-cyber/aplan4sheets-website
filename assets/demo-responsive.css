@@ -1,0 +1,222 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body:not(.embed-mode) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+body:not(.embed-mode) .site-nav,
+body:not(.embed-mode) .demo-controls,
+body:not(.embed-mode) .global-progress,
+body:not(.embed-mode) .sheets-toolbar,
+body:not(.embed-mode) .formula-bar,
+body:not(.embed-mode) .sheet-tabs {
+  flex: 0 0 auto;
+}
+
+body:not(.embed-mode) .browser-frame,
+body:not(.embed-mode) .demo-shell {
+  flex: 1 1 auto;
+  height: auto !important;
+  min-height: 0;
+}
+
+body:not(.embed-mode) .browser-frame,
+body:not(.embed-mode) .main-area,
+body:not(.embed-mode) .grid-area,
+body:not(.embed-mode) .sidebar-area,
+body:not(.embed-mode) .sidebar-inner {
+  min-width: 0;
+}
+
+body:not(.embed-mode) .main-area,
+body:not(.embed-mode) .grid-area,
+body:not(.embed-mode) .sidebar-area,
+body:not(.embed-mode) .sidebar-inner,
+body:not(.embed-mode) .chat-wrap {
+  min-height: 0;
+}
+
+body:not(.embed-mode) .chat-wrap {
+  height: 100% !important;
+  max-height: 100%;
+}
+
+body:not(.embed-mode) .chat-messages {
+  min-height: 0;
+}
+
+body:not(.embed-mode) .demo-shell {
+  align-items: stretch;
+  padding: clamp(10px, 2vw, 24px);
+}
+
+body:not(.embed-mode) .demo-shell .browser {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0 !important;
+}
+
+body.embed-mode {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden !important;
+}
+
+body.embed-mode .browser-frame,
+body.embed-mode .demo-shell {
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+}
+
+body.embed-mode .demo-shell .browser {
+  min-height: 0 !important;
+}
+
+@media (max-width: 900px) {
+  body:not(.embed-mode) .main-area {
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  body:not(.embed-mode) .grid-area {
+    flex: 1 1 auto;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body:not(.embed-mode) .grid-container {
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body:not(.embed-mode) .sidebar-area {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100%;
+    flex: 0 0 clamp(260px, 42dvh, 380px);
+    border-left: 0 !important;
+    border-top: 1px solid #dadce0;
+    transform: none !important;
+  }
+
+  body:not(.embed-mode) .sidebar-area.visible {
+    transform: none !important;
+  }
+
+  body:not(.embed-mode) .chat-wrap {
+    height: 100% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body:not(.embed-mode) .site-nav {
+    height: auto !important;
+    min-height: 56px;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 8px 12px !important;
+  }
+
+  body:not(.embed-mode) .site-nav .logo {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  body:not(.embed-mode) .site-nav-links {
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px 14px;
+    font-size: 13px;
+  }
+
+  body:not(.embed-mode) .site-nav .cta-btn {
+    flex: 0 0 auto;
+    padding: 7px 12px;
+    white-space: nowrap;
+  }
+
+  body:not(.embed-mode) .demo-controls {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 8px 12px !important;
+  }
+
+  body:not(.embed-mode) .demo-controls button {
+    flex: 0 0 auto;
+  }
+
+  body:not(.embed-mode) .step-indicator {
+    flex: 1 1 140px;
+    min-width: 0;
+    line-height: 1.3;
+  }
+
+  body:not(.embed-mode) .sheets-toolbar,
+  body:not(.embed-mode) .formula-bar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body:not(.embed-mode) .sheets-toolbar .toolbar-btn {
+    flex: 0 0 auto;
+  }
+
+  body:not(.embed-mode) .demo-shell {
+    padding: 10px;
+  }
+
+  body:not(.embed-mode) .demo-shell .browser {
+    border-radius: 14px;
+  }
+}
+
+@media (max-width: 430px) {
+  body:not(.embed-mode) .site-nav .logo {
+    flex-basis: 100%;
+  }
+
+  body:not(.embed-mode) .site-nav-links {
+    justify-content: flex-start;
+  }
+
+  body:not(.embed-mode) .site-nav .cta-btn {
+    margin-left: auto;
+  }
+
+  body:not(.embed-mode) .marketplace-wordmark span {
+    white-space: normal;
+    font-size: 22px;
+  }
+
+  body:not(.embed-mode) .search-box {
+    font-size: 16px;
+    gap: 10px;
+    padding: 0 14px;
+  }
+
+  body:not(.embed-mode) .appbar-icons {
+    display: none;
+  }
+
+  body:not(.embed-mode) .install-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
