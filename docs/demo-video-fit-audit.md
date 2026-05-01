@@ -30,7 +30,7 @@ Verification used static browser render screenshots and DOM metrics at:
 
 The animated demo pages were using fixed viewport math such as `height: calc(100vh - 56px)` for the browser simulation. That only subtracted the nav height and ignored demo controls plus the progress bar, so the simulated browser extended past the bottom of the viewport on common laptop/mobile sizes. The Marketplace walkthrough also had a `640px` browser minimum height that forced clipping on `1280x720`.
 
-The fix adds `assets/demo-responsive.css` and links it from the demo pages. The shared override makes the demo page a vertical flex shell, lets the simulated browser fill the remaining viewport with `100dvh` support, removes fixed minimum heights that caused bottom clipping, and stacks the grid/sidebar layout on tablet and mobile. Spreadsheet grids keep internal scrolling on narrow screens so wide simulated Sheets content remains reachable instead of forcing page-level horizontal overflow.
+The fix adds `assets/demo-responsive.css` and links it from the demo pages. The shared override makes the demo page a vertical flex shell, locks standalone demo pages to the available `100dvh` viewport, lets the simulated browser fill the remaining screen, removes fixed minimum heights that caused bottom clipping, and stacks the grid/sidebar layout on tablet and mobile. Spreadsheet grids keep internal scrolling on narrow screens so wide simulated Sheets content remains reachable instead of forcing page-level horizontal overflow.
 
 ## Verification Artifacts
 
@@ -39,7 +39,7 @@ Artifacts were written outside the repo:
 - Before screenshots and metrics: `/tmp/aplan4sheets-demo-audit/before`
 - Final screenshots and metrics: `/tmp/aplan4sheets-demo-audit/final`
 
-Final result: 48 screenshots and 48 metric files. The final audit reported no document-level horizontal overflow, no locked vertical overflow, and `maxPrimaryOverBottom=0` for all demo/browser shells.
+Final result: 48 screenshots and 48 metric files. The final audit reported no document-level horizontal overflow, no locked vertical overflow, and `maxPrimaryOverBottom=0` for all demo/browser shells. Rechecked on 2026-05-01 with a Chrome DevTools viewport audit across desktop, laptop, tablet, and mobile; all demo/browser shells again reported `primaryOverBottom=0`.
 
 ## Caveats
 
