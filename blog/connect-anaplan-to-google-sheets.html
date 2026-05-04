@@ -12,6 +12,12 @@
   <meta property="og:description" content="Step-by-step guide to connecting Anaplan to Google Sheets using aPlan4Sheets. Works on Mac, PC, and Chromebook.">
   <meta property="og:url" content="https://aplan4sheets.com/blog/connect-anaplan-to-google-sheets.html">
   <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+  <meta property="article:published_time" content="2026-04-17">
+  <meta property="article:modified_time" content="2026-05-03">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Connect Anaplan to Google Sheets">
+  <meta name="twitter:description" content="Install aPlan4Sheets, authenticate with Anaplan, choose a model, and pull your first Anaplan view into Google Sheets.">
+  <meta name="twitter:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,6 +54,35 @@
     ]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://aplan4sheets.com/"},
+      {"@type": "ListItem", "position": 2, "name": "Resources", "item": "https://aplan4sheets.com/blog/"},
+      {"@type": "ListItem", "position": 3, "name": "How to Connect Anaplan to Google Sheets", "item": "https://aplan4sheets.com/blog/connect-anaplan-to-google-sheets.html"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "How to Connect Anaplan to Google Sheets",
+    "description": "Step-by-step guide to connecting Anaplan to Google Sheets using aPlan4Sheets.",
+    "image": "https://aplan4sheets.com/assets/marketplace/og-icon.png",
+    "datePublished": "2026-04-17",
+    "dateModified": "2026-05-03",
+    "author": {"@type": "Organization", "name": "aPlan4Sheets"},
+    "publisher": {
+      "@type": "Organization",
+      "name": "aPlan4Sheets",
+      "logo": {"@type": "ImageObject", "url": "https://aplan4sheets.com/assets/marketplace/icon.png"}
+    },
+    "mainEntityOfPage": "https://aplan4sheets.com/blog/connect-anaplan-to-google-sheets.html"
+  }
+  </script>
 </head>
 <body class="font-sans text-text-dark bg-white antialiased">
   <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
@@ -62,7 +97,10 @@
         </svg>
         <span class="text-lg font-bold text-navy">aPlan4Sheets</span>
       </a>
-      <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">Marketplace Listing</a>
+      <div class="flex items-center gap-3">
+        <a href="/blog/" class="hidden sm:inline-flex items-center px-4 py-2.5 text-navy text-sm font-semibold hover:text-sheets-green transition-colors">Resources</a>
+        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">Marketplace Listing</a>
+      </div>
     </div>
   </nav>
 
@@ -106,16 +144,23 @@
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Works on every platform</h2>
       <p class="text-text-muted mb-4">Because aPlan4Sheets runs entirely in the browser through Google Sheets, it works on Mac, PC, Chromebook, and Linux. No desktop software to install, no Windows VMs needed.</p>
 
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Plan your next workflow</h2>
+      <p class="text-text-muted mb-4">If your team is evaluating Anaplan-connected Sheets for Mac or Chromebook users, read the <a href="/blog/anaplan-google-sheets-connector-mac-chromebook.html" class="text-sheets-green hover:underline">platform guide</a>. If the goal is recurring reporting, the <a href="/blog/anaplan-reporting-automation-google-sheets.html" class="text-sheets-green hover:underline">Anaplan reporting automation guide</a> covers connected source tabs, refresh cadence, and governance tips.</p>
+
       <div class="mt-12 p-8 bg-gray-50 rounded-2xl text-center">
         <h3 class="text-xl font-bold text-navy mb-3">Explore the setup flow</h3>
         <p class="text-text-muted mb-6">Review the Marketplace listing, setup guide, and demos to understand how the connector works.</p>
-        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-6 py-3 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">View Marketplace Listing</a>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-6 py-3 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">View Marketplace Listing</a>
+          <a href="/guide.html" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-navy font-semibold rounded-lg hover:bg-white transition-colors">Read Setup Guide</a>
+          <a href="/demos.html" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-navy font-semibold rounded-lg hover:bg-white transition-colors">Watch Demos</a>
+        </div>
       </div>
     </div>
   </article>
 
   <footer class="py-8 text-center text-sm text-text-muted border-t border-gray-100">
-    <p>aPlan4Sheets | <a href="/privacy.html" class="hover:underline">Privacy Policy</a> | <a href="/terms.html" class="hover:underline">Terms of Service</a> | &copy; 2026 aPlan4Sheets</p>
+    <p>aPlan4Sheets | <a href="/blog/" class="hover:underline">Resources</a> | <a href="/guide.html" class="hover:underline">Setup Guide</a> | <a href="/demos.html" class="hover:underline">Demos</a> | <a href="/privacy.html" class="hover:underline">Privacy Policy</a> | <a href="/terms.html" class="hover:underline">Terms of Service</a> | &copy; 2026 aPlan4Sheets</p>
   </footer>
 </body>
 </html>

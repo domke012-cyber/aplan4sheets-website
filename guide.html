@@ -6,12 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Getting Started — aPlan4Sheets</title>
   <meta name="description" content="Step-by-step setup guide for aPlan4Sheets — the Anaplan connector for Google Sheets. Install, connect, and start pulling data in minutes.">
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://aplan4sheets.com/guide.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Getting Started — aPlan4Sheets Setup Guide">
   <meta property="og:description" content="Step-by-step setup guide for aPlan4Sheets — the Anaplan connector for Google Sheets. Install, connect, and start pulling data in minutes.">
   <meta property="og:url" content="https://aplan4sheets.com/guide.html">
   <meta property="og:site_name" content="aPlan4Sheets">
+  <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Getting Started — aPlan4Sheets Setup Guide">
+  <meta name="twitter:description" content="Install aPlan4Sheets, connect Anaplan to Google Sheets, configure a model, and create your first pivot.">
+  <meta name="twitter:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -19,6 +25,28 @@
     "itemListElement": [
       {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://aplan4sheets.com/"},
       {"@type": "ListItem", "position": 2, "name": "Getting Started Guide", "item": "https://aplan4sheets.com/guide.html"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to set up aPlan4Sheets for Anaplan and Google Sheets",
+    "description": "Install aPlan4Sheets from the Google Workspace Marketplace, connect to Anaplan, configure a model, and create a pivot in Google Sheets.",
+    "totalTime": "PT10M",
+    "tool": [
+      {"@type": "HowToTool", "name": "Google Sheets"},
+      {"@type": "HowToTool", "name": "aPlan4Sheets"},
+      {"@type": "HowToTool", "name": "Anaplan workspace access"}
+    ],
+    "step": [
+      {"@type": "HowToStep", "position": 1, "name": "Install from Google Workspace Marketplace", "url": "https://aplan4sheets.com/guide.html#step-1", "text": "Install aPlan4Sheets from the Google Workspace Marketplace."},
+      {"@type": "HowToStep", "position": 2, "name": "Open the Sidebar", "url": "https://aplan4sheets.com/guide.html#step-2", "text": "Open Google Sheets and launch the aPlan4Sheets sidebar from the Extensions menu."},
+      {"@type": "HowToStep", "position": 3, "name": "Connect to Anaplan", "url": "https://aplan4sheets.com/guide.html#step-3", "text": "Authenticate with Anaplan using OAuth or basic authentication, depending on your workspace setup."},
+      {"@type": "HowToStep", "position": 4, "name": "Configure Your Model", "url": "https://aplan4sheets.com/guide.html#step-4", "text": "Choose the tenant, workspace, model, modules, and views you want to work with in Sheets."},
+      {"@type": "HowToStep", "position": 5, "name": "Create Your First Pivot", "url": "https://aplan4sheets.com/guide.html#step-5", "text": "Use the pivot interface to arrange Anaplan dimensions and write the result to Google Sheets."},
+      {"@type": "HowToStep", "position": 6, "name": "Schedule Refreshes", "url": "https://aplan4sheets.com/guide.html#step-6", "text": "Set an automatic refresh schedule so connected reports stay current."}
     ]
   }
   </script>
@@ -151,7 +179,7 @@
   <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
     <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <a href="https://aplan4sheets.com" class="flex items-center gap-2.5">
+        <a href="/" class="flex items-center gap-2.5">
           <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="36" height="36" rx="8" fill="#1a2744"/>
             <rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/>
@@ -161,15 +189,15 @@
           </svg>
           <span class="text-lg font-bold text-navy">aPlan4Sheets</span>
         </a>
-        <a href="https://aplan4sheets.com" class="hidden sm:inline-flex items-center gap-1 text-sm text-text-muted hover:text-sheets-green transition-colors ml-2">
+        <a href="/" class="hidden sm:inline-flex items-center gap-1 text-sm text-text-muted hover:text-sheets-green transition-colors ml-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
           Back to Home
         </a>
       </div>
-      <a href="https://aplan4sheets.com/demos.html" class="hidden sm:inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
+      <a href="/demos.html" class="hidden sm:inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
         View Demos
       </a>
-      <a href="https://aplan4sheets.com/demos.html" class="sm:hidden inline-flex items-center px-4 py-2 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
+      <a href="/demos.html" class="sm:hidden inline-flex items-center px-4 py-2 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
         Demos
       </a>
     </div>
@@ -178,7 +206,7 @@
   <!-- Hero -->
   <section class="pt-28 pb-14 md:pt-36 md:pb-20 bg-gradient-to-br from-navy via-navy-light to-navy">
     <div class="max-w-4xl mx-auto px-6 text-center fade-in">
-      <a href="https://aplan4sheets.com" class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors mb-6 sm:hidden">
+      <a href="/" class="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors mb-6 sm:hidden">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
         Back to Home
       </a>
@@ -551,15 +579,16 @@
   <section class="py-20 bg-gradient-to-br from-navy via-navy-light to-navy">
     <div class="max-w-4xl mx-auto px-6 text-center fade-in">
       <h2 class="text-3xl md:text-4xl font-bold text-white">Continue exploring</h2>
-      <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">Use the setup guide and feature demos to understand how aPlan4Sheets works inside Google Sheets.</p>
+      <p class="mt-4 text-lg text-gray-300 max-w-xl mx-auto">Use the setup guide, feature demos, and reporting resources to understand how aPlan4Sheets works inside Google Sheets.</p>
       <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="https://aplan4sheets.com/demos.html" class="inline-flex items-center justify-center px-8 py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors text-lg">
+        <a href="/demos.html" class="inline-flex items-center justify-center px-8 py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors text-lg">
           View Demos
         </a>
         <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-8 py-3.5 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-lg">
           Open Marketplace Listing
         </a>
       </div>
+      <p class="mt-6 text-sm text-gray-300">Planning a rollout? Read the <a href="/blog/anaplan-google-sheets-connector-mac-chromebook.html" class="text-white font-semibold hover:underline">Mac and Chromebook connector guide</a> or the <a href="/blog/anaplan-reporting-automation-google-sheets.html" class="text-white font-semibold hover:underline">reporting automation guide</a>.</p>
     </div>
   </section>
 
@@ -578,13 +607,15 @@
           <span class="text-white font-bold">aPlan4Sheets</span>
         </div>
         <div class="flex items-center gap-6 text-sm text-gray-400">
-          <a href="https://aplan4sheets.com" class="hover:text-white transition-colors">Home</a>
+          <a href="/" class="hover:text-white transition-colors">Home</a>
+          <a href="/demos.html" class="hover:text-white transition-colors">Demos</a>
+          <a href="/blog/" class="hover:text-white transition-colors">Resources</a>
           <a href="/privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
           <a href="/terms.html" class="hover:text-white transition-colors">Terms of Service</a>
         </div>
       </div>
       <div class="mt-8 pt-6 border-t border-white/10 text-center">
-        <p class="text-sm text-gray-500">&copy; 2025 aPlan4Sheets. All rights reserved.</p>
+        <p class="text-sm text-gray-500">&copy; 2026 aPlan4Sheets. All rights reserved.</p>
       </div>
     </div>
   </footer>

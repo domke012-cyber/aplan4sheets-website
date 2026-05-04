@@ -12,6 +12,41 @@
   <meta property="og:description" content="Schedule automatic Anaplan data refreshes in Google Sheets. Hourly, daily, or weekly pulls for always-current reports.">
   <meta property="og:url" content="https://aplan4sheets.com/blog/anaplan-scheduled-refresh-google-sheets.html">
   <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+  <meta property="article:published_time" content="2026-04-17">
+  <meta property="article:modified_time" content="2026-05-03">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Anaplan Scheduled Refresh in Google Sheets">
+  <meta name="twitter:description" content="Schedule hourly, daily, or weekly Anaplan data refreshes in Google Sheets for current reports and dashboards.">
+  <meta name="twitter:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://aplan4sheets.com/"},
+      {"@type": "ListItem", "position": 2, "name": "Resources", "item": "https://aplan4sheets.com/blog/"},
+      {"@type": "ListItem", "position": 3, "name": "Anaplan Scheduled Refresh in Google Sheets", "item": "https://aplan4sheets.com/blog/anaplan-scheduled-refresh-google-sheets.html"}
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Automate Anaplan Data Refreshes in Google Sheets",
+    "description": "Automate Anaplan data refreshes in Google Sheets with hourly, daily, or weekly schedules.",
+    "image": "https://aplan4sheets.com/assets/marketplace/og-icon.png",
+    "datePublished": "2026-04-17",
+    "dateModified": "2026-05-03",
+    "author": {"@type": "Organization", "name": "aPlan4Sheets"},
+    "publisher": {
+      "@type": "Organization",
+      "name": "aPlan4Sheets",
+      "logo": {"@type": "ImageObject", "url": "https://aplan4sheets.com/assets/marketplace/icon.png"}
+    },
+    "mainEntityOfPage": "https://aplan4sheets.com/blog/anaplan-scheduled-refresh-google-sheets.html"
+  }
+  </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +82,10 @@
         </svg>
         <span class="text-lg font-bold text-navy">aPlan4Sheets</span>
       </a>
-      <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">Marketplace Listing</a>
+      <div class="flex items-center gap-3">
+        <a href="/blog/" class="hidden sm:inline-flex items-center px-4 py-2.5 text-navy text-sm font-semibold hover:text-sheets-green transition-colors">Resources</a>
+        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">Marketplace Listing</a>
+      </div>
     </div>
   </nav>
 
@@ -86,16 +124,23 @@
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Reliability and recovery</h2>
       <p class="text-text-muted mb-4">The refresh system uses a persistent hourly trigger managed by Google. If a refresh fails (network issue, Anaplan maintenance), it automatically retries on the next cycle. Your authentication tokens are refreshed server-side, so the schedule survives even if your browser session expires.</p>
 
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Build the full reporting workflow</h2>
+      <p class="text-text-muted mb-4">Scheduled refresh is one part of a repeatable reporting system. The <a href="/blog/anaplan-reporting-automation-google-sheets.html" class="text-sheets-green hover:underline">Anaplan reporting automation guide</a> shows how to pair connected source tabs with formulas, charts, review notes, and shared Google Sheets reports.</p>
+
       <div class="mt-12 p-8 bg-gray-50 rounded-2xl text-center">
         <h3 class="text-xl font-bold text-navy mb-3">Set it and forget it</h3>
         <p class="text-text-muted mb-6">Review the setup guide and demos to see how scheduled refresh works in Google Sheets.</p>
-        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center px-6 py-3 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">View Marketplace Listing</a>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center justify-center px-6 py-3 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">View Marketplace Listing</a>
+          <a href="/demo/schedule.html" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-navy font-semibold rounded-lg hover:bg-white transition-colors">Watch Refresh Demo</a>
+          <a href="/blog/connect-anaplan-to-google-sheets.html" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-navy font-semibold rounded-lg hover:bg-white transition-colors">Connection Guide</a>
+        </div>
       </div>
     </div>
   </article>
 
   <footer class="py-8 text-center text-sm text-text-muted border-t border-gray-100">
-    <p>aPlan4Sheets | <a href="/privacy.html" class="hover:underline">Privacy Policy</a> | <a href="/terms.html" class="hover:underline">Terms of Service</a> | &copy; 2026 aPlan4Sheets</p>
+    <p>aPlan4Sheets | <a href="/blog/" class="hover:underline">Resources</a> | <a href="/guide.html" class="hover:underline">Setup Guide</a> | <a href="/demos.html" class="hover:underline">Demos</a> | <a href="/privacy.html" class="hover:underline">Privacy Policy</a> | <a href="/terms.html" class="hover:underline">Terms of Service</a> | &copy; 2026 aPlan4Sheets</p>
   </footer>
 </body>
 </html>
