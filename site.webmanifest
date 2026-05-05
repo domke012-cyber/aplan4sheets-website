@@ -1,0 +1,17 @@
+{
+  "name": "aPlan4Sheets",
+  "short_name": "aPlan4Sheets",
+  "description": "Anaplan connector for Google Sheets with pivots, saved views, scheduled refreshes, and executive reporting.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a2744",
+  "icons": [
+    {
+      "src": "/assets/marketplace/og-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
