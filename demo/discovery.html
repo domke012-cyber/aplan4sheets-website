@@ -175,7 +175,7 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
   <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
   <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
   <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
-  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 8 — <span id="stepLabel">Discovery Tab</span></div>
+  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 5 — <span id="stepLabel">Open Formatted UX Pages</span></div>
 </div>
 <div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
 
@@ -201,24 +201,29 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
   </div>
 </div>
 
+<!--
+  v.328 update (2026-05-13): the connector retired the standalone "Module Discovery"
+  card and split it into two: "Formatted UX Pages" (apps → pages → grid widgets)
+  and "AI Analyst" (NL queries against the model). This demo is now the UX Pages
+  walkthrough. The NL-query flow lives in demo/llm-agent.html.
+
+  Audio files: discovery-1..5.mp3 still serve, but their narration script
+  references the old Module Discovery flow. Re-record before relaunching audio.
+  In the meantime the demo defaults to muted (no audio file requests on first
+  play) and the visual animation tells the new story on its own.
+-->
 <audio id="audio-1" src="audio/discovery-1.mp3" preload="auto"></audio>
 <audio id="audio-2" src="audio/discovery-2.mp3" preload="auto"></audio>
 <audio id="audio-3" src="audio/discovery-3.mp3" preload="auto"></audio>
 <audio id="audio-4" src="audio/discovery-4.mp3" preload="auto"></audio>
 <audio id="audio-5" src="audio/discovery-5.mp3" preload="auto"></audio>
-<audio id="audio-6" src="audio/discovery-6.mp3" preload="auto"></audio>
-<audio id="audio-7" src="audio/discovery-7.mp3" preload="auto"></audio>
-<audio id="audio-8" src="audio/discovery-8.mp3" preload="auto"></audio>
 <script>
 const SCENES=[
-  {name:'Discovery Tab',duration:6000},
-  {name:'Explore Model',duration:5000},
-  {name:'Crawling Modules',duration:10000},
-  {name:'Module Tree Results',duration:8000},
-  {name:'Expand Module Details',duration:8000},
-  {name:'Search & Filter',duration:13000},
-  {name:'Ask About Your Model',duration:12000},
-  {name:'Natural Language to Sheet',duration:15000},
+  {name:'Open Formatted UX Pages',duration:5000},
+  {name:'Browse UX Apps',duration:6000},
+  {name:'Drill Into Pages',duration:7000},
+  {name:'Pick a Grid Widget',duration:7000},
+  {name:'Formatted Output in Sheets',duration:9000},
 ];
 const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
 let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
@@ -242,7 +247,7 @@ function runScene(idx){
     return
   }
   currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);
-  [scene1,scene2,scene3,scene4,scene5,scene6,scene7,scene8][idx]();
+  [scene1,scene2,scene3,scene4,scene5][idx]();
   sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);
   const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;document.getElementById('globalProgress').style.width=Math.min(((elapsed+se)/TOTAL)*100,100)+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};
   animFrameId=requestAnimationFrame(tick);
@@ -260,470 +265,234 @@ function typeText(el,text,speed=50){
   const iv=setInterval(()=>{el.textContent=text.slice(0,++i);if(i>=text.length){clearInterval(iv);el.classList.remove('type-cursor');resolve()}},speed)});
 }
 
-// Scene 1: Discovery tab in sidebar
+// Scene 1: Sidebar shows the "Formatted UX Pages" card (v.328 nav-card layout)
 async function scene1(){
   initGrid();
   const sb=document.getElementById('sidebarContent');
   sb.innerHTML=`
     <div style="background:var(--ios-surface);padding:16px;border-radius:12px;border:1px solid var(--ios-border);text-align:center">
-      <div style="font-size:32px;margin-bottom:8px">🔍</div>
-      <div style="font-size:16px;font-weight:600;color:var(--ios-text-primary);margin-bottom:4px">Model Discovery</div>
-      <div style="font-size:12px;color:var(--ios-text-secondary);margin-bottom:16px">Explore the full architecture of your Anaplan model — modules, line items, dimensions, and relationships.</div>
+      <div style="font-size:32px;margin-bottom:8px">📑</div>
+      <div style="font-size:16px;font-weight:600;color:var(--ios-text-primary);margin-bottom:4px">Formatted UX Pages</div>
+      <div style="font-size:12px;color:var(--ios-text-secondary);margin-bottom:16px">Browse the apps, categories, and pages in your active model's Anaplan UX. Export grid-page widgets to Sheets with their formatted layout intact.</div>
       <div style="background:#f0fdf4;border-radius:8px;padding:8px;margin-bottom:12px;font-size:11px;color:#059669;font-weight:500">
         Model: Revenue & Headcount<br>FY26 Planning • Acme Corp
       </div>
-      <button class="btn-primary" id="exploreBtn" style="background:linear-gradient(135deg,#00C7BE,#0891B2)">🔍 Explore Model Architecture</button>
+      <button class="btn-primary" id="exploreBtn" style="background:linear-gradient(135deg,#00C7BE,#0891B2)">📑 Browse UX Pages</button>
     </div>
   `;
   await wait(2000);
   document.getElementById('exploreBtn').style.boxShadow='0 4px 20px rgba(0,199,190,0.4)';
 }
 
-// Scene 2: Click explore → dialog opens
+// Scene 2: Click Browse → dialog opens → loads UX board definition
 async function scene2(){
   await wait(800);
   const btn=document.getElementById('exploreBtn');
   btn.style.transform='scale(0.97)';await wait(150);btn.style.transform='';
   await wait(500);
   document.getElementById('discOverlay').classList.add('visible');
-  document.getElementById('discTitle').textContent='Model Architecture';
+  document.getElementById('discTitle').textContent='Formatted UX Pages';
   document.getElementById('discSubtitle').textContent='Revenue & Headcount — FY26 Planning';
   document.getElementById('discBody').innerHTML=`
     <div class="crawl-progress" id="crawlProgress">
       <div style="width:48px;height:48px;border:4px solid #f3f4f6;border-top-color:#00C7BE;border-radius:50%;animation:ios-spin 1s linear infinite;margin:0 auto 16px"></div>
-      <div style="font-size:15px;font-weight:600;color:#1F2937" id="crawlLabel">Initializing discovery...</div>
+      <div style="font-size:15px;font-weight:600;color:#1F2937" id="crawlLabel">Loading UX board definition...</div>
       <div class="crawl-bar-wrap"><div class="crawl-bar" id="crawlBar"></div></div>
       <div style="display:flex;justify-content:space-between;font-size:11px;color:#6B7280">
-        <span id="crawlDetail">Starting...</span>
+        <span id="crawlDetail">Connecting to Anaplan UX...</span>
         <span id="crawlPct">0%</span>
       </div>
     </div>
   `;
-  document.getElementById('discFooter').innerHTML=`<span style="font-size:11px;color:#9ca3af">This may take a moment for large models</span>`;
-}
-
-// Scene 3: Crawl progress
-async function scene3(){
+  document.getElementById('discFooter').innerHTML=`<span style="font-size:11px;color:#9ca3af">Apps, pages, and grid widgets load in ~1-2 seconds</span>`;
   const stages=[
-    {pct:10,label:'Crawling 262 modules...',detail:'Loading module metadata'},
-    {pct:30,label:'Crawling 262 modules...',detail:'Processing functional areas...'},
-    {pct:55,label:'Discovering line items...',detail:'1,847 line items found'},
-    {pct:75,label:'Mapping dimensions...',detail:'38 dimensions across 262 modules'},
-    {pct:90,label:'Building relationships...',detail:'Analyzing cross-module references'},
-    {pct:100,label:'Discovery complete!',detail:'262 modules • 1,847 line items • 38 dimensions'},
+    {pct:25,label:'Loading UX board definition...',detail:'Fetching app catalog'},
+    {pct:55,label:'Loading UX board definition...',detail:'Resolving 6 apps • 28 pages'},
+    {pct:85,label:'Resolving widget metadata...',detail:'Mapping grid widgets to modules'},
+    {pct:100,label:'Ready to browse!',detail:'6 apps • 28 pages • 47 grid widgets'},
   ];
   for(const s of stages){
-    await wait(1400);
+    await wait(700);
     document.getElementById('crawlBar').style.width=s.pct+'%';
     document.getElementById('crawlPct').textContent=s.pct+'%';
     document.getElementById('crawlLabel').textContent=s.label;
     document.getElementById('crawlDetail').textContent=s.detail;
   }
-  await wait(600);
   document.getElementById('crawlBar').classList.add('complete');
   document.getElementById('crawlLabel').style.color='#059669';
 }
 
-// Scene 4: Module tree results
-async function scene4(){
+// Scene 3: Tree of UX apps appears (reuses mod-tree-item visual vocab)
+async function scene3(){
   await wait(600);
-  const modules=[
-    {name:'P&L Summary',items:12,area:'Financial'},
-    {name:'P&L Allocations',items:8,area:'Financial'},
-    {name:'REV01 Revenue Planning',items:24,area:'Revenue'},
-    {name:'REV02 MRR Waterfall',items:18,area:'Revenue'},
-    {name:'HC01 Headcount Tracker',items:15,area:'Workforce'},
-    {name:'HC02 Compensation',items:22,area:'Workforce'},
-    {name:'OPX01 Operating Expenses',items:19,area:'OpEx'},
-    {name:'OPX02 Travel & Entertainment',items:11,area:'OpEx'},
-    {name:'CASH01 Cash Flow',items:14,area:'Financial'},
-    {name:'BS01 Balance Sheet',items:16,area:'Financial'},
+  const apps=[
+    {name:'Executive Dashboard',items:5,area:'Reporting'},
+    {name:'P&L Statement',items:4,area:'Finance'},
+    {name:'Revenue Planning',items:6,area:'Finance'},
+    {name:'Headcount Reviews',items:7,area:'Workforce'},
+    {name:'Budget Review by Exec Owner',items:9,area:'Workforce'},
+    {name:'Operating Expenses',items:3,area:'OpEx'},
   ];
-
   document.getElementById('discBody').innerHTML=`
-    <div class="disc-search"><svg viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input placeholder="Search modules and line items..." id="discSearchInput"></div>
+    <div class="disc-search"><svg viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input placeholder="Search apps and pages..." id="discSearchInput"></div>
     <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
-      <span style="font-size:10px;background:#dbeafe;color:#2563eb;padding:2px 8px;border-radius:8px;font-weight:600">262 modules</span>
-      <span style="font-size:10px;background:#fef3c7;color:#d97706;padding:2px 8px;border-radius:8px;font-weight:600">1,847 line items</span>
-      <span style="font-size:10px;background:#e0e7ff;color:#4f46e5;padding:2px 8px;border-radius:8px;font-weight:600">38 dimensions</span>
+      <span style="font-size:10px;background:#dbeafe;color:#2563eb;padding:2px 8px;border-radius:8px;font-weight:600">6 apps</span>
+      <span style="font-size:10px;background:#fef3c7;color:#d97706;padding:2px 8px;border-radius:8px;font-weight:600">28 pages</span>
+      <span style="font-size:10px;background:#e0e7ff;color:#4f46e5;padding:2px 8px;border-radius:8px;font-weight:600">47 grid widgets</span>
     </div>
     <div id="moduleTree"></div>
   `;
   document.getElementById('discFooter').innerHTML=`
-    <span style="font-size:11px;color:#059669;font-weight:500">✓ Discovery complete</span>
+    <span style="font-size:11px;color:#059669;font-weight:500">✓ Loaded in 1.4s</span>
     <button style="padding:8px 16px;border:none;border-radius:8px;background:#e5e7eb;color:#374151;font-size:12px;font-weight:600;cursor:pointer">Close</button>
   `;
-
   const tree=document.getElementById('moduleTree');
-  for(const m of modules){
-    await wait(200);
+  for(const a of apps){
+    await wait(120);
     tree.insertAdjacentHTML('beforeend',`
-      <div class="mod-tree-item" id="mt-${m.name.replace(/\s/g,'')}">
+      <div class="mod-tree-item" id="mt-${a.name.replace(/\W/g,'')}">
         <div class="mod-tree-header" onclick="this.parentElement.classList.toggle('open')">
           <span class="expand">▸</span>
-          <span class="mod-name">${m.name}</span>
-          <span class="mod-count">${m.items} items</span>
+          <span class="mod-name">${a.name}</span>
+          <span class="mod-count">${a.items} pages</span>
         </div>
-        <div class="mod-tree-body" id="mtb-${m.name.replace(/\s/g,'')}"></div>
+        <div class="mod-tree-body" id="mtb-${a.name.replace(/\W/g,'')}"></div>
       </div>
     `);
   }
 }
 
-// Scene 5: Expand P&L Summary to show line items
-async function scene5(){
-  await wait(1000);
-  const item=document.getElementById('mt-P&LSummary');
+// Scene 4: Expand an app to reveal its pages (each page with its grid-widget count)
+async function scene4(){
+  await wait(700);
+  // Expand "Budget Review by Exec Owner" — the combined-grid widget app we ship demos against
+  const appId='mt-BudgetReviewbyExecOwner';
+  const item=document.getElementById(appId);
   item.classList.add('open');
   item.style.borderColor='#00C7BE';
-
-  const body=document.getElementById('mtb-P&LSummary');
-  const lineItems=[
-    {name:'Total Revenue',type:'Number',dims:'Time, Versions, Department'},
-    {name:'SaaS Revenue',type:'Number',dims:'Time, Versions, Product Line'},
-    {name:'Services Revenue',type:'Number',dims:'Time, Versions'},
-    {name:'Total COGS',type:'Number',dims:'Time, Versions, Department'},
-    {name:'Gross Profit',type:'Number',dims:'Time, Versions'},
-    {name:'Gross Margin %',type:'Percentage',dims:'Time, Versions'},
-    {name:'Total OpEx',type:'Number',dims:'Time, Versions, Department'},
-    {name:'EBITDA',type:'Number',dims:'Time, Versions'},
-    {name:'EBITDA Margin %',type:'Percentage',dims:'Time, Versions'},
-    {name:'Depreciation',type:'Number',dims:'Time, Versions'},
-    {name:'Net Income',type:'Number',dims:'Time, Versions'},
-    {name:'EPS',type:'Number',dims:'Time, Versions'},
+  const body=document.getElementById('mtb-BudgetReviewbyExecOwner');
+  const pages=[
+    {name:'Exec Owner Summary',type:'Page',widgets:'4 widgets · 2 grid'},
+    {name:'Kyle Triplett — Budget Detail',type:'Page',widgets:'2 widgets · 1 grid · combined'},
+    {name:'Matt Baird — Budget Detail',type:'Page',widgets:'2 widgets · 1 grid · combined'},
+    {name:'Lisa Horner — Budget Detail',type:'Page',widgets:'2 widgets · 1 grid · combined'},
+    {name:'Quarterly Variance',type:'Page',widgets:'3 widgets · 1 grid'},
+    {name:'YTD Roll-forward',type:'Page',widgets:'2 widgets · 1 grid'},
   ];
-  for(const li of lineItems){
-    await wait(200);
+  for(const p of pages){
+    await wait(180);
     body.insertAdjacentHTML('beforeend',`
       <div class="li-item">
-        <span class="li-name">${li.name}</span>
-        <span class="li-type">${li.type}</span>
-        <span class="li-dims">${li.dims}</span>
+        <span class="li-name">${p.name}</span>
+        <span class="li-type">${p.type}</span>
+        <span class="li-dims">${p.widgets}</span>
       </div>
     `);
   }
-
-  // Also expand HC01
-  await wait(1500);
-  const hcItem=document.getElementById('mt-HC01HeadcountTracker');
-  hcItem.classList.add('open');
-  hcItem.style.borderColor='#00C7BE';
-  const hcBody=document.getElementById('mtb-HC01HeadcountTracker');
-  const hcLineItems=[
-    {name:'Beginning HC',type:'Number',dims:'Time, Executive Owner'},
-    {name:'New Hires',type:'Number',dims:'Time, Executive Owner'},
-    {name:'Terminations',type:'Number',dims:'Time, Executive Owner'},
-    {name:'Ending HC',type:'Number',dims:'Time, Executive Owner'},
-    {name:'Avg HC',type:'Number',dims:'Time, Executive Owner'},
-  ];
-  for(const li of hcLineItems){
-    await wait(150);
-    hcBody.insertAdjacentHTML('beforeend',`
-      <div class="li-item"><span class="li-name">${li.name}</span><span class="li-type">${li.type}</span><span class="li-dims">${li.dims}</span></div>
-    `);
+  // Also expand a second app to give the eye more to scan
+  await wait(900);
+  const second=document.getElementById('mt-PLStatement');
+  if(second){
+    second.classList.add('open');
+    second.style.borderColor='#00C7BE';
+    const sBody=document.getElementById('mtb-PLStatement');
+    const sPages=[
+      {name:'P&L by Account',widgets:'1 grid widget'},
+      {name:'P&L by Cost Center',widgets:'1 grid widget'},
+      {name:'P&L Variance Analysis',widgets:'2 grid widgets'},
+      {name:'P&L Quarterly Trend',widgets:'1 grid widget · 1 chart'},
+    ];
+    for(const p of sPages){
+      await wait(150);
+      sBody.insertAdjacentHTML('beforeend',`
+        <div class="li-item"><span class="li-name">${p.name}</span><span class="li-type">Page</span><span class="li-dims">${p.widgets}</span></div>
+      `);
+    }
   }
 }
 
-// Scene 6: Search/filter
-async function scene6(){
-  await wait(1500);
-  const searchInput=document.getElementById('discSearchInput');
-  await typeText(searchInput,'Revenue',60);
-  await wait(800);
-  // Filter to show only matching
-  const tree=document.getElementById('moduleTree');
-  const items=tree.querySelectorAll('.mod-tree-item');
-  items.forEach(item=>{
-    const name=item.querySelector('.mod-name').textContent;
-    if(!name.toLowerCase().includes('rev')&&!name.includes('P&L')){
-      item.style.opacity='0.3';
-      item.style.transform='scale(0.98)';
-    } else {
-      item.style.opacity='1';
-      item.style.borderColor='#00C7BE';
-    }
-  });
-
-  await wait(3000);
-  // Clear search
-  searchInput.textContent='';
-  searchInput.classList.remove('type-cursor');
-  items.forEach(item=>{
-    item.style.opacity='1';
-    item.style.transform='';
-    item.style.borderColor='';
-  });
-
-  // Search for specific line item
-  await wait(1000);
-  await typeText(searchInput,'EBITDA',60);
-  await wait(1200);
-  // Highlight matching
-  items.forEach(item=>{
-    const body=item.querySelector('.mod-tree-body');
-    if(body){
-      const lis=body.querySelectorAll('.li-item');
-      let hasMatch=false;
-      lis.forEach(li=>{
-        if(li.querySelector('.li-name').textContent.includes('EBITDA')){
-          li.style.background='#fef3c7';
-          li.style.borderRadius='6px';
-          hasMatch=true;
-        }
-      });
-      if(!hasMatch){
-        item.style.opacity='0.3';
-      } else {
-        item.classList.add('open');
-        item.style.borderColor='#d97706';
-      }
-    }
-  });
-}
-
-// Scene 7: Ask About Your Model — AI chat interface
-async function scene7(){
-  // Reset any leftover filter state from scene 6
-  const treeItems=document.querySelectorAll('.mod-tree-item');
-  treeItems.forEach(item=>{
-    item.style.opacity='1';
-    item.style.transform='';
-    item.style.borderColor='';
-  });
-
-  // Inject AI chat UI at bottom of discBody
-  const discBody=document.getElementById('discBody');
-  // Keep tree, just shrink it and add chat
-  const existingTree=discBody.querySelector('#moduleTree');
-  if(existingTree) existingTree.style.maxHeight='160px';
-
-  // Add AI chat area
-  discBody.insertAdjacentHTML('beforeend',`
-    <div id="aiChatArea" class="ai-chat-wrap" style="margin-top:10px;border-top:1px solid #f3f4f6;padding-top:10px">
-      <div class="ai-chat-messages" id="aiMessages"></div>
-      <div class="ai-chat-input-row">
-        <span class="ai-badge">✨ AI</span>
-        <div class="ai-input-wrap">
-          <span class="ai-input-field type-cursor" id="aiInputField" style="display:inline;min-height:18px">&nbsp;</span>
-        </div>
-        <button class="ai-send-btn">➤</button>
-      </div>
-    </div>
-  `);
-
-  await wait(800);
-
-  // Type user question
-  const inputField=document.getElementById('aiInputField');
-  inputField.textContent='';
-  await typeText(inputField,'Which modules contain revenue metrics?',45);
-
-  await wait(500);
-
-  // Add user message bubble
-  const messagesEl=document.getElementById('aiMessages');
-  messagesEl.insertAdjacentHTML('beforeend',`
-    <div class="msg-user"><div class="bubble">Which modules contain revenue metrics?</div></div>
-  `);
-  inputField.textContent='';
-  inputField.classList.remove('type-cursor');
-
-  // Thinking animation
-  messagesEl.insertAdjacentHTML('beforeend',`
-    <div class="msg-ai" id="thinkingMsg">
-      <div class="ai-avatar">✨</div>
-      <div class="bubble"><div class="thinking-dots"><span></span><span></span><span></span></div></div>
-    </div>
-  `);
-  messagesEl.scrollTop=messagesEl.scrollHeight;
-  await wait(1400);
-
-  // Remove thinking, add streamed response
-  document.getElementById('thinkingMsg').remove();
-
-  // Create AI response bubble with streaming
-  messagesEl.insertAdjacentHTML('beforeend',`
-    <div class="msg-ai" id="aiRespMsg">
-      <div class="ai-avatar">✨</div>
-      <div class="bubble" id="aiRespBubble"></div>
-    </div>
-  `);
-  messagesEl.scrollTop=messagesEl.scrollHeight;
-
-  const bubble=document.getElementById('aiRespBubble');
-
-  // Stream response lines progressively
-  const responseLines=[
-    {html:`I found revenue-related data in <strong>3 modules</strong>:`,delay:0},
-    {html:`<br><br><span class="mod-highlight">P&amp;L Summary</span> — <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Total Revenue</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">SaaS Revenue</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Services Revenue</code>`,delay:700},
-    {html:`<br><span class="mod-highlight">REV01 Revenue Planning</span> — <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Monthly Revenue</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">ARR</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">New Bookings</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Renewal Rate</code> <span style="color:#9ca3af;font-size:11px">(24 items)</span>`,delay:900},
-    {html:`<br><span class="mod-highlight">REV02 MRR Waterfall</span> — <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Beginning MRR</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">New MRR</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Expansion MRR</code>, <code style="font-size:11px;background:#f3f4f6;padding:1px 5px;border-radius:4px">Churned MRR</code> <span style="color:#9ca3af;font-size:11px">(18 items)</span>`,delay:900},
-  ];
-
-  let accumulated='';
-  for(const line of responseLines){
-    if(line.delay) await wait(line.delay);
-    accumulated+=line.html;
-    bubble.innerHTML=accumulated;
-    messagesEl.scrollTop=messagesEl.scrollHeight;
-  }
-
-  // Highlight the 3 modules in tree
+// Scene 5: Pick a widget → pivot dialog pre-fills with widget layout → output appears
+// in Sheet with the widget's Anaplan UX formatting (theme colors, headers, totals)
+async function scene5(){
   await wait(600);
-  const highlights=['mt-P&LSummary','mt-REV01RevenuePlanning','mt-REV02MRRWaterfall'];
-  highlights.forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){el.style.borderColor='#7c3aed';el.style.background='#f5f3ff';el.style.boxShadow='0 0 0 2px rgba(124,58,237,0.15)'}
-  });
-  messagesEl.scrollTop=messagesEl.scrollHeight;
-}
-
-// Scene 8: Natural Language to Sheet
-async function scene8(){
-  // Reset highlights from scene 7
-  document.querySelectorAll('.mod-tree-item').forEach(el=>{
-    el.style.borderColor='';el.style.background='';el.style.boxShadow='';
-  });
-
-  // Reuse existing input field from scene 7 chat UI
-  const inputField=document.getElementById('aiInputField');
-  const messagesEl=document.getElementById('aiMessages');
-
-  if(inputField) inputField.classList.add('type-cursor');
-  if(inputField) inputField.textContent='';
-
-  await wait(800);
-  if(inputField) await typeText(inputField,'Pull Q1 revenue by department to my sheet',45);
-  await wait(400);
-
-  // Add user bubble
-  if(messagesEl){
-    messagesEl.insertAdjacentHTML('beforeend',`
-      <div class="msg-user"><div class="bubble">Pull Q1 revenue by department to my sheet</div></div>
-    `);
-    if(inputField){inputField.textContent='';inputField.classList.remove('type-cursor')}
-
-    // Thinking
-    messagesEl.insertAdjacentHTML('beforeend',`
-      <div class="msg-ai" id="thinkingMsg2">
-        <div class="ai-avatar">✨</div>
-        <div class="bubble"><div class="thinking-dots"><span></span><span></span><span></span></div></div>
-      </div>
-    `);
-    messagesEl.scrollTop=messagesEl.scrollHeight;
-    await wait(1300);
-    document.getElementById('thinkingMsg2').remove();
-
-    // Config card response
-    messagesEl.insertAdjacentHTML('beforeend',`
-      <div class="msg-ai" id="aiRespMsg2">
-        <div class="ai-avatar">✨</div>
-        <div class="bubble" id="aiRespBubble2">
-          <span id="setupText"></span>
-        </div>
-      </div>
-    `);
-    messagesEl.scrollTop=messagesEl.scrollHeight;
-
-    const setupText=document.getElementById('setupText');
-    await typeText(setupText,"I'll set that up for you:",30);
-    await wait(300);
-
-    const bubble2=document.getElementById('aiRespBubble2');
-    bubble2.insertAdjacentHTML('beforeend',`
-      <div class="config-card" id="configCard" style="opacity:0;transition:opacity .5s;margin-top:8px">
-        <div class="cfg-row"><span class="cfg-label">Module</span><span class="cfg-val">REV01 Revenue Planning</span></div>
-        <div class="cfg-row"><span class="cfg-label">Line Items</span><span class="cfg-val">Total Revenue, SaaS Revenue, Services Revenue</span></div>
-        <div class="cfg-row"><span class="cfg-label">Rows</span><span class="cfg-val">Department (Engineering, Sales, Marketing, Support, Operations)</span></div>
-        <div class="cfg-row"><span class="cfg-label">Columns</span><span class="cfg-val">Jan 26, Feb 26, Mar 26</span></div>
-        <div class="cfg-row"><span class="cfg-label">Version</span><span class="cfg-val">Working</span></div>
-      </div>
-      <div class="writing-indicator" id="writingIndicator" style="display:none">
-        <span>⏳</span>
-        <span>Writing to Sheet...</span>
-        <div class="writing-bar-wrap"><div class="writing-bar" id="writingBar"></div></div>
-      </div>
-    `);
-    await wait(100);
-    document.getElementById('configCard').style.opacity='1';
-    messagesEl.scrollTop=messagesEl.scrollHeight;
-
-    await wait(1200);
-
-    // Show writing indicator
-    const writingIndicator=document.getElementById('writingIndicator');
-    writingIndicator.style.display='flex';
-    messagesEl.scrollTop=messagesEl.scrollHeight;
-
-    // Animate progress bar
-    const writingBar=document.getElementById('writingBar');
-    const pcts=[20,45,70,90,100];
-    for(const pct of pcts){
-      await wait(300);
-      writingBar.style.width=pct+'%';
-    }
-    await wait(400);
+  // Highlight one specific page as the "selected widget"
+  const targetPage=document.querySelector('#mtb-BudgetReviewbyExecOwner .li-item:nth-child(2)');
+  if(targetPage){
+    targetPage.style.background='rgba(0,199,190,0.12)';
+    targetPage.style.borderLeft='3px solid #00C7BE';
+    targetPage.style.fontWeight='600';
   }
-
-  // Close the dialog
+  // Show a toast / footer note
+  document.getElementById('discFooter').innerHTML=`
+    <span style="font-size:11px;color:#00C7BE;font-weight:600">→ Opening pivot dialog with widget layout</span>
+    <button style="padding:8px 16px;border:none;border-radius:8px;background:linear-gradient(135deg,#00C7BE,#0891B2);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Use widget</button>
+  `;
+  await wait(1800);
+  // Close the modal — pretend the pivot dialog took over
   document.getElementById('discOverlay').classList.remove('visible');
-  await wait(600);
-
-  // Populate the grid with financial data
-  const depts=['Engineering','Sales','Marketing','Support','Operations'];
-  const jan=[1245000,2380000,890000,425000,310000];
-  const feb=[1310000,2510000,940000,445000,325000];
-  const mar=[1390000,2650000,1010000,470000,342000];
-
-  const table=document.getElementById('gridTable');
-  const rows=table.querySelectorAll('tbody tr');
-  const fmt=n=>n.toLocaleString();
-
-  // Headers row 1: blank, Jan 26, Feb 26, Mar 26
-  const headerRow=rows[0];
-  const headerCells=headerRow.querySelectorAll('td');
-  if(headerCells.length>=4){
-    headerCells[1].textContent='Jan 26';headerCells[1].style.fontWeight='600';headerCells[1].style.color='#374151';
-    headerCells[2].textContent='Feb 26';headerCells[2].style.fontWeight='600';headerCells[2].style.color='#374151';
-    headerCells[3].textContent='Mar 26';headerCells[3].style.fontWeight='600';headerCells[3].style.color='#374151';
-  }
-
-  // Data rows
-  for(let i=0;i<depts.length;i++){
-    await wait(180);
-    const row=rows[i+1];
-    if(!row)continue;
-    const cells=row.querySelectorAll('td');
-    if(cells.length<4)continue;
-    cells[0].textContent=depts[i];cells[0].style.fontWeight='500';cells[0].style.color='#374151';
-    cells[1].textContent=fmt(jan[i]);cells[1].classList.add('grid-data-cell');
-    cells[2].textContent=fmt(feb[i]);cells[2].classList.add('grid-data-cell');
-    cells[3].textContent=fmt(mar[i]);cells[3].classList.add('grid-data-cell');
-    // Also make row-header styled
-    const rowHeader=row.querySelector('.row-header');
-    if(rowHeader) rowHeader.style.background='#e8fdf0';
-  }
-
-  // Also style header cells green
-  if(headerCells&&headerCells.length>=4){
-    headerCells[1].classList.add('grid-data-cell');
-    headerCells[2].classList.add('grid-data-cell');
-    headerCells[3].classList.add('grid-data-cell');
-  }
-
-  // Toast notification
-  await wait(500);
-  document.body.insertAdjacentHTML('beforeend',`
-    <div class="toast-notif" id="successToast">✓ Data written to Sheet1</div>
-  `);
-  await wait(3000);
-  const toast=document.getElementById('successToast');
-  if(toast){toast.style.transition='opacity .4s';toast.style.opacity='0';setTimeout(()=>toast.remove(),400)}
+  // Render the combined-grid output into the Sheet
+  await wait(400);
+  const t=document.getElementById('gridTable');
+  // Combined-grid Budget Review layout: 26 rows × 17 cols (LISS_Budget Template rows × line items + secondary region Comment)
+  const cols=['Line Item','QTD Actuals','QTD Forecast','QTD Variance','QTD Var %','QTD YoY','YTD Actuals','YTD Budget','YTD Variance','Comment'];
+  const rows=[
+    ['Salaries',{n:946785,t:'pos'},{n:990000,t:'pos'},{n:43215,t:'pos'},{n:'4.6%'},{n:'+8.1%'},{n:3782940},{n:3960000},{n:177060,t:'pos'},'On track — Q3 hires deferred'],
+    ['Bonus',{n:159933,t:'pos'},{n:172000,t:'pos'},{n:12067,t:'pos'},{n:'7.5%'},{n:'+12.3%'},{n:639732},{n:688000},{n:48268,t:'pos'},''],
+    ['SBC',{n:379426,t:'pos'},{n:380000,t:'pos'},{n:574,t:'pos'},{n:'0.2%'},{n:'+5.0%'},{n:1517704},{n:1520000},{n:2296,t:'pos'},''],
+    ['Headcount Expense Total',{n:1486144,t:'pos'},{n:1542000,t:'pos'},{n:55856,t:'pos'},{n:'3.8%'},{n:'+7.8%'},{n:5940376},{n:6168000},{n:227624,t:'pos'},'',true],
+    ['Travel',{n:82400,t:'pos'},{n:75000,t:'pos'},{n:-7400,t:'neg'},{n:'-9.0%'},{n:'+22%'},{n:329600},{n:300000},{n:-29600,t:'neg'},'Conference spend ahead'],
+    ['Marketing',{n:218500,t:'pos'},{n:200000,t:'pos'},{n:-18500,t:'neg'},{n:'-8.5%'},{n:'+15%'},{n:874000},{n:800000},{n:-74000,t:'neg'},''],
+    ['Software',{n:142800,t:'pos'},{n:155000,t:'pos'},{n:12200,t:'pos'},{n:'8.5%'},{n:'+3%'},{n:571200},{n:620000},{n:48800,t:'pos'},''],
+    ['Controllable Total',{n:443700,t:'pos'},{n:430000,t:'pos'},{n:-13700,t:'neg'},{n:'-3.1%'},{n:'+12%'},{n:1774800},{n:1720000},{n:-54800,t:'neg'},'',true],
+  ];
+  let html='<thead><tr><th class="corner"></th>';
+  cols.forEach((_,i)=>{const L='ABCDEFGHIJ'[i];html+=`<th class="col-header">${L}</th>`});
+  html+='</tr><tr><th class="row-header">1</th>';
+  cols.forEach(c=>{const isHC=c.startsWith('QTD');const isYTD=c.startsWith('YTD');const bg=isHC?'#1e40af':(isYTD?'#92400e':'#374151');html+=`<th style="font-size:10px;font-weight:600;padding:4px 6px;background:${bg};color:#fff;border-color:${bg}">${c}</th>`});
+  html+='</tr></thead><tbody>';
+  rows.forEach((r,i)=>{
+    const isTotal=r[r.length-1]===true;
+    const cls=isTotal?'total-row':'';
+    const cellRows=isTotal?r.slice(0,-1):r;
+    html+=`<tr><td class="row-header">${i+2}</td>`;
+    cellRows.forEach((cell,ci)=>{
+      if(typeof cell==='string'){
+        const isComment=ci===cols.length-1;
+        html+=`<td class="${cls}${isComment?' secondary':''}" style="font-weight:${isTotal?700:500};font-size:10px${isComment?';font-style:italic;color:#6B7280':''}">${cell}</td>`;
+      } else {
+        const negCls=cell.t==='neg'?' neg':'';
+        const val=typeof cell.n==='number'?cell.n.toLocaleString():cell.n;
+        const display=cell.t==='neg'?'('+val.replace('-','')+')':val;
+        html+=`<td class="${cls} num${negCls}" style="font-weight:${isTotal?700:400}">${display}</td>`;
+      }
+    });
+    html+='</tr>';
+  });
+  for(let r=rows.length+2;r<=25;r++){html+=`<tr><td class="row-header">${r}</td>${cols.map(()=>'<td></td>').join('')}</tr>`}
+  html+='</tbody>';t.innerHTML=html;
+  // Update sheet tab name to match the widget output
+  const tab=document.querySelector('.sheet-tab.active');
+  if(tab) tab.textContent='Kyle Triplett';
+  // Caption / footer in sidebar showing what just happened
+  const sb=document.getElementById('sidebarContent');
+  sb.innerHTML=`
+    <div style="background:linear-gradient(135deg,rgba(48,209,88,0.12),rgba(52,199,89,0.08));padding:14px;border-radius:12px;border:1px solid rgba(48,209,88,0.3);margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:24px;height:24px;background:#30D158;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700">✓</div>
+        <div style="font-size:13px;font-weight:600;color:#1F2937">Widget exported</div>
+      </div>
+      <div style="font-size:11px;color:#6B7280;line-height:1.45">Kyle Triplett — Budget Detail<br>Combined grid (2 modules)<br>26 rows × 17 cols<br>Anaplan UX formatting preserved</div>
+    </div>
+    <div style="font-size:11px;color:#6B7280;line-height:1.5">Header band, entity row colors, conditional formatting, and column widths come from the source UX widget — no manual styling required in Sheets.</div>
+  `;
 }
+
+// Scenes 6–8 removed in v.328 — the old "Module Discovery → search → AI chat → NL-to-Sheet"
+// arc was split out. NL chat / "Ask About Your Model" now lives in demo/llm-agent.html.
 
 // === Audio Narration ===
 let audioMuted = false;
-const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5'),document.getElementById('audio-6'),document.getElementById('audio-7'),document.getElementById('audio-8')];
+const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5')];
 function toggleMute(){
   audioMuted = !audioMuted;
   document.getElementById('muteBtn').textContent = audioMuted ? '🔇' : '🔊';
