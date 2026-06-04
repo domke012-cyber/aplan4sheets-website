@@ -169,7 +169,7 @@ body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
 <div class="demo-controls">
   <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
   <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
-  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()" title="Enable narration" aria-label="Enable narration">🔇</button>
   <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 5 — <span id="stepLabel">Extensions Menu</span></div>
 </div>
 
@@ -238,7 +238,16 @@ let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrame
 
 const checkSVG=`<svg class="inline-checkmark" viewBox="0 0 16 16" style="width:14px;height:14px"><path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-1.5 12L3 8.5l1.06-1.06L6.5 9.88l5.44-5.44L13 5.5l-6.5 6.5z"/></svg>`;
 
-function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
+async function togglePlay(){
+  playing=!playing;
+  document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';
+  if(playing){
+    if(!audioUnlocked) enableNarration();
+    runScene(currentScene);
+  }else{
+    audioClips.forEach(a=>{if(a)a.pause();});
+  }
+}
 function restartDemo(){
   playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
   currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
@@ -465,19 +474,41 @@ async function scene5(){
 }
 
 // === Audio Narration ===
-let audioMuted = false;
+let audioMuted = true;
+let audioUnlocked = false;
 const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5')];
-function toggleMute(){
-  audioMuted = !audioMuted;
-  document.getElementById('muteBtn').textContent = audioMuted ? '🔇' : '🔊';
-  if(audioMuted) audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+function updateAudioButton(){
+  const btn = document.getElementById('muteBtn');
+  if(!btn) return;
+  btn.textContent = audioMuted ? '🔇' : '🔊';
+  const label = audioMuted ? 'Enable narration' : 'Mute narration';
+  btn.title = label;
+  btn.setAttribute('aria-label', label);
+}
+function enableNarration(){
+  audioMuted = false;
+  audioUnlocked = true;
+  updateAudioButton();
+  playNarration(currentScene);
+  return true;
+}
+async function toggleMute(){
+  if(audioMuted){
+    enableNarration();
+    return;
+  }
+  audioMuted = true;
+  updateAudioButton();
+  audioClips.forEach(a => { if(a){ a.pause(); a.currentTime = 0; } });
 }
 function playNarration(idx){
-  if(audioMuted || idx < 0 || idx >= audioClips.length) return;
-  audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
-  audioClips[idx].play().catch(()=>{});
+  if(audioMuted || !audioUnlocked || idx < 0 || idx >= audioClips.length) return;
+  audioClips.forEach(a => { if(a){ a.pause(); a.currentTime = 0; } });
+  const clip = audioClips[idx];
+  if(clip) clip.play().catch(()=>{});
 }
 
+updateAudioButton();
 initGrid();
 setTimeout(()=>runScene(0),500);
 </script>

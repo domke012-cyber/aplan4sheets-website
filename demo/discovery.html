@@ -174,7 +174,7 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 <div class="demo-controls">
   <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
   <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
-  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()" title="Enable narration" aria-label="Enable narration">🔇</button>
   <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 5 — <span id="stepLabel">Open Formatted UX Pages</span></div>
 </div>
 <div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
@@ -228,7 +228,16 @@ const SCENES=[
 const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
 let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
 
-function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
+async function togglePlay(){
+  playing=!playing;
+  document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';
+  if(playing){
+    if(!audioUnlocked) enableNarration();
+    runScene(currentScene);
+  }else{
+    audioClips.forEach(a=>{if(a)a.pause();});
+  }
+}
 function restartDemo(){
   playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
   currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
@@ -491,19 +500,41 @@ async function scene5(){
 // arc was split out. NL chat / "Ask About Your Model" now lives in demo/llm-agent.html.
 
 // === Audio Narration ===
-let audioMuted = false;
+let audioMuted = true;
+let audioUnlocked = false;
 const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5')];
-function toggleMute(){
-  audioMuted = !audioMuted;
-  document.getElementById('muteBtn').textContent = audioMuted ? '🔇' : '🔊';
-  if(audioMuted) audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
+function updateAudioButton(){
+  const btn = document.getElementById('muteBtn');
+  if(!btn) return;
+  btn.textContent = audioMuted ? '🔇' : '🔊';
+  const label = audioMuted ? 'Enable narration' : 'Mute narration';
+  btn.title = label;
+  btn.setAttribute('aria-label', label);
+}
+function enableNarration(){
+  audioMuted = false;
+  audioUnlocked = true;
+  updateAudioButton();
+  playNarration(currentScene);
+  return true;
+}
+async function toggleMute(){
+  if(audioMuted){
+    enableNarration();
+    return;
+  }
+  audioMuted = true;
+  updateAudioButton();
+  audioClips.forEach(a => { if(a){ a.pause(); a.currentTime = 0; } });
 }
 function playNarration(idx){
-  if(audioMuted || idx < 0 || idx >= audioClips.length) return;
-  audioClips.forEach(a => { a.pause(); a.currentTime = 0; });
-  audioClips[idx].play().catch(()=>{});
+  if(audioMuted || !audioUnlocked || idx < 0 || idx >= audioClips.length) return;
+  audioClips.forEach(a => { if(a){ a.pause(); a.currentTime = 0; } });
+  const clip = audioClips[idx];
+  if(clip) clip.play().catch(()=>{});
 }
 
+updateAudioButton();
 initGrid();
 document.getElementById('sidebar').classList.add('visible');
 setTimeout(()=>runScene(0),500);
