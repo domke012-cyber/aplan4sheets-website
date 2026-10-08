@@ -8,6 +8,25 @@ html {
   min-height: 100%;
 }
 
+.demo-status { font-size: 11px; color: #64748b; }
+.demo-notes {
+  flex: 0 0 auto; padding: 9px 20px; background: #eff6f2; color: #244438;
+  border-bottom: 1px solid #dbe7df; font-size: 12px; line-height: 1.5; text-align: center;
+}
+.embed-mode .demo-notes { display: none; }
+.pivot-overlay:not(.visible), .disc-overlay:not(.visible),
+.picker-overlay:not(.visible), .prog-overlay:not(.visible) { visibility: hidden; }
+.demo-controls button:focus-visible, a:focus-visible {
+  outline: 3px solid #2563eb; outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .demo-status { flex-basis: 100%; text-align: center; }
+  .demo-notes { padding: 6px 12px; font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
 body:not(.embed-mode) {
   display: flex;
   flex-direction: column;

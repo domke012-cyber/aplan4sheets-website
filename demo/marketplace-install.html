@@ -44,6 +44,7 @@ img{max-width:100%;display:block}
 
 </style>
 <link rel="stylesheet" href="../assets/demo-responsive.css">
+<script src="../assets/demo-narration.js"></script><script src="../assets/demo-player.js"></script>
 <script>
 (function(){
   const params=new URLSearchParams(location.search);
@@ -87,10 +88,10 @@ img{max-width:100%;display:block}
             <div class="hero-copy">
               <div class="hero-title">Anaplan Connector for Sheets™</div>
               <div class="hero-sub">Sync Anaplan data to Google Sheets™ with automated exports and scheduling</div>
-              <div class="hero-meta">By: <a href="#">ryan domke</a><br>Listing updated: April 11, 2026</div>
+              <div class="hero-meta">By: <a href="#">ryan domke</a><br>Illustrative Marketplace listing</div>
             </div>
             <div class="hero-action">
-              <button class="install-btn" id="installBtn" type="button">Uninstall</button>
+              <button class="install-btn" id="installBtn" type="button">Install</button>
             </div>
           </div>
 
@@ -116,7 +117,7 @@ img{max-width:100%;display:block}
 
           <div class="carousel">
             <div class="arrow-wrap"><div class="arrow">‹</div></div>
-            <div class="slide-stage"><img id="slideImage" src="../assets/marketplace/shot1.png" alt="Actual Google Workspace Marketplace listing screenshot"></div>
+            <div class="slide-stage"><img id="slideImage" src="../assets/marketplace/shot1.png" alt="Sample Marketplace listing media"></div>
             <div class="arrow-wrap"><div class="arrow">›</div></div>
           </div>
 
@@ -124,7 +125,7 @@ img{max-width:100%;display:block}
 
           <div class="dialog" id="installDialog">
             <div class="dialog-head"><div class="dialog-title">Open Google Sheets after install</div><div style="font-size:11px;font-weight:800;color:#0f9d58;letter-spacing:.08em;text-transform:uppercase">Next step</div></div>
-            <div class="dialog-copy">This demo now starts on the actual Marketplace listing view first, then loops through the real listing imagery before continuing.</div>
+            <div class="dialog-copy">Install from the real Marketplace listing, then launch the connector in Google Sheets. This demonstration does not install software.</div>
             <div class="dialog-actions"><button class="btn btn-secondary" type="button">Close</button><button class="btn btn-primary" type="button">Continue</button></div>
           </div>
         </div>
@@ -132,13 +133,13 @@ img{max-width:100%;display:block}
     </div>
   </div>
 </div>
+<audio src="audio/v2/marketplace-install-1.mp3" preload="metadata"></audio><audio src="audio/v2/marketplace-install-2.mp3" preload="metadata"></audio><audio src="audio/v2/marketplace-install-3.mp3" preload="metadata"></audio>
 <script>
 const scenes=[
-  {label:'Actual listing view',duration:2200,run:()=>setState(0)},
-  {label:'Highlight install state',duration:2200,run:()=>setState(1)},
-  {label:'Advance listing media',duration:2600,run:()=>setState(2)}
+  {label:'Find the connector listing',duration:2200,run:()=>setState(0)},
+  {label:'Review installation',duration:2200,run:()=>setState(1)},
+  {label:'Open the connector in Sheets',duration:2600,run:()=>setState(2)}
 ];
-let current=0,playing=true,timer=null,loopTimer=null;
 const installBtn=document.getElementById('installBtn');
 const installDialog=document.getElementById('installDialog');
 const progress=document.getElementById('globalProgress');
@@ -148,7 +149,7 @@ const slideImage=document.getElementById('slideImage');
 function setState(index){
   installBtn.classList.remove('pulse','done');
   installDialog.classList.remove('show');
-  installBtn.textContent='Uninstall';
+  installBtn.textContent='Install';
   slideImage.src='../assets/marketplace/shot1.png';
   if(index===1){installBtn.classList.add('pulse');}
   if(index===2){installBtn.classList.add('done');slideImage.src='../assets/marketplace/shot2.png';installDialog.classList.add('show');}
@@ -156,22 +157,8 @@ function setState(index){
   stepNum.textContent=index+1;
   stepLabel.textContent=scenes[index].label;
 }
-function runScene(index){
-  clearTimeout(timer);clearTimeout(loopTimer);
-  current=index;scenes[index].run();
-  if(!playing)return;
-  timer=setTimeout(()=>{
-    if(index<scenes.length-1)runScene(index+1);
-    else if(new URLSearchParams(location.search).has('loop'))loopTimer=setTimeout(restartDemo,1400);
-  },scenes[index].duration);
-}
-function restartDemo(){current=0;runScene(0)}
-function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'Pause':'Play';clearTimeout(timer);clearTimeout(loopTimer);if(playing)runScene(current)}
-window.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('playBtn').addEventListener('click',togglePlay);
-  document.getElementById('restartBtn').addEventListener('click',restartDemo);
-  restartDemo();
-});
+const demoPlayer=new DemoPlayer({scenes:scenes.map(s=>({name:s.label,duration:s.duration})),actions:scenes.map(s=>s.run),reset:()=>setState(0)});
+demoPlayer.mount();
 </script>
 </body>
 </html>

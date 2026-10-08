@@ -94,6 +94,8 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 @keyframes ios-spin{to{transform:rotate(360deg)}}
 </style>
 <link rel="stylesheet" href="../assets/demo-responsive.css">
+<script src="../assets/demo-narration.js"></script>
+<script src="../assets/demo-player.js"></script>
 </head>
 <body>
 
@@ -104,9 +106,9 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 </nav>
 
 <div class="demo-controls">
-  <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
-  <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
-  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()" title="Enable narration" aria-label="Enable narration">🔇</button>
+  <button class="ctrl-play" id="playBtn">⏸ Pause</button>
+  <button class="ctrl-restart">↻ Restart</button>
+  <button class="ctrl-mute" id="muteBtn" title="Enable narration" aria-label="Enable narration">🔇</button>
   <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 6 — <span id="stepLabel">Board Widgets</span></div>
 </div>
 <div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
@@ -125,12 +127,12 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
   </div>
 </div>
 
-<audio id="audio-1" src="audio/ux-formatting-1.mp3" preload="auto"></audio>
-<audio id="audio-2" src="audio/ux-formatting-2.mp3" preload="auto"></audio>
-<audio id="audio-3" src="audio/ux-formatting-3.mp3" preload="auto"></audio>
-<audio id="audio-4" src="audio/ux-formatting-4.mp3" preload="auto"></audio>
-<audio id="audio-5" src="audio/ux-formatting-5.mp3" preload="auto"></audio>
-<audio id="audio-6" src="audio/ux-formatting-6.mp3" preload="auto"></audio>
+<audio id="audio-1" src="audio/v2/ux-formatting-1.mp3" preload="metadata"></audio>
+<audio id="audio-2" src="audio/v2/ux-formatting-2.mp3" preload="metadata"></audio>
+<audio id="audio-3" src="audio/v2/ux-formatting-3.mp3" preload="metadata"></audio>
+<audio id="audio-4" src="audio/v2/ux-formatting-4.mp3" preload="metadata"></audio>
+<audio id="audio-5" src="audio/v2/ux-formatting-5.mp3" preload="metadata"></audio>
+<audio id="audio-6" src="audio/v2/ux-formatting-6.mp3" preload="metadata"></audio>
 <script>
 const SCENES=[
   {name:'Board Widgets',duration:7000},
@@ -140,39 +142,12 @@ const SCENES=[
   {name:'Apply Formatting',duration:10000},
   {name:'Final Formatted P&L',duration:7000},
 ];
-const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
-let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
+let demoPlayer;
 
-async function togglePlay(){
-  playing=!playing;
-  document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';
-  if(playing){
-    if(!audioUnlocked) enableNarration();
-    runScene(currentScene);
-  }else{
-    audioClips.forEach(a=>{if(a)a.pause();});
-  }
-}
-function restartDemo(){
-  playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
-  currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
+const wait=ms=>demoPlayer.wait(ms);
+function resetDemo(){
   initGrid();document.getElementById('sheetTabs').innerHTML='<div class="sheet-tab active">Sheet1</div>';
-  updateProgress();runScene(0);
 }
-function updateProgress(){
-  document.getElementById('globalProgress').style.width=Math.min((elapsed/TOTAL)*100,100)+'%';
-  document.getElementById('stepNum').textContent=currentScene+1;
-  document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete';
-}
-function runScene(idx){
-  if(idx>=SCENES.length){currentScene=SCENES.length-1;updateProgress();return}
-  currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);
-  [scene1,scene2,scene3,scene4,scene5,scene6][idx]();
-  sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);
-  const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;document.getElementById('globalProgress').style.width=Math.min(((elapsed+se)/TOTAL)*100,100)+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};
-  animFrameId=requestAnimationFrame(tick);
-}
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
 function initGrid(){
   const t=document.getElementById('gridTable');const L='ABCDEFGHIJ'.split('');
@@ -422,45 +397,8 @@ async function scene6(){
   `);
 }
 
-// === Audio Narration ===
-let audioMuted = true;
-let audioUnlocked = false;
-const audioClips = [document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5'),document.getElementById('audio-6')];
-function updateAudioButton(){
-  const btn = document.getElementById('muteBtn');
-  if(!btn) return;
-  btn.textContent = audioMuted ? '🔇' : '🔊';
-  const label = audioMuted ? 'Enable narration' : 'Mute narration';
-  btn.title = label;
-  btn.setAttribute('aria-label', label);
-}
-function enableNarration(){
-  audioMuted = false;
-  audioUnlocked = true;
-  updateAudioButton();
-  playNarration(currentScene);
-  return true;
-}
-async function toggleMute(){
-  if(audioMuted){
-    enableNarration();
-    return;
-  }
-  audioMuted = true;
-  updateAudioButton();
-  audioClips.forEach(a => { if(a){ a.pause(); a.currentTime = 0; } });
-}
-function playNarration(idx){
-  if(audioMuted || !audioUnlocked || idx < 0 || idx >= audioClips.length) return;
-  audioClips.forEach(a => { if(a){ a.pause(); a.currentTime = 0; } });
-  const clip = audioClips[idx];
-  if(clip) clip.play().catch(()=>{});
-}
-
-updateAudioButton();
-initGrid();
-document.getElementById('sidebar').classList.add('visible');
-setTimeout(()=>runScene(0),500);
+demoPlayer = new DemoPlayer({scenes:SCENES, actions:[scene1,scene2,scene3,scene4,scene5,scene6], reset:()=>{resetDemo();initGrid();}});
+demoPlayer.mount();
 </script>
 </body>
 </html>

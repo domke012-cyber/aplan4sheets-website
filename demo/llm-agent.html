@@ -93,6 +93,8 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 </style>
 <link rel="stylesheet" href="../assets/demo-responsive.css">
+<script src="../assets/demo-narration.js"></script>
+<script src="../assets/demo-player.js"></script>
 <script>
 (function(){
   const params=new URLSearchParams(location.search);
@@ -114,9 +116,9 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
   <button class="cta-btn" onclick="window.open('https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107','_blank','noopener')">Marketplace Listing</button>
 </nav>
 <div class="demo-controls">
-  <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
-  <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
-  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <button class="ctrl-play" id="playBtn">⏸ Pause</button>
+  <button class="ctrl-restart">↻ Restart</button>
+  <button class="ctrl-mute" id="muteBtn">🔊</button>
   <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 7 — <span id="stepLabel">Open AI Analyst</span></div>
 </div>
 <div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
@@ -125,7 +127,7 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
   <div class="formula-bar"><div class="cell-ref">B4</div><span class="fx">fx</span><span>=SUM(B7:B10)</span></div>
   <div class="main-area">
     <div class="grid-area">
-      <div class="sheet-callout" id="sheetCallout">Agent is writing an executive summary back to the sheet…</div>
+      <div class="sheet-callout" id="sheetCallout">Reviewed export to Sheets — not Anaplan model write-back</div>
       <div class="grid-container"><table class="grid-table" id="gridTable"></table></div>
       <div class="sheet-tabs"><div class="sheet-tab active">Variance Analysis</div><div class="sheet-tab">Deck Inputs</div></div>
     </div>
@@ -134,7 +136,7 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
         <div class="panel chat-wrap">
           <div class="sidebar-header">
             <div class="sidebar-title">✨ AI Analyst <span class="ai-badge">Agent</span></div>
-            <div class="sidebar-sub">Ask aPlan4Sheets to explain variances, identify drivers, and draft executive-ready outputs using your live Anaplan data.</div>
+            <div class="sidebar-sub">Illustrative AI workflow. Review model context and outputs before explicitly exporting a result. Claude handoff requires separate pilot setup.</div>
           </div>
           <div class="chat-messages" id="chatMessages"></div>
           <div class="input-area">
@@ -148,78 +150,52 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
     </div>
   </div>
 </div>
-<div class="toast" id="toast">Executive summary written to Sheet and ready for Slides export</div>
-<audio id="audio-1" src="audio/llm-agent-1.mp3?v=cea06c6" preload="auto"></audio>
-<audio id="audio-2" src="audio/llm-agent-2.mp3?v=cea06c6" preload="auto"></audio>
-<audio id="audio-3" src="audio/llm-agent-3.mp3?v=cea06c6" preload="auto"></audio>
-<audio id="audio-4" src="audio/llm-agent-4.mp3?v=cea06c6" preload="auto"></audio>
-<audio id="audio-5" src="audio/llm-agent-5.mp3?v=cea06c6" preload="auto"></audio>
-<audio id="audio-6" src="audio/llm-agent-6.mp3?v=cea06c6" preload="auto"></audio>
-<audio id="audio-7" src="audio/llm-agent-7.mp3?v=cea06c6" preload="auto"></audio>
+<div class="toast" id="toast">Reviewed sample result exported to Sheets</div>
+<audio id="audio-1" src="audio/v2/llm-agent-1.mp3" preload="metadata"></audio>
+<audio id="audio-2" src="audio/v2/llm-agent-2.mp3" preload="metadata"></audio>
+<audio id="audio-3" src="audio/v2/llm-agent-3.mp3" preload="metadata"></audio>
+<audio id="audio-4" src="audio/v2/llm-agent-4.mp3" preload="metadata"></audio>
+<audio id="audio-5" src="audio/v2/llm-agent-5.mp3" preload="metadata"></audio>
+<audio id="audio-6" src="audio/v2/llm-agent-6.mp3" preload="metadata"></audio>
+<audio id="audio-7" src="audio/v2/llm-agent-7.mp3" preload="metadata"></audio>
 <script>
 const SCENES=[
   {name:'Open AI Analyst',duration:4500},
   {name:'Ask a Plain-English Question',duration:6500},
-  {name:'Agent Analyzes Live Data',duration:7000},
+  {name:'Check Source Context',duration:7000},
   {name:'Structured Findings',duration:8500},
-  {name:'Write Back to Sheet',duration:6500},
+  {name:'Review & Export to Sheet',duration:6500},
   {name:'Prepare Slides Narrative',duration:8000},
   {name:'Outcome Ready to Share',duration:6000},
 ];
-const TOTAL=SCENES.reduce((s,x)=>s+x.duration,0);
-let playing=true,currentScene=0,sceneTimer=null,elapsed=0,sceneStart=0,animFrameId=null;
-let audioMuted=false;
-let audioUnlocked=false;
-const audioClips=[document.getElementById('audio-1'),document.getElementById('audio-2'),document.getElementById('audio-3'),document.getElementById('audio-4'),document.getElementById('audio-5'),document.getElementById('audio-6'),document.getElementById('audio-7')];
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
-async function unlockAudio(){
-  if(audioUnlocked) return true;
-  try{
-    const clip=audioClips[0];
-    clip.muted=true;
-    await clip.play();
-    clip.pause();
-    clip.currentTime=0;
-    clip.muted=false;
-    audioUnlocked=true;
-    return true;
-  }catch(_){
-    return false;
-  }
-}
-async function togglePlay(){
-  playing=!playing;
-  document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';
-  if(playing){
-    await unlockAudio();
-    runScene(currentScene);
-  }else{
-    audioClips.forEach(a=>a.pause());
-  }
-}
-async function toggleMute(){
-  audioMuted=!audioMuted;
-  document.getElementById('muteBtn').textContent=audioMuted?'🔇':'🔊';
-  if(!audioMuted) await unlockAudio();
-  if(audioMuted) audioClips.forEach(a=>{a.pause();a.currentTime=0;});
-}
-function playNarration(idx){if(audioMuted||!audioUnlocked||idx<0||idx>=audioClips.length)return;audioClips.forEach(a=>{a.pause();a.currentTime=0;});audioClips[idx].play().catch(()=>{});}
-function restartDemo(){playing=true;document.getElementById('playBtn').textContent='⏸ Pause';currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);document.getElementById('chatMessages').innerHTML='';document.getElementById('inputText').textContent='';document.getElementById('toast').classList.remove('visible');document.getElementById('sheetCallout').classList.remove('visible');initGrid();updateProgress();runScene(0)}
-function updateProgress(){document.getElementById('globalProgress').style.width=Math.min((elapsed/TOTAL)*100,100)+'%';document.getElementById('stepNum').textContent=currentScene+1;document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete'}
-function runScene(idx){if(idx>=SCENES.length){currentScene=SCENES.length-1;updateProgress();if(new URLSearchParams(location.search).has('loop'))setTimeout(()=>restartDemo(),2200);return}currentScene=idx;sceneStart=Date.now();updateProgress();playNarration(idx);[scene1,scene2,scene3,scene4,scene5,scene6,scene7][idx]();sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;document.getElementById('globalProgress').style.width=Math.min(((elapsed+se)/TOTAL)*100,100)+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};animFrameId=requestAnimationFrame(tick)}
-function initGrid(){const t=document.getElementById('gridTable');const cols='ABCDEFGHIJK'.split('');let h='<thead><tr><th class="corner"></th>';cols.forEach(c=>h+=`<th class="col-header">${c}</th>`);h+='</tr></thead><tbody>';const rows=[['Scenario','Revenue','COGS','Gross Margin','Opex','EBITDA','','','','',''],['Actual','12.4','4.1','8.3','5.6','2.7','','','','',''],['Budget','11.8','3.9','7.9','5.2','2.7','','','','',''],['Variance','0.6','0.2','0.4','0.4','0.0','','','','',''],['','','','','','','','','','',''],['Department','Actual','Budget','Var','Var %','Driver','','','','',''],['Sales','3.4','3.0','0.4','13%','Strong enterprise expansion','','','','',''],['Marketing','1.9','1.4','0.5','36%','Campaign timing + agency spend','','','','',''],['R&D','2.1','2.0','0.1','5%','Headcount ramp slightly ahead','','','','',''],['G&A','1.4','1.5','-0.1','-7%','Lower recruiting costs','','','','',''],['','','','','','','','','','',''],['Executive Summary','','','','','','','','','',''],['Q1 outperformed budget on revenue, but EBITDA was flat as higher marketing spend offset margin gains.','','','','','','','','','',''],['','','','','','','','','','',''],['Suggested Actions','','','','','','','','','','']];for(let r=1;r<=24;r++){h+=`<tr><td class="row-header">${r}</td>`;const row=rows[r-1]||Array(cols.length).fill('');cols.forEach((_,i)=>h+=`<td id="cell-${r}-${i+1}">${row[i]||''}</td>`);h+='</tr>'}h+='</tbody>';t.innerHTML=h;['1-1','1-2','1-3','1-4','1-5','1-6','6-1','6-2','6-3','6-4','6-5','6-6','12-1'].forEach(id=>document.getElementById('cell-'+id)?.classList.add('highlight'))}
+let demoPlayer;
+const wait=ms=>demoPlayer.wait(ms);
+function initGrid(){const t=document.getElementById('gridTable');const cols='ABCDEFGHIJK'.split('');let h='<thead><tr><th class="corner"></th>';cols.forEach(c=>h+=`<th class="col-header">${c}</th>`);h+='</tr></thead><tbody>';const rows=[['Scenario','Revenue','COGS','Gross Margin','Opex','EBITDA','','','','',''],['Actual','12.4','4.1','8.3','5.6','2.7','','','','',''],['Budget','11.8','3.9','7.9','5.2','2.7','','','','',''],['Variance','0.6','0.2','0.4','0.4','0.0','','','','',''],['','','','','','','','','','',''],['Department','Actual','Budget','Var','Var %','Driver','','','','',''],['Sales','3.4','3.0','0.4','13%','Strong enterprise expansion','','','','',''],['Marketing','1.9','1.4','0.5','36%','Campaign timing + agency spend','','','','',''],['R&D','2.1','2.0','0.1','5%','Headcount ramp slightly ahead','','','','',''],['G&A','1.4','1.5','-0.1','-7%','Lower recruiting costs','','','','',''],['','','','','','','','','','',''],['Executive Summary','','','','','','','','','',''],['','','','','','','','','','',''],['','','','','','','','','','',''],['Suggested Actions','','','','','','','','','','']];for(let r=1;r<=24;r++){h+=`<tr><td class="row-header">${r}</td>`;const row=rows[r-1]||Array(cols.length).fill('');cols.forEach((_,i)=>h+=`<td id="cell-${r}-${i+1}">${row[i]||''}</td>`);h+='</tr>'}h+='</tbody>';t.innerHTML=h;['1-1','1-2','1-3','1-4','1-5','1-6','6-1','6-2','6-3','6-4','6-5','6-6','12-1'].forEach(id=>document.getElementById('cell-'+id)?.classList.add('highlight'))}
 function addMsg(role,html){const box=document.getElementById('chatMessages');const wrap=document.createElement('div');wrap.className='msg '+role;if(role==='ai'){wrap.innerHTML=`<div class="avatar">AI</div><div class="bubble">${html}</div>`}else{wrap.innerHTML=`<div class="bubble">${html}</div>`}box.appendChild(wrap);box.scrollTop=box.scrollHeight;return wrap}
 function addThinking(){const box=document.getElementById('chatMessages');const wrap=document.createElement('div');wrap.className='msg ai';wrap.innerHTML='<div class="avatar">AI</div><div class="bubble"><div class="thinking"><span></span><span></span><span></span></div></div>';box.appendChild(wrap);box.scrollTop=box.scrollHeight;return wrap}
 async function typeInput(text,speed=28){const el=document.getElementById('inputText');el.textContent='';for(let i=0;i<text.length;i++){el.textContent=text.slice(0,i+1);await wait(speed)} }
 function setWritingBar(pct){const bar=document.querySelector('.writing-bar');if(bar)bar.style.width=pct+'%'}
-async function scene1(){initGrid();document.getElementById('chatMessages').innerHTML='';addMsg('ai','<strong>Hi, I’m your AI Analyst.</strong><br>I can explain Anaplan variances, identify key drivers, and draft outputs for Sheets or Slides.');addMsg('ai','<div class="kpi-strip"><div class="kpi"><div class="kpi-label">Connected model</div><div class="kpi-value">FY26 Plan</div><div class="kpi-note">Revenue & headcount</div></div><div class="kpi"><div class="kpi-label">Current sheet</div><div class="kpi-value">Variance Review</div><div class="kpi-note">Live pivot data</div></div><div class="kpi"><div class="kpi-label">Available actions</div><div class="kpi-value">Summarize</div><div class="kpi-note">Write back or build deck</div></div></div>')}
+async function scene1(){initGrid();document.getElementById('chatMessages').innerHTML='';addMsg('ai','<strong>Hi, I’m your AI Analyst.</strong><br>I can explain Anaplan variances, identify key drivers, and draft outputs for Sheets or Slides.');addMsg('ai','<div class="kpi-strip"><div class="kpi"><div class="kpi-label">Connected model</div><div class="kpi-value">FY26 Plan</div><div class="kpi-note">Revenue & headcount</div></div><div class="kpi"><div class="kpi-label">Current sheet</div><div class="kpi-value">Variance Review</div><div class="kpi-note">Sample pivot data</div></div><div class="kpi"><div class="kpi-label">Available actions</div><div class="kpi-value">Summarize</div><div class="kpi-note">Review, then export</div></div></div>')}
 async function scene2(){await typeInput('Summarize Q1 actual vs budget, identify the biggest spend drivers, and draft an executive summary I can use in Slides.');await wait(300);addMsg('user','Summarize Q1 actual vs budget, identify the biggest spend drivers, and draft an executive summary I can use in Slides.');document.getElementById('inputText').textContent='';}
-async function scene3(){const thinking=addThinking();await wait(1800);thinking.remove();addMsg('ai','Analyzing the active variance sheet and connected Anaplan model context now.');const bubble=addMsg('ai','<div class="writing-row">Reading live sheet ranges<div class="writing-bar-wrap"><div class="writing-bar"></div></div></div>');for(const pct of [18,36,58,76,100]){setWritingBar(pct);await wait(900)}bubble.querySelector('.writing-row').innerHTML='Analysis complete. I found the main revenue gain, the largest cost overrun, and the EBITDA impact.';['7-4','8-4','13-1'].forEach(id=>document.getElementById('cell-'+id)?.classList.add('good'))}
+async function scene3(){const thinking=addThinking();await wait(1800);thinking.remove();addMsg('ai','Reviewing the sample report and selected model context.');const bubble=addMsg('ai','<div class="writing-row">Checking sample report context<div class="writing-bar-wrap"><div class="writing-bar"></div></div></div>');for(const pct of [18,36,58,76,100]){setWritingBar(pct);await wait(900)}bubble.querySelector('.writing-row').innerHTML='Analysis complete. I found the main revenue gain, the largest cost overrun, and the EBITDA impact.';['7-4','8-4','13-1'].forEach(id=>document.getElementById('cell-'+id)?.classList.add('good'))}
 async function scene4(){addMsg('ai','<strong>Top findings</strong><ul><li>Revenue beat budget by <strong>$0.6M</strong>, led by enterprise expansion in Sales.</li><li>Marketing was the largest spend overrun at <strong>$0.5M</strong>, mainly campaign timing and agency costs.</li><li>Gross margin improved, but the extra marketing spend fully offset it, leaving <strong>EBITDA flat to budget</strong>.</li></ul>');await wait(1500);addMsg('ai','<strong>Executive summary draft</strong><br>Q1 finished ahead of budget on revenue, with the strongest upside coming from Sales. However, higher-than-planned marketing investment absorbed most of the margin improvement, keeping EBITDA in line with plan. The business enters Q2 with positive commercial momentum, but spend discipline in demand generation is the main watch item.');}
-async function scene5(){document.getElementById('sheetCallout').classList.add('visible');addMsg('ai','Writing the executive summary and recommended next steps back to the sheet so the finance team can review or edit it.');await wait(1200);const targets=[['13-1','Q1 revenue exceeded budget by $0.6M, but higher marketing spend offset margin gains, leaving EBITDA flat to plan.'],['15-1','1) Tighten Q2 campaign pacing'],['16-1','2) Protect Sales momentum in enterprise segments'],['17-1','3) Use the Slides export to brief leaders quickly']];for(const [id,text] of targets){const cell=document.getElementById('cell-'+id);cell.classList.add('good');cell.textContent=text;await wait(950)} }
-async function scene6(){addMsg('ai','<strong>Slides-ready narrative</strong><ul><li><strong>Headline:</strong> Revenue ahead, EBITDA flat</li><li><strong>Main driver:</strong> Sales upside from enterprise expansion</li><li><strong>Main risk:</strong> Marketing overspend diluted margin improvement</li><li><strong>Recommended next slide:</strong> Department-level variance waterfall</li></ul>');await wait(1400);addMsg('ai','I can now hand this directly into the AI Deck Builder so your Google Slides output starts with the same storyline.');}
-async function scene7(){document.getElementById('toast').classList.add('visible');addMsg('ai','<strong>Ready.</strong> Your summary is in the sheet, the talking points are structured, and the next step is one click away in Slides export.');}
-window.addEventListener('DOMContentLoaded',()=>{initGrid();runScene(0);document.getElementById('playBtn').textContent='▶ Play';playing=false;});
+async function scene5(){
+  addMsg('ai','<strong>Review before exporting</strong><br>Check the source and findings. Nothing is written to Anaplan.<br><button id="reviewedExport" style="margin-top:12px;background:#0f9d58;color:white;border:0;border-radius:6px;padding:8px 12px">Export to Sheet — after review</button>');
+  await wait(1800);
+  document.getElementById('reviewedExport').textContent='✓ Reviewed · exporting sample result';
+  document.getElementById('sheetCallout').classList.add('visible');
+  document.querySelector('.sheet-tabs').innerHTML='<div class="sheet-tab">Variance Analysis</div><div class="sheet-tab active">AI Result (sample)</div>';
+  document.getElementById('gridTable').innerHTML='<thead><tr><th>Finding</th><th>Value</th><th>Review note</th></tr></thead><tbody><tr><td>Revenue vs budget</td><td>+$0.6M</td><td>Sample Sales expansion</td></tr><tr><td>Marketing overrun</td><td>+$0.5M</td><td>Sample campaign timing and agency spend</td></tr><tr><td>EBITDA variance</td><td>$0.0M</td><td>Review underlying source data</td></tr></tbody>';
+  await wait(1200);
+  addMsg('ai','Sample result exported after review. The Claude pilot similarly requires an explicit Write to sheet action and a configured connector.');
+}
+async function scene6(){addMsg('ai','<strong>Slides-ready narrative</strong><ul><li><strong>Headline:</strong> Revenue ahead, EBITDA flat</li><li><strong>Main driver:</strong> Sales upside from enterprise expansion</li><li><strong>Main risk:</strong> Marketing overspend diluted margin improvement</li><li><strong>Recommended next slide:</strong> Department-level variance waterfall</li></ul>');await wait(1400);addMsg('ai','Use these reviewed talking points alongside your Sheets charts and presentation workflow. A deck should be reviewed separately before sharing.');}
+async function scene7(){document.getElementById('toast').classList.add('visible');addMsg('ai','<strong>Ready.</strong> The reviewed result is in Sheets and the talking points are ready. Validate your final report before sharing.');}
+demoPlayer = new DemoPlayer({scenes:SCENES, actions:[scene1,scene2,scene3,scene4,scene5,scene6,scene7], reset:()=>{
+  document.getElementById('chatMessages').innerHTML='';document.getElementById('inputText').textContent='';
+  document.getElementById('toast').classList.remove('visible');document.getElementById('sheetCallout').classList.remove('visible');document.querySelector('.sheet-tabs').innerHTML='<div class="sheet-tab active">Variance Analysis</div>';initGrid();
+}});
+demoPlayer.mount();
 </script>
 </body>
 </html>

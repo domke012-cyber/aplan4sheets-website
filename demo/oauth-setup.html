@@ -192,6 +192,8 @@ body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
 .wizard-buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:12px;border-top:1px solid #f0f0f0}
 </style>
 <link rel="stylesheet" href="../assets/demo-responsive.css">
+<script src="../assets/demo-narration.js"></script>
+<script src="../assets/demo-player.js"></script>
 
 <script>
 (function(){
@@ -199,14 +201,14 @@ body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
   if(!params.has('embed'))return;
   document.addEventListener('DOMContentLoaded',()=>{
     document.body.classList.add('embed-mode');
-    document.querySelectorAll('audio').forEach(a=>a.remove());
+  // Embedded narration is disabled by the shared player.
     const nav=document.querySelector('.site-nav');if(nav)nav.style.display='none';
     const ctrl=document.querySelector('.demo-controls');if(ctrl)ctrl.style.display='none';
     const prog=document.querySelector('.global-progress');if(prog)prog.style.display='none';
     document.body.style.overflow='hidden';
   });
-  Object.defineProperty(window,'audioMuted',{value:true,writable:true,configurable:true});
-  window.addEventListener('load',()=>{window.playNarration=function(){};});
+  // Embedded narration is disabled by the shared player.
+  // Embedded narration is disabled by the shared player.
 })();
 </script>
 </head>
@@ -222,9 +224,9 @@ body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
 </nav>
 
 <div class="demo-controls">
-  <button class="ctrl-play" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
-  <button class="ctrl-restart" onclick="restartDemo()">↻ Restart</button>
-  <button class="ctrl-mute" id="muteBtn" onclick="toggleMute()">🔊</button>
+  <button class="ctrl-play" id="playBtn">⏸ Pause</button>
+  <button class="ctrl-restart">↻ Restart</button>
+  <button class="ctrl-mute" id="muteBtn">🔊</button>
   <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 7 — <span id="stepLabel">Opening Extensions Menu</span></div>
 </div>
 
@@ -275,6 +277,13 @@ body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
   </div>
 </div>
 
+<audio src="audio/v2/oauth-setup-1.mp3" preload="metadata"></audio>
+<audio src="audio/v2/oauth-setup-2.mp3" preload="metadata"></audio>
+<audio src="audio/v2/oauth-setup-3.mp3" preload="metadata"></audio>
+<audio src="audio/v2/oauth-setup-4.mp3" preload="metadata"></audio>
+<audio src="audio/v2/oauth-setup-5.mp3" preload="metadata"></audio>
+<audio src="audio/v2/oauth-setup-6.mp3" preload="metadata"></audio>
+<audio src="audio/v2/oauth-setup-7.mp3" preload="metadata"></audio>
 <script>
 const SCENES=[
   {name:'Opening Extensions Menu',duration:6000},
@@ -285,19 +294,10 @@ const SCENES=[
   {name:'Main Connector - Login',duration:7000},
   {name:'Connected & Ready',duration:5000},
 ];
-const TOTAL=SCENES.reduce((s,sc)=>s+sc.duration,0);
-let playing=true,currentScene=0,sceneTimer=null,sceneStart=0,elapsed=0,animFrameId=null;
-
+let demoPlayer;
 const checkSVG=`<svg class="inline-checkmark" viewBox="0 0 16 16" style="width:14px;height:14px"><path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-1.5 12L3 8.5l1.06-1.06L6.5 9.88l5.44-5.44L13 5.5l-6.5 6.5z"/></svg>`;
-
-function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play';if(playing)runScene(currentScene)}
-function toggleMute(){
-  const btn=document.getElementById('muteBtn');
-  btn.textContent=btn.textContent==='🔊'?'🔇':'🔊';
-}
-function restartDemo(){
-  playing=true;document.getElementById('playBtn').textContent='⏸ Pause';
-  currentScene=0;elapsed=0;clearTimeout(sceneTimer);cancelAnimationFrame(animFrameId);
+const wait=ms=>demoPlayer.wait(ms);
+function resetDemo(){
   document.getElementById('sidebar').classList.remove('visible');
   document.getElementById('sidebarContent').innerHTML='';
   document.getElementById('extDrop').classList.remove('show');
@@ -305,26 +305,7 @@ function restartDemo(){
   document.getElementById('extMenuLabel').style.background='';
   document.getElementById('extConnector').classList.remove('highlighted');
   document.getElementById('extOpenSidebar').classList.remove('highlighted');
-  updateProgress();runScene(0);
 }
-function updateProgress(){
-  const pct=Math.min((elapsed/TOTAL)*100,100);
-  document.getElementById('globalProgress').style.width=pct+'%';
-  document.getElementById('stepNum').textContent=currentScene+1;
-  document.getElementById('stepLabel').textContent=SCENES[currentScene]?.name||'Complete';
-}
-function runScene(idx){
-  if(idx>=SCENES.length){
-    currentScene=SCENES.length-1;updateProgress();
-    if(new URLSearchParams(location.search).has('loop')){setTimeout(()=>restartDemo(),2000)}
-    return}
-  currentScene=idx;sceneStart=Date.now();updateProgress();
-  [scene1,scene2,scene3,scene4,scene5,scene6,scene7][idx]();
-  sceneTimer=setTimeout(()=>{elapsed+=SCENES[idx].duration;if(playing)runScene(idx+1)},SCENES[idx].duration);
-  const tick=()=>{if(!playing)return;const se=Date.now()-sceneStart;const pct=Math.min(((elapsed+se)/TOTAL)*100,100);document.getElementById('globalProgress').style.width=pct+'%';if(se<SCENES[idx].duration)animFrameId=requestAnimationFrame(tick)};
-  animFrameId=requestAnimationFrame(tick);
-}
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
 function initGrid(){
   const t=document.getElementById('gridTable');const L='ABCDEFGHIJKLMNO'.split('');
@@ -626,8 +607,8 @@ async function scene7(){
   }
 }
 
-initGrid();
-setTimeout(()=>runScene(0),500);
+demoPlayer = new DemoPlayer({scenes:SCENES, actions:[scene1,scene2,scene3,scene4,scene5,scene6,scene7], reset:()=>{resetDemo();initGrid();}});
+demoPlayer.mount();
 </script>
 </body>
 </html>

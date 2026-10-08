@@ -126,7 +126,7 @@
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 2: Authenticate with Anaplan</h2>
       <p class="text-text-muted mb-4">Open any Google Sheet, go to <strong>Extensions > aPlan4Sheets > Open Sidebar</strong>. Click "Login" and authenticate with your Anaplan credentials. aPlan4Sheets supports both OAuth (SSO) and Basic Auth (email + password).</p>
-      <p class="text-text-muted mb-4">Your credentials are handled securely through Anaplan's official authentication endpoints. aPlan4Sheets never stores your password.</p>
+      <p class="text-text-muted mb-4">Authentication uses Anaplan endpoints. OAuth/SSO avoids entering an Anaplan password in the connector; Basic Auth and authentication tokens use user-specific Google Apps Script storage. See the <a href="/privacy.html" class="text-sheets-green hover:underline">Privacy Policy</a> for data handling.</p>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 3: Select your workspace and model</h2>
       <p class="text-text-muted mb-4">After logging in, the sidebar shows your available Anaplan tenants. Select a tenant, then choose a workspace and model. The sidebar loads all available modules and views.</p>

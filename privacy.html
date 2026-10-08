@@ -48,7 +48,7 @@
   </nav>
   <main class="pt-28 pb-20 max-w-4xl mx-auto px-6">
     <h1 class="text-3xl md:text-4xl font-bold text-navy mb-2">Privacy Policy</h1>
-    <p class="text-sm text-gray-500 mb-10">Last Updated: September 2, 2025</p>
+    <p class="text-sm text-gray-500 mb-10">Last Updated: October 7, 2026</p>
     <div class="prose prose-gray max-w-none space-y-8 text-gray-700 leading-relaxed">
 
       <section>
@@ -61,7 +61,7 @@
         <ul class="list-disc pl-6 space-y-1">
           <li><strong>Google Sheets™ Data:</strong> Only the spreadsheets where you explicitly install and use the add-on</li>
           <li><strong>Anaplan Credentials:</strong> Your Anaplan authentication tokens (stored securely in Google's Properties Service)</li>
-          <li><strong>User Email:</strong> Used only for sending scheduled export notifications (if enabled by you)</li>
+          <li><strong>User Email:</strong> Used for account identification, authentication, support, first-party product usage analysis, and enabled export notifications</li>
         </ul>
       </section>
 
@@ -71,7 +71,8 @@
           <li><strong>Configuration Data:</strong> Your Anaplan workspace/model selections, stored in Google Properties Service</li>
           <li><strong>Schedule Settings:</strong> Export schedules you create, stored in Google Script Properties</li>
           <li><strong>Authentication Tokens:</strong> Encrypted and stored in Google's secure Properties Service</li>
-          <li><strong>No External Storage:</strong> We do not store any data on external servers</li>
+          <li><strong>Server Processing:</strong> Google-hosted services process Anaplan queries and write results to the selected Google Sheet</li>
+          <li><strong>Operational Records:</strong> Account email/domain and usage metadata are retained in our Google Cloud project for support and product usage analysis. These are not third-party advertising records.</li>
         </ul>
       </section>
 
@@ -83,18 +84,15 @@
           <li>Execute data exports from Anaplan to Google Sheets™</li>
           <li>Run scheduled exports at your specified times</li>
           <li>Send notification emails about export status (only if enabled)</li>
+          <li>Provide requested AI analysis and model exploration</li>
+          <li>Diagnose service failures and understand first-party product usage</li>
         </ul>
       </section>
 
       <section>
         <h2 class="text-xl font-bold text-navy mb-3">Data Sharing</h2>
-        <p>We <strong>do not</strong>:</p>
-        <ul class="list-disc pl-6 space-y-1 mt-2">
-          <li>Share your data with third parties</li>
-          <li>Use your data for advertising</li>
-          <li>Access your data except when you explicitly run the add-on</li>
-          <li>Store your data outside of Google's infrastructure</li>
-        </ul>
+        <p>Data is processed by Google infrastructure to provide the connector. When you invoke an AI feature, the selected prompt and relevant context or query results may be processed by the configured AI provider. Claude handoffs are optional, require a configured connector, and involve a separate user action.</p>
+        <p class="mt-2">We <strong>do not</strong> use connector data for advertising or sell it to advertisers.</p>
       </section>
 
       <section>
@@ -110,9 +108,10 @@
       <section>
         <h2 class="text-xl font-bold text-navy mb-3">Data Retention</h2>
         <ul class="list-disc pl-6 space-y-1">
-          <li>Configuration data is retained until you uninstall the add-on</li>
+          <li>Saved connection and schedule configurations are retained in Google Apps Script storage until removed through the relevant controls</li>
           <li>Authentication tokens expire according to Anaplan's policies</li>
-          <li>You can clear all stored data by using the "Logout" function</li>
+          <li>Logout clears authentication state; it does not delete server-side operational usage records</li>
+          <li>Legacy usage records and aggregate account profiles do not currently have automatic expiry. Uninstalling the add-on does not delete these records; contact us to request their deletion.</li>
         </ul>
       </section>
 

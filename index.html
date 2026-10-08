@@ -75,12 +75,6 @@
     "applicationCategory": "BusinessApplication",
     "applicationSubCategory": "Google Workspace Marketplace add-on",
     "operatingSystem": "Web, macOS, Windows, ChromeOS, Linux",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5.0",
-      "ratingCount": "9",
-      "bestRating": "5"
-    },
     "description": "Connect Anaplan to Google Sheets. Pivot views, natural language queries, automated refreshes, and AI-powered executive dashboards. Available on the Google Workspace Marketplace.",
     "url": "https://aplan4sheets.com/",
     "image": "https://aplan4sheets.com/assets/marketplace/og-icon.png",
@@ -93,7 +87,7 @@
       "https://aplan4sheets.com/assets/marketplace/shot1.png",
       "https://aplan4sheets.com/assets/marketplace/shot2.png"
     ],
-    "featureList": "Anaplan pivot views, Natural language queries, Automated data refresh, Executive slide decks, Multi-model support, Anaplan UX formatting, Server-side pivot engine, Multi-grid combinations"
+    "featureList": "Anaplan pivot views, Natural language queries, Scheduled refresh, Multi-model support, Anaplan UX grid formatting, Selective nested combinations, Linked pivots, Workbook cloning, Multi-grid combinations"
   }
   </script>
 
@@ -131,7 +125,7 @@
         "name": "Is my Anaplan data secure?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Absolutely. aPlan4S uses Anaplan's official OAuth authentication. Your credentials are never stored by our add-on. All data transfers happen over encrypted connections, and your data lives only in your own Google Sheets — we never store or access it on our servers."
+          "text": "aPlan4Sheets supports Anaplan OAuth/SSO and Basic Auth, subject to your organization's configuration and permissions. Authentication details are retained in user-specific Google Apps Script storage. Google-hosted services process requests and write results to your Sheets over HTTPS. See our Privacy Policy for AI processing and operational usage records."
         }
       },
       {
@@ -139,7 +133,7 @@
         "name": "What Anaplan modules are supported?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "aPlan4Sheets supports all standard Anaplan modules, saved views, and pre-defined exports. Our pivot engine runs true server-side pivots — just like Anaplan's native UX — with full control over rows, columns, page selectors, and line item subsets. You can even combine multiple modules into a single multi-grid pivot view. We support both read and write-back operations across all module types."
+          "text": "Connect accessible Anaplan modules, saved views, exports, and supported UX grid widgets. Configure rows, columns, page selectors, line-item selections, and compatible combined grids. Availability depends on source structure and Anaplan permissions. The workflows shown here retrieve Anaplan data; exporting an AI result to Sheets is not Anaplan model write-back."
         }
       },
       {
@@ -266,7 +260,46 @@
     </div>
   </section>
 
-  <!-- Social Proof (removed) -->
+  <!-- Latest connected-reporting workflows -->
+  <section id="latest" class="py-20 md:py-28 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <p class="text-sm font-semibold text-sheets-green uppercase tracking-wide mb-3">Latest workflows · October 2026</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-navy">Build the report you actually need</h2>
+        <p class="mt-4 text-text-muted text-lg max-w-2xl mx-auto">Choose exact nested combinations, keep connected views in sync, and reuse your reporting setup across workbooks.</p>
+      </div>
+      <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div class="fade-in bg-white rounded-2xl border border-gray-200 p-6 shadow-sm min-w-0">
+          <p class="text-sm font-semibold text-navy mb-4">Different measures for different periods</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left" style="min-width:460px">
+              <caption class="text-xs text-text-muted text-left pb-3">Illustrative budget review · sample data</caption>
+              <thead class="bg-navy text-white">
+                <tr><th rowspan="2" scope="col" class="p-3 rounded-tl-lg">Metric</th><th scope="col" class="p-3 text-center">FY26</th><th scope="colgroup" colspan="3" class="p-3 text-center rounded-tr-lg">FY27</th></tr>
+                <tr><th scope="col" class="p-3">Forecast</th><th scope="col" class="p-3">Budget</th><th scope="col" class="p-3">YoY</th><th scope="col" class="p-3">YoY %</th></tr>
+              </thead>
+              <tbody class="text-navy">
+                <tr class="border-b border-gray-100"><th scope="row" class="p-3">Revenue</th><td class="p-3">$100M</td><td class="p-3">$120M</td><td class="p-3">$20M</td><td class="p-3">20.0%</td></tr>
+                <tr class="bg-green-light"><th scope="row" class="p-3">Operating profit</th><td class="p-3">$18M</td><td class="p-3">$24M</td><td class="p-3">$6M</td><td class="p-3">33.3%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-4 text-xs text-text-muted">Keep only the combinations you want—not every measure repeated under every year.</p>
+          <a href="/demo/nested-selections.html" class="mt-5 inline-flex text-sheets-green text-sm font-semibold">Explore nested selections →</a>
+        </div>
+        <div class="space-y-7 fade-in min-w-0">
+          <div><h3 class="text-xl font-bold text-navy">Preview. Show or hide. Repivot.</h3><p class="mt-2 text-text-muted leading-relaxed">Select exact row and column occurrences across two or three nested dimensions. Preview the layout, change selections, and save it for refresh.</p></div>
+          <div><h3 class="text-xl font-bold text-navy">One filter, connected reports</h3><p class="mt-2 text-text-muted leading-relaxed">Link compatible pivots in the same model so shared page selections stay in sync. Combine compatible module grids in one output.</p></div>
+          <div><h3 class="text-xl font-bold text-navy">Reuse your workbook setup</h3><p class="mt-2 text-text-muted leading-relaxed">Clone a connected workbook with its saved-view and pivot configurations, then reconnect under the receiving user's own access.</p></div>
+        </div>
+      </div>
+      <div class="mt-10 p-6 rounded-xl border border-gray-200 bg-white fade-in">
+        <h3 class="text-lg font-bold text-navy">AI Analyst, with a review step</h3>
+        <p class="mt-2 text-text-muted text-sm leading-relaxed">Ask about model structure and data, review the answer, and explicitly export a result to Sheets. The Claude handoff is a pilot that requires a configured Claude connector; availability depends on your environment. It is not unattended Anaplan write-back.</p>
+        <a href="/demo/llm-agent.html" class="mt-3 inline-flex text-sheets-green text-sm font-semibold">See the illustrative AI workflow →</a>
+      </div>
+    </div>
+  </section>
 
   <!-- How It Works -->
   <section id="how-it-works" class="py-20 md:py-28 bg-white">
@@ -284,7 +317,7 @@
             </svg>
           </div>
           <h3 class="text-lg font-bold text-navy mb-2">Ask in plain English</h3>
-          <p class="text-text-muted leading-relaxed text-sm">Query your Anaplan models with natural language. Ask "What were Q1 expenses by department?" and get instant answers — no formulas required.</p>
+          <p class="text-text-muted leading-relaxed text-sm">Query your Anaplan models with natural language. Ask "What were Q1 expenses by department?" and review an answer with model context and results you can export.</p>
         </div>
         <!-- Feature 2 -->
         <div class="fade-in text-center">
@@ -294,7 +327,7 @@
             </svg>
           </div>
           <h3 class="text-lg font-bold text-navy mb-2">Anaplan UX formatting</h3>
-          <p class="text-text-muted leading-relaxed text-sm">Your Sheets look like Anaplan — complete with bold headers, number formatting, and conditional colors. No manual cleanup needed.</p>
+          <p class="text-text-muted leading-relaxed text-sm">Bring supported UX grid styles into Sheets, including hierarchy emphasis, number formats, and conditional colors.</p>
         </div>
         <!-- Feature 3 -->
         <div class="fade-in text-center">
@@ -304,7 +337,7 @@
             </svg>
           </div>
           <h3 class="text-lg font-bold text-navy mb-2">Quick dashboards & slides</h3>
-          <p class="text-text-muted leading-relaxed text-sm">Turn any Anaplan view into an executive-ready Google Slides deck with AI-analyzed KPIs, variance breakdowns, and key themes — in seconds.</p>
+          <p class="text-text-muted leading-relaxed text-sm">Use connected data for Google Sheets charts and Google Slides reporting. Review AI-generated KPIs, findings, and narrative before sharing.</p>
         </div>
         <!-- Feature 4 -->
         <div class="fade-in text-center">
@@ -314,7 +347,7 @@
             </svg>
           </div>
           <h3 class="text-lg font-bold text-navy mb-2">Automated refreshes</h3>
-          <p class="text-text-muted leading-relaxed text-sm">Schedule hourly, daily, or weekly refreshes. Your Sheets always have the latest Anaplan data — no manual pulls, no stale numbers.</p>
+          <p class="text-text-muted leading-relaxed text-sm">Schedule hourly, daily, or weekly refreshes. Refresh connected reports on a recurring cadence, with status and error feedback when a refresh needs attention.</p>
         </div>
       </div>
     </div>
@@ -366,7 +399,7 @@
             </svg>
           </div>
           <h3 class="text-lg font-bold text-navy mb-2">Scheduled auto-refresh</h3>
-          <p class="text-text-muted text-sm leading-relaxed">Set it and forget it. Schedule automatic data refreshes so your reports are always current — no manual intervention needed.</p>
+          <p class="text-text-muted text-sm leading-relaxed">Schedule recurring data refreshes and check their status. Google-managed trigger timing is approximate; authentication and source-model availability still apply.</p>
         </div>
         <!-- Feature 5 -->
         <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
@@ -376,7 +409,7 @@
             </svg>
           </div>
           <h3 class="text-lg font-bold text-navy mb-2">Enterprise AI exploration</h3>
-          <p class="text-text-muted text-sm leading-relaxed">Explore your Anaplan modules with enterprise-grade Gemini AI. Ask questions about your data in plain English — and your data is never used for model training.</p>
+          <p class="text-text-muted text-sm leading-relaxed">Ask about modules, formulas, dependencies, and data using Aplan AI. Review results before exporting to Sheets; see our Privacy Policy for AI data handling.</p>
         </div>
         <!-- Feature 6 -->
         <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
@@ -419,7 +452,7 @@
             <span class="text-sheets-green text-2xl">👥</span>
           </div>
           <h3 class="font-bold text-navy mb-2">Real-time collaboration</h3>
-          <p class="text-text-muted text-sm">Share Anaplan-connected sheets with your team. Everyone sees the same live data.</p>
+          <p class="text-text-muted text-sm">Share Anaplan-connected sheets with your team. Collaborators see the shared workbook; connected data updates when its configured refresh runs.</p>
         </div>
       </div>
     </div>
@@ -611,7 +644,7 @@
             <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
           </button>
           <div class="faq-answer">
-            <p class="px-6 pb-5 text-text-muted leading-relaxed">Absolutely. aPlan4S uses Anaplan's official OAuth authentication. Your credentials are never stored by our add-on. All data transfers happen over encrypted connections, and your data lives only in your own Google Sheets — we never store or access it on our servers.</p>
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">aPlan4Sheets supports Anaplan OAuth/SSO and Basic Auth, subject to your organization's configuration and permissions. Authentication details are retained in user-specific Google Apps Script storage. Google-hosted services process requests and write results to your Sheets over HTTPS. See our Privacy Policy for AI processing and operational usage records.</p>
           </div>
         </div>
         <!-- FAQ 6 -->
@@ -621,7 +654,7 @@
             <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
           </button>
           <div class="faq-answer">
-            <p class="px-6 pb-5 text-text-muted leading-relaxed">aPlan4S supports all standard Anaplan modules, saved views, and pre-defined exports. Our pivot engine runs true server-side pivots — just like Anaplan's native UX — with full control over rows, columns, page selectors, and line item subsets. You can even combine multiple modules into a single multi-grid pivot view. We support both read and write-back operations across all module types.</p>
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">Connect accessible Anaplan modules, saved views, exports, and supported UX grid widgets. Configure rows, columns, page selectors, line-item selections, and compatible combined grids. Availability depends on source structure and Anaplan permissions. The workflows shown here retrieve Anaplan data; exporting an AI result to Sheets is not Anaplan model write-back.</p>
           </div>
         </div>
       </div>

@@ -1,0 +1,8 @@
+{
+  "name": "aplan4sheets-website",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20.11" },
+  "scripts": { "test": "node --test tests/*.test.mjs", "verify:audio": "node tooling/verify-audio.mjs" },
+  "devDependencies": { "@sinonjs/fake-timers": "^13.0.5", "jsdom": "^26.1.0" }
+}
