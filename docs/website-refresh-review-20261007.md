@@ -1,9 +1,10 @@
 # Website refresh review — October 7, 2026
 
-Status: approved for publication following the user's review of the draft,
-including the narration and revised privacy disclosures. Based on website
-`main` at `bba7af5`; GitHub Pages publishes from `main`. The release changes only
-the public website. No connector or Anaplan environment is part of this release.
+Status: published following the user's review and explicit approval of the draft,
+including the narration and revised privacy disclosures. Release commit:
+`9b9730ccacbaa7c22e9c71b901e8aa070a0b43e4`, based on website `main` at `bba7af5`.
+GitHub Pages publishes from `main`. The release changes only the public website.
+No connector or Anaplan environment was changed.
 
 ## Updated
 
@@ -40,3 +41,19 @@ Audio metrics and browser playback checks do not substitute for a person's
 voice/pronunciation review. The user approved publication after draft review.
 
 Screenshot: [homepage draft](review/homepage-draft.jpg).
+
+## Publication verification
+
+- GitHub Pages build/deployment run `37709168958` succeeded. The Pages build API
+  reports the release commit as `built`, updated `2026-10-08T00:43:13Z`
+  (October 7 in America/New_York).
+- Public HTTPS checks without cache-busting: all 75 checked resources returned
+  HTTP 200 and matched their local release SHA-256 hashes. These comprise 15
+  HTML pages, three shared CSS/JavaScript assets, and all 57 v2 narration tracks.
+- Chrome shows the new homepage section and walkthrough hub on the public domain.
+  The nested-selection demo starts paused; Play loaded and advanced the live
+  narration with no media error, progressed to the third scene, and Pause
+  returned the control to Play successfully.
+- Screenshot: [published homepage](review/homepage-published.jpg).
+- Existing hosting, domain, and security settings were preserved. No connector,
+  Apps Script, App Engine, Marketplace, or Anaplan deployment was performed.

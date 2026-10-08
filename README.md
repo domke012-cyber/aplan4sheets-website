@@ -45,5 +45,5 @@ Review the homepage, all demos, and the corrected privacy disclosures before
 merging. A push to `main` publishes to the existing GitHub Pages site. No
 connector, Apps Script, App Engine, or Marketplace deployment is involved.
 
-The October 2026 refresh was approved for publication after draft review. See
+The October 2026 refresh is published at https://aplan4sheets.com/ after draft review. See
 `docs/website-refresh-review-20261007.md` for the changes and verification.
