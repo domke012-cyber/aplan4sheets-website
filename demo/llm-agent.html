@@ -89,10 +89,24 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 .writing-bar-wrap{flex:1;height:5px;background:#fde68a;border-radius:999px;overflow:hidden}.writing-bar{height:100%;background:linear-gradient(90deg,#f59e0b,#10b981);width:0%;transition:width .4s ease}
 .toast{position:fixed;bottom:24px;right:24px;background:#065f46;color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:9999;opacity:0;transform:translateY(18px);transition:all .35s}
 .toast.visible{opacity:1;transform:translateY(0)}
+.grid-table .financial-number{text-align:right;font-variant-numeric:tabular-nums}
+.grid-table .report-heading{background:#e8f0fe;font-weight:700;color:#17365d}
+.grid-table .report-total{background:#f0f5fa;font-weight:700;border-top:1px solid #9aabc0}
+.grid-table .report-detail{padding-left:22px;color:#475569}
+.grid-table .source-note{color:#64748b;font-size:10px;white-space:normal;overflow-wrap:anywhere}
+.grid-table .financial-note{white-space:normal;min-width:150px;max-width:220px}
+.source-reference{display:block;margin-top:6px;color:#526577;font-size:11px}
+.analysis-label{display:inline-block;padding:2px 6px;margin-bottom:5px;border:1px solid #dbe4ee;border-radius:4px;background:#f5f8fb;color:#526577;font-size:10px;font-weight:700;text-transform:uppercase}
+.analysis-label.assumption{background:#fffbeb;border-color:#fcd34d;color:#92400e}
+.review-export{margin-top:12px;background:#0f9d58;color:white;border:0;border-radius:6px;padding:8px 12px;font:inherit;cursor:pointer}
+.review-export:disabled{background:#526577;cursor:default}
+.review-mode{display:block;margin-top:8px;color:#64748b;font-size:11px}
 @keyframes dotPulse{0%,80%,100%{transform:scale(.7);opacity:.45}40%{transform:scale(1);opacity:1}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 </style>
-<link rel="stylesheet" href="../assets/demo-responsive.css">
+<link rel="stylesheet" href="../assets/demo-responsive-v2.css">
+<link rel="stylesheet" href="../assets/demo-realism-v3.css">
+<script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
 <script src="../assets/demo-player.js"></script>
 <script>
@@ -123,8 +137,8 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 </div>
 <div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
 <div class="browser-frame">
-  <div class="sheets-toolbar"><div class="doc-icon">📊</div><div class="doc-name">Executive Variance Review - Q1 FY26</div></div>
-  <div class="formula-bar"><div class="cell-ref">B4</div><span class="fx">fx</span><span>=SUM(B7:B10)</span></div>
+  <div class="sheets-toolbar"><div class="doc-icon">📊</div><div class="doc-name">Northstar · Q1 FY26 Executive Variance Review</div></div>
+  <div class="formula-bar"><div class="cell-ref" id="cellRef">B10</div><span class="fx">fx</span><span id="formulaValue">=SUM(B14:B17)</span></div>
   <div class="main-area">
     <div class="grid-area">
       <div class="sheet-callout" id="sheetCallout">Reviewed export to Sheets — not Anaplan model write-back</div>
@@ -136,7 +150,7 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
         <div class="panel chat-wrap">
           <div class="sidebar-header">
             <div class="sidebar-title">✨ AI Analyst <span class="ai-badge">Agent</span></div>
-            <div class="sidebar-sub">Illustrative AI workflow. Review model context and outputs before explicitly exporting a result. Claude handoff requires separate pilot setup.</div>
+            <div class="sidebar-sub">Fictional, fixed report snapshot. No live AI or model connection. Inspect the financial bridge and source references before the tour demonstrates an export. Claude handoff requires separate pilot setup.</div>
           </div>
           <div class="chat-messages" id="chatMessages"></div>
           <div class="input-area">
@@ -170,29 +184,146 @@ const SCENES=[
 ];
 let demoPlayer;
 const wait=ms=>demoPlayer.wait(ms);
-function initGrid(){const t=document.getElementById('gridTable');const cols='ABCDEFGHIJK'.split('');let h='<thead><tr><th class="corner"></th>';cols.forEach(c=>h+=`<th class="col-header">${c}</th>`);h+='</tr></thead><tbody>';const rows=[['Scenario','Revenue','COGS','Gross Margin','Opex','EBITDA','','','','',''],['Actual','12.4','4.1','8.3','5.6','2.7','','','','',''],['Budget','11.8','3.9','7.9','5.2','2.7','','','','',''],['Variance','0.6','0.2','0.4','0.4','0.0','','','','',''],['','','','','','','','','','',''],['Department','Actual','Budget','Var','Var %','Driver','','','','',''],['Sales','3.4','3.0','0.4','13%','Strong enterprise expansion','','','','',''],['Marketing','1.9','1.4','0.5','36%','Campaign timing + agency spend','','','','',''],['R&D','2.1','2.0','0.1','5%','Headcount ramp slightly ahead','','','','',''],['G&A','1.4','1.5','-0.1','-7%','Lower recruiting costs','','','','',''],['','','','','','','','','','',''],['Executive Summary','','','','','','','','','',''],['','','','','','','','','','',''],['','','','','','','','','','',''],['Suggested Actions','','','','','','','','','','']];for(let r=1;r<=24;r++){h+=`<tr><td class="row-header">${r}</td>`;const row=rows[r-1]||Array(cols.length).fill('');cols.forEach((_,i)=>h+=`<td id="cell-${r}-${i+1}">${row[i]||''}</td>`);h+='</tr>'}h+='</tbody>';t.innerHTML=h;['1-1','1-2','1-3','1-4','1-5','1-6','6-1','6-2','6-3','6-4','6-5','6-6','12-1'].forEach(id=>document.getElementById('cell-'+id)?.classList.add('highlight'))}
+// One fictional snapshot supplies the sheet, variance bridge, findings and export.
+// Integer dollars avoid independently rounded or hand-maintained subtotal values.
+const AI_SAMPLE = Object.freeze({
+  id:'northstar-q1fy26-close-2026-04-03', company:'Northstar', period:'Q1 FY26',
+  asOf:'3 Apr 2026 · closed actuals', currency:'USD', model:'Northstar FP&A (sample)',
+  revenues:Object.freeze([
+    Object.freeze({id:'saas',label:'SaaS revenue',actual:11600000,budget:11200000}),
+    Object.freeze({id:'services',label:'Services revenue',actual:800000,budget:600000})
+  ]),
+  cogs:Object.freeze({id:'cogs',label:'Cost of revenue',actual:4100000,budget:3900000}),
+  departments:Object.freeze([
+    Object.freeze({id:'sales',label:'Sales',actual:1800000,budget:1700000}),
+    Object.freeze({id:'marketing',label:'Marketing',actual:1500000,budget:1200000}),
+    Object.freeze({id:'rd',label:'R&D',actual:1600000,budget:1500000}),
+    Object.freeze({id:'ga',label:'G&A',actual:700000,budget:800000})
+  ]),
+  controllerComment:'Two campaign invoices booked in March; reviewing timing versus plan.'
+});
+const escapeHtml=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=value=>(value<0?'−':'')+'$'+(Math.abs(value)/1000000).toFixed(2)+'M';
+const percent=value=>value===null?'—':(value*100).toFixed(1)+'%';
+const sumField=(rows,key)=>rows.reduce((sum,row)=>sum+row[key],0);
+function line(id,label,actual,budget,expense=false){return{id,label,actual,budget,variance:actual-budget,percent:budget===0?null:(actual-budget)/budget,expense};}
+function analyseSample(snapshot){
+  const revenue=line('revenue','Revenue',sumField(snapshot.revenues,'actual'),sumField(snapshot.revenues,'budget'));
+  const cogs=line('cogs','Cost of revenue',snapshot.cogs.actual,snapshot.cogs.budget,true);
+  const grossProfit=line('grossProfit','Gross profit',revenue.actual-cogs.actual,revenue.budget-cogs.budget);
+  const departments=snapshot.departments.map(r=>line(r.id,r.label,r.actual,r.budget,true));
+  const opex=line('opex','Operating expenses',sumField(departments,'actual'),sumField(departments,'budget'),true);
+  const ebitda=line('ebitda','EBITDA',grossProfit.actual-opex.actual,grossProfit.budget-opex.budget);
+  return{snapshotId:snapshot.id,revenue,cogs,grossProfit,departments,opex,ebitda,
+    revenueRows:snapshot.revenues.map(r=>line(r.id,r.label,r.actual,r.budget)),
+    largestOverrun:departments.reduce((largest,row)=>row.variance>largest.variance?row:largest),
+    bridge:[{label:'Revenue',impact:revenue.variance},{label:'Cost of revenue',impact:-cogs.variance},...departments.map(r=>({label:r.label,impact:-r.variance}))]};
+}
+const AI_ANALYSIS=analyseSample(AI_SAMPLE);
+let exportState=null;
+function reference(label){return '<span class="source-reference">Source: '+escapeHtml(label)+' · '+AI_SAMPLE.period+' · '+AI_SAMPLE.asOf+'</span>';}
+function initGrid(){
+  const analysis=AI_ANALYSIS, rows=[];
+  const financial=(row,note='',kind='')=>({id:row.id,kind,values:[row.label,row.actual/1000000,row.budget/1000000,row.variance/1000000,percent(row.percent),note],raw:[null,row.actual,row.budget,row.variance]});
+  rows.push({kind:'report-heading',values:['NORTHSTAR · EXECUTIVE VARIANCE REVIEW']});
+  rows.push({kind:'source-note',values:[AI_SAMPLE.period,'USD millions','Actual vs Budget',AI_SAMPLE.asOf]});
+  rows.push({values:[]});
+  rows.push({kind:'report-heading',values:['P&L line','Actual','Budget','Variance','Var %','Actual − Budget; expenses shown positive']});
+  rows.push(financial(analysis.revenue,'Favorable','report-total'));
+  rows.push(financial(analysis.revenueRows[0],'Favorable','report-detail'));
+  rows.push(financial(analysis.revenueRows[1],'Favorable','report-detail'));
+  rows.push(financial(analysis.cogs,'Unfavorable'));
+  rows.push(financial(analysis.grossProfit,'Favorable','report-total'));
+  rows.push(financial(analysis.opex,'Unfavorable','report-total'));
+  rows.push(financial(analysis.ebitda,'In line with budget','report-total'));
+  rows.push({values:[]});
+  rows.push({kind:'report-heading',values:['Opex by department','Actual','Budget','Variance','Var %','Variance assessment']});
+  analysis.departments.forEach(row=>rows.push(financial(row,row.variance>0?'Unfavorable':row.variance<0?'Favorable':'In line')));
+  rows.push(financial({...analysis.opex,id:'opexDetail',label:'Total operating expenses'},'Reconciles to P&L','report-total'));
+  rows.push({values:[]});
+  rows.push({kind:'report-heading',values:['Evidence & limitations']});
+  rows.push({kind:'source-note',values:['MKT comment (unverified)',AI_SAMPLE.controllerComment]});
+  rows.push({kind:'source-note',values:['Follow-up','Check invoices, service dates and accruals before assigning a cause.']});
+  rows.push({kind:'source-note',values:['Scope','Fictional fixed snapshot; no live connection or model write-back.']});
+  const formulas={'5-2':'=SUM(B6:B7)','5-3':'=SUM(C6:C7)','9-2':'=B5-B8','9-3':'=C5-C8','10-2':'=SUM(B14:B17)','10-3':'=SUM(C14:C17)','11-2':'=B9-B10','11-3':'=C9-C10','18-2':'=SUM(B14:B17)','18-3':'=SUM(C14:C17)'};
+  let html='<thead><tr><th class="corner"></th>'+'ABCDEFGH'.split('').map(c=>'<th class="col-header">'+c+'</th>').join('')+'</tr></thead><tbody>';
+  for(let r=1;r<=26;r++){
+    const row=rows[r-1]||{values:[]};
+    html+='<tr'+(row.id?' data-source-row="'+row.id+'"':'')+'><td class="row-header">'+r+'</td>';
+    if(row.kind==='source-note'){
+      html+='<td id="cell-'+r+'-1" class="source-note">'+escapeHtml(row.values[0]||'')+'</td><td id="cell-'+r+'-2" class="source-note" colspan="7">'+escapeHtml(row.values.slice(1).join(' · '))+'</td></tr>';
+      continue;
+    }
+    if(row.kind==='report-heading'&&row.values.length===1){
+      html+='<td id="cell-'+r+'-1" class="report-heading" colspan="8">'+escapeHtml(row.values[0])+'</td></tr>';
+      continue;
+    }
+    for(let c=1;c<=8;c++){
+      const value=row.values[c-1]??'',isNumber=typeof value==='number',formula=formulas[r+'-'+c];
+      html+='<td id="cell-'+r+'-'+c+'" class="'+(row.kind||'')+(isNumber?' financial-number':'')+(c===6?' financial-note':'')+'"'+(formula?' data-formula="'+formula+'"':'')+(row.raw?.[c-1]!=null?' data-value="'+row.raw[c-1]+'"':'')+'>'+escapeHtml(isNumber?value.toFixed(2):value)+'</td>';
+    }
+    html+='</tr>';
+  }
+  document.getElementById('gridTable').innerHTML=html+'</tbody>';
+  document.getElementById('gridTable').dataset.snapshot=AI_SAMPLE.id;
+  document.querySelector('.cell-ref').textContent='B10';
+  document.getElementById('formulaValue').textContent='=SUM(B14:B17)';
+}
 function addMsg(role,html){const box=document.getElementById('chatMessages');const wrap=document.createElement('div');wrap.className='msg '+role;if(role==='ai'){wrap.innerHTML=`<div class="avatar">AI</div><div class="bubble">${html}</div>`}else{wrap.innerHTML=`<div class="bubble">${html}</div>`}box.appendChild(wrap);box.scrollTop=box.scrollHeight;return wrap}
 function addThinking(){const box=document.getElementById('chatMessages');const wrap=document.createElement('div');wrap.className='msg ai';wrap.innerHTML='<div class="avatar">AI</div><div class="bubble"><div class="thinking"><span></span><span></span><span></span></div></div>';box.appendChild(wrap);box.scrollTop=box.scrollHeight;return wrap}
 async function typeInput(text,speed=28){const el=document.getElementById('inputText');el.textContent='';for(let i=0;i<text.length;i++){el.textContent=text.slice(0,i+1);await wait(speed)} }
 function setWritingBar(pct){const bar=document.querySelector('.writing-bar');if(bar)bar.style.width=pct+'%'}
-async function scene1(){initGrid();document.getElementById('chatMessages').innerHTML='';addMsg('ai','<strong>Hi, I’m your AI Analyst.</strong><br>I can explain Anaplan variances, identify key drivers, and draft outputs for Sheets or Slides.');addMsg('ai','<div class="kpi-strip"><div class="kpi"><div class="kpi-label">Connected model</div><div class="kpi-value">FY26 Plan</div><div class="kpi-note">Revenue & headcount</div></div><div class="kpi"><div class="kpi-label">Current sheet</div><div class="kpi-value">Variance Review</div><div class="kpi-note">Sample pivot data</div></div><div class="kpi"><div class="kpi-label">Available actions</div><div class="kpi-value">Summarize</div><div class="kpi-note">Review, then export</div></div></div>')}
+async function scene1(){initGrid();document.getElementById('chatMessages').innerHTML='';addMsg('ai','<strong>AI Analyst · variance review</strong><br>This simulated analysis uses one reconciled Northstar snapshot. We’ll distinguish measured variances from possible causes and retain the source references.');addMsg('ai','<div class="kpi-strip"><div class="kpi"><div class="kpi-label">Sample model</div><div class="kpi-value">Northstar FP&A</div><div class="kpi-note">'+AI_SAMPLE.period+'</div></div><div class="kpi"><div class="kpi-label">Comparison</div><div class="kpi-value">Actual / Budget</div><div class="kpi-note">USD millions</div></div><div class="kpi"><div class="kpi-label">As of</div><div class="kpi-value">3 Apr 2026</div><div class="kpi-note">Closed Q1 snapshot</div></div></div>')}
 async function scene2(){await typeInput('Summarize Q1 actual vs budget, identify the biggest spend drivers, and draft an executive summary I can use in Slides.');await wait(300);addMsg('user','Summarize Q1 actual vs budget, identify the biggest spend drivers, and draft an executive summary I can use in Slides.');document.getElementById('inputText').textContent='';}
-async function scene3(){const thinking=addThinking();await wait(1800);thinking.remove();addMsg('ai','Reviewing the sample report and selected model context.');const bubble=addMsg('ai','<div class="writing-row">Checking sample report context<div class="writing-bar-wrap"><div class="writing-bar"></div></div></div>');for(const pct of [18,36,58,76,100]){setWritingBar(pct);await wait(900)}bubble.querySelector('.writing-row').innerHTML='Analysis complete. I found the main revenue gain, the largest cost overrun, and the EBITDA impact.';['7-4','8-4','13-1'].forEach(id=>document.getElementById('cell-'+id)?.classList.add('good'))}
-async function scene4(){addMsg('ai','<strong>Top findings</strong><ul><li>Revenue beat budget by <strong>$0.6M</strong>, led by enterprise expansion in Sales.</li><li>Marketing was the largest spend overrun at <strong>$0.5M</strong>, mainly campaign timing and agency costs.</li><li>Gross margin improved, but the extra marketing spend fully offset it, leaving <strong>EBITDA flat to budget</strong>.</li></ul>');await wait(1500);addMsg('ai','<strong>Executive summary draft</strong><br>Q1 finished ahead of budget on revenue, with the strongest upside coming from Sales. However, higher-than-planned marketing investment absorbed most of the margin improvement, keeping EBITDA in line with plan. The business enters Q2 with positive commercial momentum, but spend discipline in demand generation is the main watch item.');}
-async function scene5(){
-  addMsg('ai','<strong>Review before exporting</strong><br>Check the source and findings. Nothing is written to Anaplan.<br><button id="reviewedExport" style="margin-top:12px;background:#0f9d58;color:white;border:0;border-radius:6px;padding:8px 12px">Export to Sheet — after review</button>');
-  await wait(1800);
-  document.getElementById('reviewedExport').textContent='✓ Reviewed · exporting sample result';
+async function scene3(){const thinking=addThinking();await wait(1800);thinking.remove();addMsg('ai','<strong>Scope checked</strong><br>All figures below use '+AI_SAMPLE.period+', Actual versus Budget, USD millions, from the same closed-period snapshot.'+reference('Variance Analysis!A4:F18'));const bubble=addMsg('ai','<div class="writing-row">Reconciling source totals<div class="writing-bar-wrap"><div class="writing-bar"></div></div></div>');for(const pct of [18,36,58,76,100]){setWritingBar(pct);await wait(900)}bubble.querySelector('.writing-row').innerHTML='Checks passed: revenue components → revenue; departments → Opex; gross profit − Opex → EBITDA.';['5-4','10-4','11-4','15-4'].forEach(id=>document.getElementById('cell-'+id)?.classList.add('good'))}
+async function scene4(){
+  const a=AI_ANALYSIS;
+  addMsg('ai','<span class="analysis-label">Observed in this snapshot</span><br><strong>Reconciled variance bridge</strong><ul><li>Revenue is '+money(a.revenue.variance)+' above budget: SaaS '+money(a.revenueRows[0].variance)+' and services '+money(a.revenueRows[1].variance)+'.</li><li>Cost of revenue is '+money(a.cogs.variance)+' higher, leaving a '+money(a.grossProfit.variance)+' gross-profit improvement.</li><li>Opex is '+money(a.opex.variance)+' higher. '+a.largestOverrun.label+' is the largest department overrun at '+money(a.largestOverrun.variance)+' ('+percent(a.largestOverrun.percent)+').</li><li>The '+money(a.grossProfit.variance)+' gross-profit gain and '+money(a.opex.variance)+' Opex increase offset: EBITDA is '+money(a.ebitda.actual)+', '+money(a.ebitda.variance)+' versus budget.</li></ul>'+reference('Variance Analysis!A5:F18'));
+  await wait(1500);
+  addMsg('ai','<span class="analysis-label assumption">Commentary · not a verified cause</span><br>The controller’s sample note says: “'+escapeHtml(AI_SAMPLE.controllerComment)+'” This may explain some marketing timing, but the summary does not establish causality. Check invoice service dates and accruals before treating it as a timing-only variance.'+reference('Variance Analysis!A21:B22'));
+}
+function exportReviewedResult(mode){
+  if(exportState)return;
+  if(!['manual','guided-tour'].includes(mode))throw new Error('Review mode required.');
+  exportState={snapshotId:AI_SAMPLE.id,mode};
+  const a=AI_ANALYSIS,button=document.getElementById('reviewedExport');
+  if(button){button.textContent=mode==='manual'?'✓ Sample export requested':'✓ Simulated review → sample export';button.disabled=true;}
+  document.getElementById('reviewMode').textContent=mode==='manual'?'You explicitly requested this browser-only sample export.':'Guided tour: reviewer approval is simulated. No human approval or real export is claimed.';
+  document.getElementById('sheetCallout').textContent='Browser-only sample result · no Google file or model changed';
   document.getElementById('sheetCallout').classList.add('visible');
   document.querySelector('.sheet-tabs').innerHTML='<div class="sheet-tab">Variance Analysis</div><div class="sheet-tab active">AI Result (sample)</div>';
-  document.getElementById('gridTable').innerHTML='<thead><tr><th>Finding</th><th>Value</th><th>Review note</th></tr></thead><tbody><tr><td>Revenue vs budget</td><td>+$0.6M</td><td>Sample Sales expansion</td></tr><tr><td>Marketing overrun</td><td>+$0.5M</td><td>Sample campaign timing and agency spend</td></tr><tr><td>EBITDA variance</td><td>$0.0M</td><td>Review underlying source data</td></tr></tbody>';
-  await wait(1200);
-  addMsg('ai','Sample result exported after review. The Claude pilot similarly requires an explicit Write to sheet action and a configured connector.');
+  const outputRows=[
+    ['Finding','Value','Source / review note'],
+    ['Revenue vs budget',money(a.revenue.variance),'Variance Analysis!D5 — favorable'],
+    ['Marketing overrun',money(a.largestOverrun.variance),'Variance Analysis!D15 — unfavorable; cause not verified'],
+    ['Total Opex increase',money(a.opex.variance),'Variance Analysis!D10 — reconciled to department detail'],
+    ['EBITDA vs budget',money(a.ebitda.variance),'Variance Analysis!D11 — in line with budget'],
+    ['Snapshot',AI_SAMPLE.period,AI_SAMPLE.asOf+' · USD millions · fictional data']
+  ];
+  let output='<thead><tr><th class="corner"></th>'+'ABCDEFGH'.split('').map(c=>'<th class="col-header">'+c+'</th>').join('')+'</tr></thead><tbody>';
+  for(let rowIndex=0;rowIndex<26;rowIndex++){
+    const values=outputRows[rowIndex]||[];
+    output+='<tr><td class="row-header">'+(rowIndex+1)+'</td>';
+    for(let column=0;column<8;column++)output+='<td'+(rowIndex===0?' class="report-heading"':'')+'>'+escapeHtml(values[column]??'')+'</td>';
+    output+='</tr>';
+  }
+  document.getElementById('gridTable').innerHTML=output+'</tbody>';
+  document.querySelector('.cell-ref').textContent='B2';
+  document.getElementById('formulaValue').textContent='Sample exported finding · '+money(a.revenue.variance);
 }
-async function scene6(){addMsg('ai','<strong>Slides-ready narrative</strong><ul><li><strong>Headline:</strong> Revenue ahead, EBITDA flat</li><li><strong>Main driver:</strong> Sales upside from enterprise expansion</li><li><strong>Main risk:</strong> Marketing overspend diluted margin improvement</li><li><strong>Recommended next slide:</strong> Department-level variance waterfall</li></ul>');await wait(1400);addMsg('ai','Use these reviewed talking points alongside your Sheets charts and presentation workflow. A deck should be reviewed separately before sharing.');}
-async function scene7(){document.getElementById('toast').classList.add('visible');addMsg('ai','<strong>Ready.</strong> The reviewed result is in Sheets and the talking points are ready. Validate your final report before sharing.');}
+async function scene5(){
+  addMsg('ai','<strong>Review before exporting</strong><br>Confirm the scope, source references and unverified commentary. The guided tour will demonstrate the approval step. Pause to inspect, or click to request the local sample output.<br><button id="reviewedExport" class="review-export">Export sample result after review</button><span id="reviewMode" class="review-mode">Awaiting the review step. No data has been exported.</span>');
+  document.getElementById('reviewedExport').addEventListener('click',()=>exportReviewedResult('manual'));
+  await wait(1800);
+  exportReviewedResult('guided-tour');
+  await wait(1200);
+  addMsg('ai','This is a local illustration of the review-and-export flow, not a Google file creation. The actual Aplan AI Export to Sheet and separately configured Claude Write to sheet actions require explicit user action. Neither is Anaplan model write-back.');
+}
+async function scene6(){const a=AI_ANALYSIS;addMsg('ai','<strong>Executive summary draft</strong><br>Q1 revenue exceeded budget by '+money(a.revenue.variance)+'. After '+money(a.cogs.variance)+' of additional cost of revenue and '+money(a.opex.variance)+' of additional operating expense, EBITDA remained '+money(a.ebitda.actual)+', in line with budget. Marketing accounts for '+money(a.largestOverrun.variance)+' of the Opex increase; invoice timing is a follow-up question, not a confirmed explanation.'+reference('Variance Analysis!A5:F18'));await wait(1400);addMsg('ai','<strong>Suggested presentation</strong><br>Use a variance waterfall from budget EBITDA to actual EBITDA. Its signed movements sum to '+money(a.bridge.reduce((sum,row)=>sum+row.impact,0))+'. Review the commentary and any linked chart before sharing. No Slides deck is generated here.');}
+async function scene7(){document.getElementById('toast').textContent='Sample analysis complete · source references retained';document.getElementById('toast').classList.add('visible');addMsg('ai','<strong>Analysis ready for review.</strong> The fictional result reconciles to the source snapshot. The simulated export and narrative do not change Anaplan or create Google files. Validate assumptions before sharing a real report.');}
+window.AIRealismDemo={snapshot:AI_SAMPLE,analysis:AI_ANALYSIS,analyse:analyseSample,getExportState:()=>exportState&&{...exportState}};
 demoPlayer = new DemoPlayer({scenes:SCENES, actions:[scene1,scene2,scene3,scene4,scene5,scene6,scene7], reset:()=>{
-  document.getElementById('chatMessages').innerHTML='';document.getElementById('inputText').textContent='';
+  exportState=null;document.getElementById('chatMessages').innerHTML='';document.getElementById('inputText').textContent='';
   document.getElementById('toast').classList.remove('visible');document.getElementById('sheetCallout').classList.remove('visible');document.querySelector('.sheet-tabs').innerHTML='<div class="sheet-tab active">Variance Analysis</div>';initGrid();
 }});
 demoPlayer.mount();

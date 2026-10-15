@@ -34,14 +34,17 @@
     "name": "aPlan4Sheets feature demos",
     "description": "Interactive demos for connecting Anaplan to Google Sheets with aPlan4Sheets.",
     "itemListElement": [
-      {"@type": "ListItem", "position": 1, "name": "Getting Connected", "url": "https://aplan4sheets.com/demo/setup.html"},
-      {"@type": "ListItem", "position": 2, "name": "Pivot Views", "url": "https://aplan4sheets.com/demo/pivot.html"},
-      {"@type": "ListItem", "position": 3, "name": "Multi-Module Pivots", "url": "https://aplan4sheets.com/demo/multi-module.html"},
-      {"@type": "ListItem", "position": 4, "name": "Scheduled Refresh", "url": "https://aplan4sheets.com/demo/schedule.html"},
-      {"@type": "ListItem", "position": 5, "name": "Formatted UX Pages", "url": "https://aplan4sheets.com/demo/discovery.html"},
-      {"@type": "ListItem", "position": 6, "name": "UX Board Formatting", "url": "https://aplan4sheets.com/demo/ux-formatting.html"},
-      {"@type": "ListItem", "position": 7, "name": "AI Analyst", "url": "https://aplan4sheets.com/demo/llm-agent.html"},
-      {"@type": "ListItem", "position": 8, "name": "OAuth Setup", "url": "https://aplan4sheets.com/demo/oauth-setup.html"}
+      {"@type": "ListItem", "position": 1, "name": "Budget Review", "url": "https://aplan4sheets.com/demo/budget-review.html"},
+      {"@type": "ListItem", "position": 2, "name": "Nested Selections", "url": "https://aplan4sheets.com/demo/nested-selections.html"},
+      {"@type": "ListItem", "position": 3, "name": "Getting Connected", "url": "https://aplan4sheets.com/demo/setup.html"},
+      {"@type": "ListItem", "position": 4, "name": "Pivot Views", "url": "https://aplan4sheets.com/demo/pivot.html"},
+      {"@type": "ListItem", "position": 5, "name": "Multi-Module Pivots", "url": "https://aplan4sheets.com/demo/multi-module.html"},
+      {"@type": "ListItem", "position": 6, "name": "Scheduled Refresh", "url": "https://aplan4sheets.com/demo/schedule.html"},
+      {"@type": "ListItem", "position": 7, "name": "Formatted UX Pages", "url": "https://aplan4sheets.com/demo/discovery.html"},
+      {"@type": "ListItem", "position": 8, "name": "UX Board Formatting", "url": "https://aplan4sheets.com/demo/ux-formatting.html"},
+      {"@type": "ListItem", "position": 9, "name": "AI Analyst", "url": "https://aplan4sheets.com/demo/llm-agent.html"},
+      {"@type": "ListItem", "position": 10, "name": "OAuth Setup", "url": "https://aplan4sheets.com/demo/oauth-setup.html"},
+      {"@type": "ListItem", "position": 11, "name": "UX to formatted Sheet", "url": "https://aplan4sheets.com/demo/formatted-ux.html"}
     ]
   }
   </script>
@@ -49,27 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            navy: '#1a2744',
-            'navy-light': '#243352',
-            'sheets-green': '#0f9d58',
-            'sheets-green-dark': '#0b8043',
-            'green-light': '#e8f5e9',
-            'text-dark': '#1a1a2e',
-            'text-muted': '#6b7280',
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          },
-        },
-      },
-    }
-  </script>
+  <link rel="stylesheet" href="/assets/site-v1.css">
   <style>
     .demo-card {
       transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -112,13 +95,21 @@
   <section class="bg-navy text-white py-20">
     <div class="max-w-4xl mx-auto text-center px-6">
       <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Feature Demos</h1>
-      <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto">Explore narrated, illustrative walkthroughs using sample data. Press Play to start with sound, or mute the narration. These are simulations, not recordings of customer models.</p>
+      <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto">Explore interactive walkthroughs using fictional data. Start with the self-paced UX-to-Sheets workflow, or play a narrated feature tour. These are simulations, not recordings of customer models.</p>
     </div>
   </section>
 
   <!-- Demo Cards Grid -->
   <section class="max-w-6xl mx-auto px-6 py-16">
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="demoGrid">
+
+      <a href="/demo/formatted-ux.html" class="demo-card bg-white rounded-2xl border border-green-200 p-6 flex flex-col no-underline text-text-dark fade-in md:col-span-2 lg:col-span-3">
+        <div class="flex items-start gap-4 mb-4"><div class="demo-icon" style="background:#2f5496;color:white">▤</div><div><span class="text-xs font-semibold text-white bg-sheets-green px-2 py-0.5 rounded-full">Start here · self-paced</span><h2 class="text-2xl font-bold text-navy mt-3 mb-3">From UX page to formatted Sheet</h2><p class="text-sm text-text-muted leading-relaxed">Navigate the app → category → page tree, select a combined grid, and choose account hierarchy levels. See Time and Executive Owner linked automatically, then compare source headers, variance colors, number formats and commentary with the exported sample Sheet.</p><div class="mt-4 text-sheets-green font-semibold text-sm">Explore the complete Formatted UX workflow →</div></div></div>
+      </a>
+
+      <a href="/demo/budget-review.html" class="demo-card bg-white rounded-2xl border border-green-200 p-6 flex flex-col no-underline text-text-dark fade-in md:col-span-2 lg:col-span-3">
+        <div class="grid md:grid-cols-2 gap-6 items-center"><img src="/assets/demo/budget-review-v1.jpg" alt="Working budget review simulation with fictional forecast and budget data" width="1224" height="751" loading="lazy" decoding="async" class="w-full rounded-xl border border-gray-200"><div><span class="text-xs font-semibold text-white bg-sheets-green px-2 py-0.5 rounded-full">Reporting follow-through · about 2 minutes</span><h2 class="text-2xl font-bold text-navy mt-3 mb-3">From source view to budget review</h2><p class="text-sm text-text-muted leading-relaxed">Choose exact year/measure combinations and expense rows, populate a sample pivot, and build a chart. Switch to Q4 Forecast and refresh to see the sheet, chart, and illustrative slide reconcile. Fictional data; no sign-in or customer-model access.</p><div class="mt-4 text-sheets-green font-semibold text-sm">Try the interactive demo →</div></div></div>
+      </a>
 
       <a href="/demo/nested-selections.html" class="demo-card bg-white rounded-2xl border border-green-200 p-6 flex flex-col no-underline text-text-dark fade-in">
         <div class="flex items-start gap-4 mb-4"><div class="demo-icon" style="background:linear-gradient(135deg,#0f9d58,#0b8043)">✓</div><div><h3 class="text-lg font-bold text-navy mb-1">Nested Selections</h3><span class="text-xs font-semibold text-white bg-sheets-green px-2 py-0.5 rounded-full">New · interactive + narrated</span></div></div>

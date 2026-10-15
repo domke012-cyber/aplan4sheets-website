@@ -61,6 +61,9 @@ body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
 .sidebar-area{width:360px;min-width:360px;border-left:1px solid #dadce0;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateX(20px);transition:all .4s cubic-bezier(.25,.46,.45,.94)}
 .sidebar-area.visible{opacity:1;transform:translateX(0)}
 .sidebar-inner{flex:1;overflow-y:auto;padding:8px}
+.guided-preview-note{flex-shrink:0;margin:0;padding:8px 12px;background:#eff6ff;border-bottom:1px solid #dbeafe;color:#334155;font-size:11px;line-height:1.45}
+fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
+#sidebarContent .ios-toggle-header,#sidebarContent .ios-toggle-option,#sidebarContent button:disabled{cursor:default}
 
 /* Extensions menu dropdown */
 .ext-menu{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:50}
@@ -133,7 +136,9 @@ body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
 /* Success badge */
 .success-badge{display:inline-flex;align-items:center;gap:6px;background:#d1fae5;color:#059669;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;animation:slideDown .4s var(--ios-ease)}
 </style>
-<link rel="stylesheet" href="../assets/demo-responsive.css">
+<link rel="stylesheet" href="../assets/demo-responsive-v2.css">
+<link rel="stylesheet" href="../assets/demo-realism-v3.css">
+<script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
 <script src="../assets/demo-player.js"></script>
 
@@ -217,7 +222,8 @@ body.embed-mode .sheets-toolbar .toolbar-btn{display:none}
       </div>
     </div>
     <div class="sidebar-area" id="sidebar">
-      <div class="sidebar-inner connector-ui" id="sidebarContent"></div>
+      <p class="guided-preview-note" id="setupPreviewNote">Guided preview — controls are read-only. Use Play / Restart above. No sign-in or model configuration is performed.</p>
+      <fieldset class="sidebar-inner connector-ui guided-preview" id="sidebarContent" disabled aria-label="Connection setup preview" aria-describedby="setupPreviewNote"></fieldset>
     </div>
   </div>
 </div>
@@ -283,7 +289,7 @@ async function scene2(){
     </div>
     <hr>
     <div class="ios-toggle-menu" id="authToggle">
-      <div class="ios-toggle-header" onclick="document.getElementById('authToggle').classList.toggle('expanded')">
+      <div class="ios-toggle-header">
         <div class="ios-toggle-title">
           <span class="ios-toggle-label">Login Method</span>
           <span class="ios-toggle-value" id="authValue">OAuth/SSO</span>

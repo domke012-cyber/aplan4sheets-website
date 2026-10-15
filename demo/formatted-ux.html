@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>From Anaplan UX to a formatted Sheet — aPlan4Sheets</title>
+  <meta name="description" content="Explore the connector's real sidebar, UX page directory, persistent hierarchy selector and formatted Sheets export in an interactive demo with fictional data.">
+  <link rel="canonical" href="https://aplan4sheets.com/demo/formatted-ux.html">
+  <link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../assets/formatted-ux-v4.css">
+  <script defer src="../assets/budget-review-data-v2.js"></script>
+  <script defer src="../assets/formatted-ux-data-v2.js"></script>
+  <script defer src="../assets/formatted-ux-v4.js"></script>
+</head>
+<body class="fx-demo">
+  <header class="fx-topbar"><a class="fx-brand" href="/">a4 <span>aPlan4Sheets</span></a><nav aria-label="Website"><a href="../demos.html">All demos</a><a href="budget-review.html">Budget reporting demo ↗</a></nav></header>
+  <section class="fx-intro"><div><p class="fx-eyebrow">FORMATTED UX PAGES · INTERACTIVE WALKTHROUGH</p><h1>The connector, as your team uses it.</h1><p>Browse your UX. Shape the hierarchy. Bring a formatted report into Sheets.</p></div><span class="fx-badge">Fictional data · no sign-in</span></section>
+  <main class="fx-shell">
+    <div class="fx-tour"><nav class="fx-steps" aria-label="Workflow"><button data-step="0" aria-current="step"><span>1</span> Open the connector</button><button data-step="1"><span>2</span> Browse UX Pages</button><button data-step="2"><span>3</span> Configure Pivot</button><button data-step="3"><span>4</span> Review in Sheets</button></nav><button id="fxRestart" class="fx-btn quiet">↻ Restart</button></div>
+    <div class="fx-caption"><p id="fxCaption">Start with Browse UX Pages in the connector sidebar.</p><div><button id="fxPrev" class="fx-btn quiet">← Back</button><button id="fxNext" class="fx-btn primary">Browse UX Pages →</button></div></div>
+    <p class="fx-disclosure">Interactive simulation based on the connector UI. Names, model references and values are fictional. No sign-in, live data or file changes. <button id="fxExpand" class="fx-grid-expand" aria-pressed="false">Expand report area</button></p>
+
+    <div class="fx-workspace" id="fxWorkbook">
+      <section class="fx-workbook-main" aria-label="Sample Google Sheets workbook">
+        <div class="fx-sheet-chrome"><div class="fx-sheet-heading"><svg width="25" height="32" viewBox="0 0 30 38" aria-hidden="true"><path d="M3 0h17l10 10v25a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3" fill="#188038"/><path d="M20 0v10h10" fill="#8bd4a5"/><path d="M6 17h18v14H6zM6 22h18M6 27h18M12 17v14" fill="none" stroke="white" stroke-width="1.5"/></svg><div><h2 id="fxOutputTitle">Northstar — Operating Plan</h2><div class="fx-sheet-menu" aria-label="Illustrative Sheets menu, non-interactive">File &nbsp; Edit &nbsp; View &nbsp; Insert &nbsp; Format &nbsp; Data &nbsp; Tools &nbsp; Extensions &nbsp; Help</div></div></div><span class="fx-workbook-badge">Demo workbook</span></div>
+        <div class="fx-sheet-toolbar"><span aria-label="Illustrative formatting toolbar">↶ &nbsp; ↷ &nbsp; ⎙ &nbsp; │ &nbsp; 100% &nbsp; │ &nbsp; $ &nbsp; % &nbsp; │ &nbsp; Arial &nbsp; 10 &nbsp; │ &nbsp; <b>B</b> &nbsp; <i>I</i></span></div>
+        <div class="fx-formula"><span id="fxCell">A1</span><i>fx</i><span id="fxFormula"></span></div>
+        <div id="fxBlankGrid" class="fx-blank-grid" aria-label="Empty sample spreadsheet">
+          <div class="fx-blank-letters" aria-hidden="true"><span></span><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span></div>
+          <div class="fx-blank-numbers" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span></div>
+          <div class="fx-active-cell" aria-hidden="true"></div>
+        </div>
+        <section id="fxOutput" aria-label="Exported sample report" hidden>
+          <div class="fx-sheet-grid fx-grid-scroll" tabindex="0" aria-label="Scrollable formatted spreadsheet"><table id="fxOutputTable" class="fx-data-table" aria-label="Exported sample Sheet"></table></div>
+        </section>
+        <div class="fx-sheet-tabs"><span aria-hidden="true">＋ &nbsp; ☰</span><strong id="fxTabName">Sheet1 ▾</strong><small>Browser-only sample</small></div>
+      </section>
+
+      <aside class="fx-sidebar" aria-label="Anaplan Connector">
+        <div class="fx-connector-title"><strong>Anaplan Connector</strong><span aria-hidden="true">×</span></div>
+        <div class="fx-connector-content">
+          <div class="fx-identity"><span class="fx-avatar" aria-hidden="true">J</span><div><strong>Signed in as Jordan <span class="fx-verified" aria-label="Sample authenticated state">✓</span></strong><small>jordan@northstar.example</small></div><span class="fx-preview-label">Demo</span></div>
+          <div class="fx-model-summary"><span>Show Model Configuration ▼</span><small>Northstar FP&A · fictional model</small></div>
+          <div class="fx-nav-group">
+            <div class="fx-nav-preview" aria-disabled="true"><span class="fx-nav-icon" aria-hidden="true">↥</span><strong>Export Actions</strong><span aria-hidden="true">›</span></div>
+            <div class="fx-nav-preview" aria-disabled="true"><span class="fx-nav-icon" aria-hidden="true">◉</span><strong>Saved Views</strong><span aria-hidden="true">›</span></div>
+            <div class="fx-nav-preview" aria-disabled="true"><span class="fx-nav-icon" aria-hidden="true">▦</span><strong>Pivot Views</strong><span aria-hidden="true">›</span></div>
+            <section class="fx-ux-card" aria-labelledby="fxUxCardTitle">
+              <div class="fx-nav-preview is-open"><span class="fx-nav-icon" aria-hidden="true">▤</span><strong id="fxUxCardTitle">Formatted UX Pages</strong><span aria-hidden="true">⌄</span></div>
+              <div class="fx-ux-card-body"><p>Browse the apps, categories, and pages in your active model's UX. Export grid-page widgets to Sheets directly with their formatted layout.</p><button id="fxBrowse" class="fx-connector-primary">Browse UX Pages</button><div class="fx-connector-actions"><button id="fxRepivot" disabled>Repivot</button><span class="fx-unavailable-action" aria-label="Link, outside this walkthrough">Link</span></div></div>
+            </section>
+          </div>
+          <div class="fx-nav-group"><div class="fx-nav-preview" aria-disabled="true"><span class="fx-nav-icon" aria-hidden="true">▥</span><strong>Export to Slides</strong><span aria-hidden="true">›</span></div><div class="fx-nav-preview" aria-disabled="true"><span class="fx-nav-icon" aria-hidden="true">✧</span><strong>AI Analyst</strong><span aria-hidden="true">›</span></div></div>
+          <div class="fx-nav-group"><div class="fx-nav-preview" aria-disabled="true"><span class="fx-nav-icon" aria-hidden="true">▣</span><strong>Schedule</strong><span aria-hidden="true">›</span></div><div class="fx-nav-preview" aria-disabled="true"><span class="fx-nav-icon" aria-hidden="true">ϟ</span><strong>Quick Actions</strong><span aria-hidden="true">›</span></div></div>
+          <button id="fxRefresh" class="fx-refresh-sheets" disabled>↻ &nbsp; Refresh Sheets</button>
+          <p class="fx-sidebar-note">Formatted UX Pages, Repivot and Refresh work in this demo. Other navigation cards are visual context only.</p>
+        </div>
+      </aside>
+    </div>
+    <p id="fxStatus" class="fx-status" role="status" aria-live="polite">Ready to browse the sample UX page.</p>
+    <div id="fxParity" class="fx-parity" hidden></div>
+    <details class="fx-compare" id="fxComparison" hidden><summary>Compare with the source UX formatting reference</summary><p id="fxCompareContext" class="fx-muted"></p><div class="fx-grid-scroll" tabindex="0" aria-label="Scrollable source comparison"><table id="fxCompareTable" class="fx-data-table" aria-label="Source formatting reference for exported selection"></table></div><p class="fx-muted">This separate comparison illustrates the source formatting with fictional values. The connector's discovery thumbnail shows structure, not financial data.</p></details>
+    <details class="fx-about"><summary>What is real about this walkthrough?</summary><p>The sidebar, UX directory, structural grid preview and two-pane Pivot configuration follow the real connector workflow. Select items directly in the left pane; changes immediately update the dimension chips on the right. Shared Time and Executive Owner filters control both modules.</p><p>This fictional model has an illustrative expense hierarchy to demonstrate level selection. Its dimensions and item counts are not an exact copy of the reference model's flat line-item subset. The exported financial grid follows the supplied UX styling reference. All numbers, names and commentary are fictional. No customer screenshot or private data is embedded. Refresh rereads this local fixture; this self-paced walkthrough has no audio.</p><a href="mailto:ryan.domke@aplan4sheets.com?subject=Formatted%20UX%20Pages%20live%20demo">Request a live demonstration with your model →</a></details>
+  </main>
+
+  <dialog id="fxUxDialog" class="fx-app-dialog fx-ux-dialog" aria-labelledby="fxUxDialogTitle">
+    <header class="fx-dialog-head"><h2 id="fxUxDialogTitle">Formatted UX Pages</h2><button id="fxCloseUx" class="fx-dialog-close" aria-label="Close Formatted UX Pages">×</button></header>
+    <div class="fx-dialog-body">
+      <div class="fx-directory-toolbar"><label class="fx-sr-only" for="fxPageSearch">Search apps and pages</label><input id="fxPageSearch" type="search" placeholder="Search apps and pages…"><button id="fxRefreshDirectory">Refresh UX Structure</button></div>
+      <section class="fx-directory" id="fxDirectory" aria-label="UX page directory">
+        <div class="fx-directory-heading">⌄ &nbsp; Browse UX Structure — 1 app, 1 page</div>
+        <div class="fx-directory-tree"><details id="fxApp"><summary><strong>Northstar Planning</strong><small>1 page · 1 category</small></summary><div class="fx-app-pages"><details id="fxCategory"><summary><span>Budget Owner Review</span><small>1 page</small></summary><div class="fx-category-pages">
+          <div class="fx-page-row"><button id="fxPage" class="fx-page"><span class="fx-page-type board" aria-label="Board page">B</span><span>Budget Review by Exec Owner</span></button><button id="fxDiscover" class="fx-discover">Discover modules</button></div>
+          <section id="fxSource" class="fx-discovered-content" aria-label="Discovered grid widgets" hidden>
+            <p class="fx-discovery-stats">1 widget on canvas · 1 exportable grid</p>
+            <div id="fxGridCard" class="fx-preview-card"><button id="fxSelectGrid" class="fx-select-grid" aria-pressed="false"><span id="fxGridLabel">Grid 1 — Budget Review</span><span class="fx-selected-label" aria-hidden="true">✓ Selected</span></button><div class="fx-preview-table-wrap"><table id="fxSourceTable" class="fx-data-table" aria-label="Structural grid preview with blank financial cells"></table></div></div>
+            <p class="fx-preview-caption">Page layout preview · row and column labels, no financial values</p>
+            <div class="fx-preview-details"><strong id="fxSelectionStatus" role="status">Select a grid to see its module</strong><p id="fxModuleReference">Hover or focus to preview. Click, Enter or Space to keep a selection, then choose Export.</p><div><button id="fxExportGrid" disabled>Export selected grid</button><button id="fxClearGrid" disabled>Clear selection</button></div></div>
+            <div id="fxModuleList" class="fx-module-list"><span class="fx-module-badge">Multi-module (2 modules)</span><strong>Budget Review by Exec Owner</strong><p>• Budget Review [Combined Grid Section 1 of 2]</p><p>• Owner Commentary [Combined Grid Section 2 of 2]</p></div>
+          </section>
+        </div></details></div></details><p id="fxNoPages" class="fx-muted" hidden>No matching apps or pages.</p></div>
+      </section>
+      <p class="fx-dialog-demo-note">One fictional app and page keep this walkthrough focused. The live connector discovers the full authorized UX directory.</p>
+    </div>
+  </dialog>
+
+  <dialog id="fxPivotDialog" class="fx-app-dialog fx-pivot-dialog" aria-labelledby="fxPivotDialogTitle">
+    <header class="fx-dialog-head"><h2 id="fxPivotDialogTitle">Configure Pivot: Budget Review by Exec Owner [Combined Grid Section 1 of 2]</h2><button id="fxClosePivot" class="fx-dialog-close" aria-label="Close Configure Pivot">×</button></header>
+    <div class="fx-dialog-body fx-pivot-body" id="fxConfig">
+      <div class="fx-view-banner"><span>VIEW:</span><strong>Budget Review by Exec Owner</strong></div>
+      <div class="fx-dimension-manager">
+        <section id="fxPicker" class="fx-item-selector" aria-labelledby="fxPickerTitle">
+          <h3 id="fxPickerTitle">Item Selector</h3><p id="fxPickerHelp" class="fx-selector-hint">Click on a dimension to select items</p><p id="fxPickerEmpty" class="fx-selector-empty">Select a dimension on the right.</p>
+          <div id="fxPickerContent" hidden><label class="fx-sr-only" for="fxItemSearch">Search items</label><input id="fxItemSearch" class="fx-picker-search" type="search" placeholder="Search items..."><button id="fxHierarchyToggle" class="fx-hierarchy-toggle" aria-expanded="false">▶ Show Hierarchy Selectors</button><div id="fxLevels" class="fx-level-controls" hidden></div><ul id="fxItems" class="fx-hierarchy"></ul><footer class="fx-selector-footer"><span id="fxPickerCount" aria-live="polite"></span><div id="fxPickerTools"><button id="fxSelectDefault">Default</button><button id="fxSelectAll">All</button><button id="fxSelectNone">None</button></div></footer><div class="fx-context-action formula" aria-disabled="true" title="UI reference only: adding formulas is outside this walkthrough">＋ Add Formula <small>UI preview</small></div></div>
+        </section>
+        <div class="fx-dimension-zones">
+          <div class="fx-context-action" aria-disabled="true" title="UI reference only: adding modules is outside this walkthrough">＋ Add Module <small>UI preview</small></div>
+          <div class="fx-secondary-module-banner"><span>M2</span><strong>Owner Commentary</strong><small>Combined grid · linked rows</small></div>
+          <p id="fxLayoutNote" class="fx-layout-note">Drag chips to rearrange them, or use each chip’s ↕ control. Layout preview only: Create Pivot uses the Budget Review layout shown in this demo.</p>
+          <div id="fxChipMoveMenu" class="fx-chip-move-menu" role="group" aria-labelledby="fxChipMoveTitle" hidden><strong id="fxChipMoveTitle">Rearrange dimension</strong><label for="fxChipAxis">Axis</label><select id="fxChipAxis"><option value="rows">Rows</option><option value="columns">Columns</option><option value="pages">Pages</option></select><button id="fxChipEarlier" type="button">← Earlier</button><button id="fxChipLater" type="button">Later →</button><button id="fxChipMoveClose" type="button" aria-label="Close rearrange controls">Done</button></div>
+          <p id="fxLayoutStatus" class="fx-sr-only" role="status" aria-live="polite"></p>
+          <section class="fx-zone"><h3>Rows</h3><button class="fx-dim" data-picker="rows"><span>LISS_Budget Template</span><small id="fxRowsCount">22 items</small><span class="fx-selection-badge" id="fxRowsSelection">All</span></button><div class="fx-dim secondary-module locked"><span class="fx-module-tag">M2</span><span>LISS_Budget Template</span><small>22 items</small><span aria-label="Linked row dimension">▣</span></div><div class="fx-combination-control"><div><strong>Row combinations</strong><span>All combinations</span></div><div><span class="fx-control-preview">All</span><span class="fx-control-preview">Show / Hide</span></div></div></section>
+          <section class="fx-zone"><h3>Columns</h3><button class="fx-dim" data-picker="columns"><span>Line Items</span><small id="fxColumnsCount">11 items</small><span class="fx-selection-badge" id="fxColumnsSelection">All</span></button><div class="fx-dim secondary-module"><span class="fx-module-tag">M2</span><span>Line Items</span><small>1 item</small><span class="fx-selection-badge">All</span></div><div class="fx-combination-control"><div><strong>Column combinations</strong><span>All combinations</span></div><div><span class="fx-control-preview">All</span><span class="fx-control-preview">Show / Hide</span></div></div></section>
+          <section class="fx-zone"><h3>Pages</h3><button class="fx-dim linked" data-picker="time"><span class="fx-link-count" aria-label="Linked across two modules">↔ 2</span><span>Time</span><small>2 items</small><span class="fx-selection-badge partial" id="fxTimeValue">1/2</span><span class="fx-chain" aria-hidden="true">∞</span></button><button class="fx-dim linked" data-picker="owner"><span class="fx-link-count" aria-label="Linked across two modules">↔ 2</span><span>Executive Owner</span><small>4 items</small><span class="fx-selection-badge partial" id="fxOwnerValue">1/4</span><span class="fx-chain" aria-hidden="true">∞</span></button><div class="fx-dim fixed"><span class="fx-link-count" aria-hidden="true">↔ 2</span><span>GAAP</span><small>1 item</small><span class="fx-selection-badge">All</span></div><div class="fx-dim fixed"><span class="fx-link-count" aria-hidden="true">↔ 2</span><span>Versions</span><small>1 item</small><span class="fx-selection-badge">All</span></div><p class="fx-link-proof" id="fxModuleProof">Time and Executive Owner are linked automatically across both grids.</p></section>
+          <button id="fxResetLayout" type="button" class="fx-reset-layout">Reset chip layout</button><p class="fx-pivot-scope-note">Chip positions can be explored freely. Item selections still control the sample report; GAAP and Versions each have one fixed item. Show / Hide is visual context only.</p>
+        </div>
+      </div>
+      <div class="fx-save-config">
+        <p class="fx-autosave">✓ This pivot is saved automatically so it can be refreshed</p>
+        <div class="fx-config-option"><label><input type="checkbox" id="fxCustomName"> Specify custom sheet name</label><div id="fxSheetNameWrap" hidden><label for="fxSheetName">Sheet Name:</label><input id="fxSheetName" value="Budget Review" maxlength="60" placeholder="Enter a sheet name (e.g., Revenue by Region)"><small>This becomes the sheet tab name.<br>If blank, the default is used: [P] View name</small></div></div>
+        <div class="fx-config-option"><label><input type="checkbox" id="fxHideZeros"> Hide rows that are all zero or blank</label><small>Rows whose data cells are all 0 or blank are left out</small></div>
+        <section class="fx-dashboard-settings" aria-label="Dashboard formatting"><label class="fx-dashboard-preset"><input type="checkbox" id="fxFormatting" checked><span><strong>Use dashboard settings</strong><small>Auto-fit rows, freeze headers, hide gridlines, merge repeated headers, group report setup rows, and group rows by hierarchy.</small></span><span id="fxDashboardState" class="fx-settings-state">On</span></label><details id="fxDashboardDetails"><summary>Customize dashboard settings</summary><div class="fx-dashboard-options"><label><input class="fx-dashboard-setting" id="fxAutoFitRows" type="checkbox" checked><span><strong>Auto-fit row heights</strong><small>Fit compact single-line cells. Hover over commentary for full text.</small></span></label><label><input class="fx-dashboard-setting" id="fxFreezeHeaders" type="checkbox" checked><span><strong>Freeze headers</strong><small>Keep headers visible while scrolling.</small></span></label><label><input class="fx-dashboard-setting" id="fxHideGridlines" type="checkbox" checked><span><strong>Hide gridlines</strong><small>Give the sheet a cleaner presentation.</small></span></label><label><input class="fx-dashboard-setting" id="fxMergeHeaders" type="checkbox" disabled><span><strong>Merge repeated top column headers</strong><small>Combine adjacent matching outer headers.</small></span></label><label><input class="fx-dashboard-setting" id="fxGroupSetup" type="checkbox" disabled><span><strong>Group page filters and dimension labels</strong><small>Create an expanded group above the report.</small></span></label><label><input class="fx-dashboard-setting" id="fxGroupHierarchy" type="checkbox" disabled><span><strong>Group rows by hierarchy</strong><small>Collapsible groups for each parent, totals below.</small></span></label></div><p class="fx-settings-demo-note">Auto-fit, freeze headers and hide gridlines work in this demo. The remaining options are shown for UI reference.</p></details></section>
+        <div class="fx-config-option"><label><input type="checkbox" id="fxKeepFormatting" checked> Keep current Sheet formatting on refresh</label><small>Refreshes keep your formatting. New sheets are always formatted.</small></div>
+      </div>
+      <div id="fxProgress" class="fx-progress" hidden><strong>Building the pivot</strong><span id="fxProgressText">Initializing...</span><div class="fx-progress-track"><span id="fxProgressFill"></span></div><small id="fxProgressPercent">0%</small></div>
+    </div>
+    <footer class="fx-pivot-footer"><span id="fxCompletionStatus" role="status" aria-live="polite"></span><button id="fxCancelConfig" class="fx-btn">Cancel</button><button id="fxCreate" class="fx-btn primary">Create Pivot</button></footer>
+  </dialog>
+</body>
+</html>

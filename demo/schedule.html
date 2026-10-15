@@ -102,7 +102,9 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 @keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes ios-spin{to{transform:rotate(360deg)}}
 </style>
-<link rel="stylesheet" href="../assets/demo-responsive.css">
+<link rel="stylesheet" href="../assets/demo-responsive-v2.css">
+<link rel="stylesheet" href="../assets/demo-realism-v3.css">
+<script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
 <script src="../assets/demo-player.js"></script>
 
@@ -144,7 +146,7 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 
 <div class="browser-frame">
   <div class="sheets-toolbar"><div class="doc-icon">📊</div><div class="doc-name">FY26 Financial Planning</div></div>
-  <div class="formula-bar"><div class="cell-ref">A1</div><span class="fx">fx</span><span></span></div>
+  <div class="formula-bar"><div class="cell-ref" id="cellRef">A1</div><span class="fx">fx</span><span id="formulaText"></span></div>
   <div class="main-area">
     <div class="grid-area">
       <div class="grid-container"><table class="grid-table" id="gridTable"></table></div>
@@ -178,10 +180,29 @@ function resetDemo(){
 
 }
 
-function initGrid(){
-  const t=document.getElementById('gridTable');const L='ABCDEFGHIJ'.split('');
+function initGrid(refreshed=false){
+  const t=document.getElementById('gridTable');const L='ABCDEFG'.split('');
+  const revenue=refreshed?58800000:58740000;
+  const cogs=refreshed?-17640000:-17622000;
+  const opex=refreshed?-27525000:-27510000;
+  const sampleRows=[
+    ['','[P] Full Year P&L · Fictional sample'],
+    ['','Versions','FY26 Open Forecast'],
+    ['','Time','FY26'],
+    ['','Sample refreshed at',refreshed?'Oct 15, 2026 07:04 CDT':'Oct 15, 2026 06:04 CDT'],
+    [],['','Line Item','FY26'],
+    ['','Revenue',revenue],['','COGS',cogs],['','Gross Profit',revenue+cogs],
+    ['','Operating Expenses',opex],['','EBITDA',revenue+cogs+opex]
+  ];
   let h='<thead><tr><th class="corner"></th>';L.forEach(l=>{h+=`<th class="col-header">${l}</th>`});
-  h+='</tr></thead><tbody>';for(let r=1;r<=25;r++){h+=`<tr><td class="row-header">${r}</td>`;L.forEach(()=>{h+='<td></td>'});h+='</tr>'}h+='</tbody>';t.innerHTML=h;
+  h+='</tr></thead><tbody>';
+  for(let r=1;r<=25;r++){
+    const values=sampleRows[r-1]||[];
+    h+=`<tr><td class="row-header">${r}</td>`;
+    L.forEach((_,c)=>{const value=values[c]??'';const num=typeof value==='number';h+=`<td class="${num?'num'+(value<0?' neg':''):''}"${num?' data-value="'+value+'"':''}>${num?(value<0?'('+Math.abs(value).toLocaleString('en-US')+')':value.toLocaleString('en-US')):value}</td>`});
+    h+='</tr>';
+  }
+  h+='</tbody>';t.innerHTML=h;
 }
 
 // Scene 1: Show schedule tab in sidebar
@@ -189,6 +210,7 @@ async function scene1(){
   initGrid();
   const sb=document.getElementById('sidebarContent');
   sb.innerHTML=`
+    <p id="schedulePreviewNote" style="font-size:12px;color:#51657c;line-height:1.5;padding:10px;background:#f1f5f9;border-radius:8px">Guided, read-only preview. Play demonstrates a fixed sample schedule; these controls do not create or edit a real schedule.</p>
     <div class="nav-card" data-section="runTab"><div class="nav-card-header"><div class="nav-icon-container"><div class="nav-icon-circle"><svg viewBox="0 0 16 16" style="width:16px;height:16px"><path d="M8 2.5v7" stroke="#0A84FF" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M5.5 5L8 2.5L10.5 5" stroke="#0A84FF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10.5v2c0 .828.672 1.5 1.5 1.5h7c.828 0 1.5-.672 1.5-1.5v-2" stroke="#0A84FF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span>Exports</span></div></div></div>
     <div class="nav-card" data-section="pivotTab"><div class="nav-card-header"><div class="nav-icon-container"><div class="nav-icon-circle"><svg viewBox="0 0 16 16" style="width:16px;height:16px"><rect x="2.5" y="2.5" width="4.5" height="4.5" rx=".8" stroke="#BF5AF2" stroke-width="1.6" fill="none"/><rect x="9" y="2.5" width="4.5" height="4.5" rx=".8" stroke="#BF5AF2" stroke-width="1.6" fill="none" opacity=".6"/><rect x="2.5" y="9" width="4.5" height="4.5" rx=".8" stroke="#BF5AF2" stroke-width="1.6" fill="none" opacity=".6"/><rect x="9" y="9" width="4.5" height="4.5" rx=".8" stroke="#BF5AF2" stroke-width="1.6" fill="none" opacity=".35"/></svg></div><span>Pivot Views</span></div></div></div>
     <div class="nav-card active" data-section="scheduleTab" id="schedCard">
@@ -203,7 +225,7 @@ async function scene1(){
           <div style="font-size:24px;margin-bottom:8px">⏰</div>
           No schedules configured yet.<br>Set up automatic data refreshes.
         </div>
-        <button class="btn-primary" id="addSchedBtn" style="background:linear-gradient(135deg,#FF9F0A,#FFCC00);color:#1F2937">+ Add Schedule</button>
+        <button class="btn-primary" id="addSchedBtn" disabled style="background:linear-gradient(135deg,#FF9F0A,#FFCC00);color:#1F2937">+ Add Schedule</button>
       </div>
     </div>
   `;
@@ -219,9 +241,12 @@ async function scene2(){
   btn.style.transform='scale(0.97)';await wait(150);btn.style.transform='';
   await wait(600);
   document.getElementById('schedContent').innerHTML=`
-    <div class="sched-form" id="schedForm" style="animation:slideDown .3s ease">
+    <fieldset class="sched-form" id="schedForm" disabled aria-describedby="schedulePreviewNote" style="animation:slideDown .3s ease;border:0;margin:0;padding:0;min-width:0">
       <div style="font-size:14px;font-weight:600;margin-bottom:12px;color:#1F2937">New Schedule</div>
-      <label>Frequency</label>
+      <label for="scheduleName">Schedule Name</label>
+      <input id="scheduleName" type="text" value="Finance reporting refresh" style="width:100%;padding:8px 10px;border:1px solid #dadce0;border-radius:8px;margin-bottom:10px">
+      <div style="font-size:11px;color:#5f6368;margin-bottom:10px">Owner: demo.owner@example.invalid · Sample account</div>
+      <label for="freqSelect">Frequency</label>
       <select id="freqSelect"><option value="">Select frequency...</option><option>Hourly</option><option>Daily</option><option>Weekly</option></select>
       <div id="freqOptions" style="display:none"></div>
       <div id="sheetSelect" style="display:none"></div>
@@ -229,7 +254,7 @@ async function scene2(){
         <button style="flex:1;padding:8px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;color:#6B7280;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit">Cancel</button>
         <button class="btn-primary" id="saveSchedBtn" style="flex:1;background:linear-gradient(135deg,#FF9F0A,#FFCC00);color:#1F2937" disabled>Save Schedule</button>
       </div>
-    </div>
+    </fieldset>
   `;
 }
 
@@ -242,12 +267,11 @@ async function scene3(){
   await wait(800);
   document.getElementById('freqOptions').style.display='block';
   document.getElementById('freqOptions').innerHTML=`
-    <label>Run every</label>
+    <label for="intervalSelect">Run every</label>
     <select id="intervalSelect" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(60,60,67,0.18);font-size:13px;font-family:inherit;margin-bottom:10px">
       <option>1 hour</option><option selected>2 hours</option><option>4 hours</option><option>6 hours</option>
     </select>
-    <label>Starting at</label>
-    <input type="time" value="06:00" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid rgba(60,60,67,0.18);font-size:13px;font-family:inherit;margin-bottom:10px">
+    <p style="font-size:11px;color:#5f6368;line-height:1.5;margin-bottom:10px">Hourly schedules use a Google-managed trigger. Execution timing is approximate, not an exact-minute guarantee.</p>
   `;
   await wait(1500);
   document.getElementById('intervalSelect').value='1 hour';
@@ -261,9 +285,9 @@ async function scene4(){
   document.getElementById('sheetSelect').innerHTML=`
     <label style="font-size:12px;font-weight:500;color:rgba(60,60,67,0.85);display:block;margin-bottom:6px">Include Sheets:</label>
     <div style="background:white;border:1px solid rgba(60,60,67,0.15);border-radius:8px;padding:4px">
-      <div class="checkbox-item" id="cb1"><input type="checkbox"><span>[P] Full Year P&L</span></div>
-      <div class="checkbox-item" id="cb2"><input type="checkbox"><span>Revenue by Product</span></div>
-      <div class="checkbox-item" id="cb3"><input type="checkbox"><span>HC Tracker</span></div>
+      <label class="checkbox-item" id="cb1"><input type="checkbox"><span>[P] Full Year P&L</span></label>
+      <label class="checkbox-item" id="cb2"><input type="checkbox"><span>Revenue by Product</span></label>
+      <label class="checkbox-item" id="cb3"><input type="checkbox"><span>HC Tracker</span></label>
     </div>
   `;
   // Check them one by one
@@ -289,16 +313,16 @@ async function scene5(){
       <div class="sched-item" id="schedItem1">
         <div style="width:8px;height:8px;background:#FF9F0A;border-radius:50%;flex-shrink:0"></div>
         <div style="flex:1">
-          <div class="sched-name">Hourly Refresh</div>
-          <div class="sched-next">Next run: Today at 7:00 AM CDT</div>
+          <div class="sched-name">Finance reporting refresh</div>
+          <div class="sched-next">Next eligible run: approximately 7:00 AM CDT</div>
         </div>
         <div class="sched-freq">Every 1hr</div>
       </div>
       <div style="text-align:center;margin:12px 0">
         <span style="font-size:11px;color:#059669;font-weight:600">✓ Schedule saved successfully</span>
       </div>
-      <div style="font-size:11px;color:var(--ios-text-tertiary);text-align:center;margin-top:8px">3 sheets will refresh automatically every hour</div>
-      <button class="btn-primary" id="addSchedBtn2" style="background:linear-gradient(135deg,#FF9F0A,#FFCC00);color:#1F2937;margin-top:12px">+ Add Another Schedule</button>
+      <div style="font-size:11px;color:var(--ios-text-tertiary);text-align:center;margin-top:8px">3 saved configurations · Hourly cadence<br>Runs with the saved owner's access</div>
+      <button class="btn-primary" id="addSchedBtn2" disabled style="background:linear-gradient(135deg,#FF9F0A,#FFCC00);color:#1F2937;margin-top:12px">+ Add Another Schedule</button>
     </div>
   `;
 }
@@ -319,6 +343,7 @@ async function scene6(){
   const refreshDiv=document.createElement('div');
   refreshDiv.style.marginTop='12px';
   refreshDiv.innerHTML=`
+    <div style="font-size:11px;background:#eef4fb;color:#485b70;padding:8px;border-radius:6px;margin-bottom:10px">Illustrative time jump: approximately one hour later. This walkthrough does not create a live schedule.</div>
     <div style="font-size:12px;font-weight:600;color:#1F2937;margin-bottom:8px">Refreshing sheets...</div>
     <div class="refresh-item" id="rf1"><div style="width:14px;height:14px;border:2px solid #e5e7eb;border-top-color:#2563eb;border-radius:50%;flex-shrink:0" id="rf1icon"></div><div class="rf-name">[P] Full Year P&L</div><span class="rf-status" style="background:#dbeafe;color:#2563eb" id="rf1status">Running</span></div>
     <div class="refresh-item" id="rf2"><div style="width:14px;height:14px;border-radius:50%;background:#e5e7eb;flex-shrink:0" id="rf2icon"></div><div class="rf-name">Revenue by Product</div><span class="rf-status" style="background:#f3f4f6;color:#9ca3af" id="rf2status">Pending</span></div>
@@ -337,6 +362,9 @@ async function scene6(){
   document.getElementById('rf1status').style.background='#d1fae5';
   document.getElementById('rf1status').style.color='#059669';
   document.getElementById('rf1status').textContent='Done';
+  initGrid(true);
+  document.getElementById('cellRef').textContent='C7';
+  document.getElementById('formulaText').textContent='58800000';
 
   // Sheet 2 running
   document.getElementById('rf2').classList.add('running');
@@ -383,7 +411,7 @@ async function scene6(){
   // Update schedule item
   await wait(500);
   document.getElementById('schedItem1').classList.remove('running');
-  document.getElementById('schedItem1').querySelector('.sched-next').textContent='Last run: Just now • Next: Today at 8:00 AM';
+  document.getElementById('schedItem1').querySelector('.sched-next').textContent='Sample run: 7:04 AM CDT · Next eligible: approximately 8:00 AM';
   document.getElementById('schedItem1').querySelector('.sched-next').style.color='#059669';
 }
 

@@ -151,27 +151,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            navy: '#1a2744',
-            'navy-light': '#243352',
-            'sheets-green': '#0f9d58',
-            'sheets-green-dark': '#0b8043',
-            'green-light': '#e8f5e9',
-            'text-dark': '#1a1a2e',
-            'text-muted': '#6b7280',
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          },
-        },
-      },
-    }
-  </script>
+  <link rel="stylesheet" href="/assets/site-v1.css">
   <style>
     .fade-in {
       opacity: 0;
@@ -226,7 +206,7 @@
         <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
           Marketplace Listing
         </a>
-        <a href="/demo.html" class="sm:hidden inline-flex items-center px-4 py-2 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
+        <a href="/demo/budget-review.html" class="sm:hidden inline-flex items-center px-4 py-2 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
           Demo
         </a>
       </div>
@@ -236,7 +216,7 @@
   <!-- Hero -->
   <section class="pt-32 pb-20 md:pt-40 md:pb-28 bg-gradient-to-br from-navy via-navy-light to-navy">
     <div class="max-w-6xl mx-auto px-6 text-center">
-      <div class="fade-in">
+      <div class="hero-content">
         <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white/10 text-green-light text-sm font-medium px-4 py-1.5 rounded-full mb-8 hover:bg-white/20 transition-colors">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
           Available on Google Workspace Marketplace
@@ -248,14 +228,16 @@
           The browser-native connector that brings your Anaplan models directly into Google Sheets. Works on Mac, PC, and Chromebook — no Excel required.
         </p>
         <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/demo.html" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors text-lg">
+          <a href="/demo/budget-review.html" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors text-lg">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Watch Demo
+            Try a budget review
           </a>
           <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-lg">
             Marketplace Listing
           </a>
         </div>
+        <p class="mt-5 text-sm text-gray-300">Interactive sample · no sign-in · about 2 minutes. <a class="text-white underline underline-offset-4" href="mailto:ryan.domke@aplan4sheets.com?subject=Aplan4Sheets%20live%20demo">Request a live demo for your model →</a></p>
+        <p class="mt-5 text-sm text-gray-300"><a class="text-white underline underline-offset-4" href="/demo/formatted-ux.html">Explore UX navigation, hierarchy selection and source formatting →</a></p>
       </div>
     </div>
   </section>
@@ -466,21 +448,20 @@
         <p class="mt-4 text-text-muted text-lg max-w-xl mx-auto">A familiar spreadsheet experience with Anaplan data at your fingertips.</p>
       </div>
       <div class="mt-14 grid md:grid-cols-3 gap-6">
-        <!-- Demo 1: Setup / Sidebar -->
+        <!-- Demo 1: working budget review with fictional data -->
         <div class="fade-in">
-          <a href="/demo/setup.html" class="block group">
+          <a href="/demo/budget-review.html" class="block group">
             <div class="rounded-xl overflow-hidden border border-gray-200 bg-white shadow-sm transition-shadow group-hover:shadow-md">
               <div class="relative h-72 overflow-hidden">
-                <div class="h-full bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-center gap-3">
-                  <div class="w-16 h-16 rounded-full bg-sheets-green/90 flex items-center justify-center shadow-lg group-hover:bg-sheets-green transition-colors">
+                <img src="/assets/demo/budget-review-v1.jpg" alt="Fictional budget review with matching forecast and budget charts" width="1224" height="751" loading="lazy" decoding="async" class="w-full h-full object-cover object-top">
+                <div class="absolute inset-0 bg-navy/10 flex items-center justify-center">
+                  <div class="w-16 h-16 rounded-full bg-sheets-green/90 flex items-center justify-center shadow-lg group-hover:bg-sheets-green transition-colors" aria-hidden="true">
                     <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                   </div>
-                  <span class="text-sm font-semibold text-navy/70">Getting Connected</span>
-                  <span class="text-xs text-text-muted">Click to watch demo</span>
                 </div>
               </div>
               <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                <span class="text-sm font-medium text-text-muted">Anaplan module sidebar</span>
+                <span class="text-sm font-medium text-text-muted">Budget review · working interactive sample</span>
               </div>
             </div>
           </a>

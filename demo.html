@@ -13,20 +13,22 @@
   <nav><strong>aPlan4Sheets</strong><a href="/demos.html">All feature demos</a><a href="/">Home</a></nav>
   <main>
     <h1>Connected reporting, your way</h1>
-    <p>Explore the latest workflows using illustrative sample data. Choose a topic, then press Play inside the demo to hear its narration. No customer models or credentials are used.</p>
+    <p>Explore the latest workflows using fictional sample data. The UX-to-Sheets demo is self-paced; other tours include optional narration. No customer models or credentials are used.</p>
     <div class="topics" aria-label="Choose a walkthrough">
-      <a href="/demo/nested-selections.html" aria-current="true">Nested selections</a>
-      <a href="/demo/discovery.html">Formatted UX Pages</a><a href="/demo/pivot.html">Pivot Views</a>
+      <a href="/demo/budget-review.html" aria-current="true">Budget review · end to end</a>
+      <a href="/demo/nested-selections.html">Nested selections</a>
+      <a href="/demo/formatted-ux.html">UX to formatted Sheet</a><a href="/demo/discovery.html">Quick UX discovery</a><a href="/demo/pivot.html">Pivot Views</a>
       <a href="/demo/multi-module.html">Combined grids</a><a href="/demo/llm-agent.html">AI Analyst</a>
       <a href="/demo/schedule.html">Scheduled refresh</a><a href="/demo/setup.html">Getting connected</a>
     </div>
-    <iframe id="walkthrough" title="Nested selections walkthrough" src="/demo/nested-selections.html" allow="autoplay"></iframe>
-    <p class="hint"><a id="fullScreenLink" href="/demo/nested-selections.html">Open this walkthrough on its own →</a> · Claude handoffs are a separately configured pilot. These demos retrieve Anaplan data; exporting results to Sheets is not Anaplan model write-back.</p>
+    <iframe id="walkthrough" title="Budget review walkthrough" src="/demo/budget-review.html?preview=2" allow="autoplay"></iframe>
+    <p class="hint"><a id="fullScreenLink" href="/demo/budget-review.html">Open this walkthrough on its own →</a> · These simulations illustrate retrieving Anaplan data and exporting results to Sheets, not Anaplan model write-back. Claude handoffs are a separately configured pilot.</p>
   </main>
   <script>
     for(const link of document.querySelectorAll('.topics a'))link.addEventListener('click',event=>{
       event.preventDefault();for(const item of document.querySelectorAll('.topics a'))item.removeAttribute('aria-current');link.setAttribute('aria-current','true');
-      document.getElementById('walkthrough').src=link.href;document.getElementById('walkthrough').title=link.textContent+' walkthrough';document.getElementById('fullScreenLink').href=link.href;
+      const previewUrl=new URL(link.href);previewUrl.searchParams.set('preview','2');
+      document.getElementById('walkthrough').src=previewUrl.href;document.getElementById('walkthrough').title=link.textContent+' walkthrough';document.getElementById('fullScreenLink').href=link.href;
     });
   </script>
 </body>

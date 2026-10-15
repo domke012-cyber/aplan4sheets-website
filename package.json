@@ -2,7 +2,21 @@
   "name": "aplan4sheets-website",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=20.11" },
-  "scripts": { "test": "node --test tests/*.test.mjs", "verify:audio": "node tooling/verify-audio.mjs" },
-  "devDependencies": { "@sinonjs/fake-timers": "^13.0.5", "jsdom": "^26.1.0" }
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verify:audio": "node tooling/verify-audio.mjs",
+    "build:css": "tailwindcss -i assets/site-tailwind-v1.css -o assets/site-v1.css --minify"
+  },
+  "overrides": {
+    "@parcel/watcher": "2.6.0"
+  },
+  "devDependencies": {
+    "@sinonjs/fake-timers": "^13.0.5",
+    "@tailwindcss/cli": "4.3.3",
+    "jsdom": "^26.1.0",
+    "tailwindcss": "4.3.3"
+  }
 }

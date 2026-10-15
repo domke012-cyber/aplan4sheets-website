@@ -93,7 +93,9 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 @keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes ios-spin{to{transform:rotate(360deg)}}
 </style>
-<link rel="stylesheet" href="../assets/demo-responsive.css">
+<link rel="stylesheet" href="../assets/demo-responsive-v2.css">
+<link rel="stylesheet" href="../assets/demo-realism-v3.css">
+<script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
 <script src="../assets/demo-player.js"></script>
 </head>
@@ -134,6 +136,27 @@ html{font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased
 <audio id="audio-5" src="audio/v2/ux-formatting-5.mp3" preload="metadata"></audio>
 <audio id="audio-6" src="audio/v2/ux-formatting-6.mp3" preload="metadata"></audio>
 <script>
+// Recognized quarterly revenue, not annualized ARR. Every subtotal and FY value
+// is derived from these fictional leaf records; percentages are never summed.
+const uxPnlSource={
+  existing:[9825000,10582000,11030000,11570000],
+  newSubscriptions:[1350000,1625000,1800000,1950000],
+  expansion:[585000,723000,810000,900000],
+  services:[1380000,1480000,1560000,1630000],
+  hosting:[1314000,1441000,1520000,1605000],
+  support:[1578000,1729000,1824000,1926000],
+  onboarding:[1050000,1153000,1216000,1284000]
+};
+function buildUxFinancials(source=uxPnlSource){
+  const add=(...arrays)=>arrays[0].map((_,index)=>arrays.reduce((sum,array)=>sum+array[index],0));
+  const annual=quarters=>[...quarters,quarters.reduce((sum,value)=>sum+value,0)];
+  const saas=add(source.existing,source.newSubscriptions,source.expansion),revenue=add(saas,source.services),cogs=add(source.hosting,source.support,source.onboarding);
+  const grossProfit=revenue.map((value,index)=>value-cogs[index]);
+  const result=Object.fromEntries(Object.entries({...source,saas,revenue,cogs,grossProfit}).map(([key,values])=>[key,annual(values)]));
+  result.grossMargin=result.revenue.map((value,index)=>value===0?null:result.grossProfit[index]/value);
+  return result;
+}
+window.UXFinancials={source:uxPnlSource,build:buildUxFinancials};
 const SCENES=[
   {name:'Board Widgets',duration:7000},
   {name:'Select Widget',duration:6000},
@@ -142,10 +165,12 @@ const SCENES=[
   {name:'Apply Formatting',duration:10000},
   {name:'Final Formatted P&L',duration:7000},
 ];
-let demoPlayer;
+let demoPlayer, formattingRequested=true;
 
 const wait=ms=>demoPlayer.wait(ms);
 function resetDemo(){
+  formattingRequested=true;
+  setFormattingPath(true);
   initGrid();document.getElementById('sheetTabs').innerHTML='<div class="sheet-tab active">Sheet1</div>';
 }
 
@@ -164,11 +189,11 @@ async function scene1(){
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
         <span style="font-size:20px">🎨</span>
         <div>
-          <div style="font-size:14px;font-weight:600">UX Board Import</div>
+          <div style="font-size:14px;font-weight:600">Formatted UX Pages</div>
           <div style="font-size:11px;color:var(--ios-text-secondary)">FY26 Executive Dashboard</div>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--ios-text-tertiary);margin-bottom:12px">Import Anaplan board widgets with their original formatting preserved.</div>
+      <div style="font-size:11px;color:var(--ios-text-tertiary);margin-bottom:12px">Export a supported grid with its source formatting. Chart and KPI cards are shown for context only.</div>
       <div style="font-size:12px;font-weight:600;color:var(--ios-text-primary);margin-bottom:8px">Board Widgets:</div>
       <div id="widgetList"></div>
     </div>
@@ -187,7 +212,7 @@ async function scene1(){
       <div class="widget-card" data-name="${w.name}">
         <span style="font-size:16px">${w.icon}</span>
         <span class="wg-name">${w.name}</span>
-        <span class="wg-type">${w.type}</span>
+        <span class="wg-type">${w.type}${w.type==='Grid'?'':' · Preview only'}</span>
       </div>
     `);
   }
@@ -224,12 +249,19 @@ async function scene3(){
         <span style="font-size:9px;background:#fee2e2;color:#dc2626;padding:2px 6px;border-radius:4px;font-weight:500">Negative (red)</span>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px">
-      <input type="checkbox" checked style="width:16px;height:16px;accent-color:#FF453A">
+    <label style="display:flex;align-items:center;gap:6px;margin-bottom:12px">
+      <input id="applyBoardFormatting" type="checkbox" checked style="width:16px;height:16px;accent-color:#FF453A">
       <span style="font-size:12px;color:var(--ios-text-primary)">Apply board formatting to sheet</span>
-    </div>
-    <button class="btn-primary" id="execWidgetBtn" style="background:linear-gradient(135deg,#FF453A,#FF6961)">Execute with Formatting</button>
+    </label>
+    <p id="formattingChoiceNote" role="status" style="font-size:11px;line-height:1.5;color:#51657c">Pause to change this option before the sample is written.</p>
+    <button class="btn-primary" id="execWidgetBtn" style="background:linear-gradient(135deg,#FF453A,#FF6961)">Create Pivot</button>
   `);
+  document.getElementById('applyBoardFormatting').addEventListener('change',event=>{
+    formattingRequested=event.target.checked;
+    demoPlayer.pause();
+    setFormattingPath(formattingRequested);
+    document.getElementById('formattingChoiceNote').textContent=formattingRequested?'Source formatting selected. Press Play to continue.':'Plain output selected. Press Play to continue; the alternative output steps use on-screen notes instead of formatting narration.';
+  });
   await wait(2000);
   // Click execute
   document.getElementById('execWidgetBtn').style.transform='scale(0.97)';
@@ -239,6 +271,9 @@ async function scene3(){
 
 // Scene 4: Execute → data writes to sheet (plain first)
 async function scene4(){
+  const formattingChoice=document.getElementById('applyBoardFormatting');
+  formattingRequested=formattingChoice.checked;
+  formattingChoice.disabled=true;
   document.getElementById('execWidgetBtn').disabled=true;
   document.getElementById('execWidgetBtn').textContent='Writing data...';
 
@@ -257,36 +292,42 @@ async function scene4(){
 
   // Write plain data first (no formatting yet)
   const t=document.getElementById('gridTable');
+  const financials=buildUxFinancials();
+  const amounts=(key,negative=false)=>financials[key].map(value=>(negative?'(':'')+value.toLocaleString('en-US')+(negative?')':''));
   const rows=[
     {l:'P&L Statement',cls:'',v:['Q1 FY26','Q2 FY26','Q3 FY26','Q4 FY26','FY26']},
     {l:'Revenue',cls:'',v:['','','','','']},
-    {l:'SaaS Revenue',cls:'',v:['11,760,000','12,930,000','13,640,000','14,420,000','52,750,000']},
-    {l:'  New ARR',cls:'',v:['1,350,000','1,625,000','1,800,000','1,950,000','6,725,000']},
-    {l:'  Expansion',cls:'',v:['585,000','723,000','810,000','900,000','3,018,000']},
-    {l:'  Churn',cls:'',v:['(195,000)','(185,000)','(170,000)','(160,000)','(710,000)']},
-    {l:'Services Revenue',cls:'',v:['1,380,000','1,480,000','1,560,000','1,630,000','6,050,000']},
-    {l:'Total Revenue',cls:'',v:['13,140,000','14,410,000','15,200,000','16,050,000','58,800,000']},
+    {l:'SaaS Revenue',cls:'',v:amounts('saas')},
+    {l:'  Existing subscriptions',cls:'',v:amounts('existing')},
+    {l:'  New subscriptions',cls:'',v:amounts('newSubscriptions')},
+    {l:'  Expansion revenue',cls:'',v:amounts('expansion')},
+    {l:'Services Revenue',cls:'',v:amounts('services')},
+    {l:'Total Revenue',cls:'',v:amounts('revenue')},
     {l:'',cls:'',v:['','','','','']},
     {l:'Cost of Revenue',cls:'',v:['','','','','']},
-    {l:'Hosting & Infra',cls:'',v:['(1,314,000)','(1,441,000)','(1,520,000)','(1,605,000)','(5,880,000)']},
-    {l:'Support Staff',cls:'',v:['(1,578,000)','(1,729,000)','(1,824,000)','(1,926,000)','(7,057,000)']},
-    {l:'CS & Onboarding',cls:'',v:['(1,050,000)','(1,153,000)','(1,216,000)','(1,284,000)','(4,703,000)']},
-    {l:'Total COGS',cls:'',v:['(3,942,000)','(4,323,000)','(4,560,000)','(4,815,000)','(17,640,000)']},
+    {l:'Hosting & Infra',cls:'',v:amounts('hosting',true)},
+    {l:'Support Staff',cls:'',v:amounts('support',true)},
+    {l:'CS & Onboarding',cls:'',v:amounts('onboarding',true)},
+    {l:'Total COGS',cls:'',v:amounts('cogs',true)},
     {l:'',cls:'',v:['','','','','']},
-    {l:'Gross Profit',cls:'',v:['9,198,000','10,087,000','10,640,000','11,235,000','41,160,000']},
-    {l:'Gross Margin %',cls:'',v:['70.0%','70.0%','70.0%','70.0%','70.0%']},
+    {l:'Gross Profit',cls:'',v:amounts('grossProfit')},
+    {l:'Gross Margin %',cls:'',v:financials.grossMargin.map(value=>value===null?'—':(value*100).toFixed(1)+'%')},
   ];
 
   let html='<thead><tr><th class="corner"></th>';
-  'ABCDEF'.split('').forEach(l=>{html+=`<th class="col-header">${l}</th>`});
-  html+='</tr></thead><tbody id="gridBody"></tbody>';
+  'ABCDEFG'.split('').forEach(l=>{html+=`<th class="col-header">${l}</th>`});
+  html+='</tr></thead><tbody id="gridBody">';
+  [['','P&L Statement · Sample report'],['','Versions','FY26 Open Forecast'],['']].forEach((values,i)=>{
+    html+=`<tr><td class="row-header">${i+1}</td>${Array.from({length:7},(_,c)=>`<td>${values[c]||''}</td>`).join('')}</tr>`;
+  });
+  html+='</tbody>';
   t.innerHTML=html;
   const body=document.getElementById('gridBody');
 
   for(let i=0;i<rows.length;i++){
     await wait(150);
     const r=rows[i];
-    let tr=`<tr id="row${i}"><td class="row-header">${i+1}</td><td>${r.l}</td>`;
+    let tr=`<tr id="row${i}"><td class="row-header">${i+4}</td><td class="sheet-gutter"></td><td>${r.l}</td>`;
     r.v.forEach(v=>{tr+=`<td class="${v.startsWith('(')?'num neg':'num'}">${v}</td>`});
     tr+='</tr>';body.insertAdjacentHTML('beforeend',tr);
 
@@ -294,77 +335,35 @@ async function scene4(){
     document.getElementById('execBar').style.width=pct+'%';
     document.getElementById('execDetail').textContent=pct+'% — Writing cells';
   }
-  document.getElementById('execLabel').textContent='Data written, applying formatting...';
+  document.getElementById('execLabel').textContent=formattingRequested?'Data written, applying formatting...':'Data written without source formatting';
 }
 
 // Scene 5: Formatting applies with visual transformation
 async function scene5(){
-  const formatSteps=[
-    {label:'Applying header styles...',pct:65},
-    {label:'Applying hierarchy indentation...',pct:75},
-    {label:'Applying summary bold...',pct:85},
-    {label:'Applying number formats...',pct:92},
-    {label:'Applying colors...',pct:100},
-  ];
-
-  // Apply formatting row by row
-  // Row 0: Title header
-  await wait(400);
-  document.getElementById('row0').querySelectorAll('td')[0].className='ux-h0';
-  document.getElementById('row0').querySelectorAll('td').forEach((td,i)=>{if(i>0)td.className='ux-h0 num'});
-  document.getElementById('execBar').style.width='65%';document.getElementById('execDetail').textContent='65% — Header styles';
-
-  // Row 1: Section header
-  await wait(400);
-  document.getElementById('row1').querySelectorAll('td')[0].className='ux-h1';
-  document.getElementById('row1').querySelectorAll('td').forEach((td,i)=>{if(i>0)td.className='ux-h1'});
-
-  // Rows 2-6: Detail with hierarchy
-  await wait(400);
-  document.getElementById('row2').querySelectorAll('td')[0].className='ux-h2';
-  await wait(200);
-  document.getElementById('row3').querySelectorAll('td')[0].className='ux-detail';
-  await wait(200);
-  document.getElementById('row4').querySelectorAll('td')[0].className='ux-detail';
-  await wait(200);
-  document.getElementById('row5').querySelectorAll('td')[0].className='ux-detail';
-  document.getElementById('row5').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='num neg'});
-  await wait(200);
-  document.getElementById('row6').querySelectorAll('td')[0].className='ux-h2';
-  document.getElementById('execBar').style.width='75%';document.getElementById('execDetail').textContent='75% — Hierarchy';
-
-  // Row 7: Subtotal
-  await wait(400);
-  document.getElementById('row7').querySelectorAll('td')[0].className='ux-subtotal';
-  document.getElementById('row7').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='ux-subtotal num'});
-
-  // Row 9: Section header
-  await wait(300);
-  document.getElementById('row9').querySelectorAll('td')[0].className='ux-h1';
-  document.getElementById('row9').querySelectorAll('td').forEach((td,i)=>{if(i>0)td.className='ux-h1'});
-
-  // Rows 10-12: Detail
-  await wait(300);
-  [10,11,12].forEach(r=>{
-    document.getElementById('row'+r).querySelectorAll('td')[0].className='ux-detail';
-    document.getElementById('row'+r).querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='num neg'});
-  });
-
-  // Row 13: COGS subtotal
-  await wait(300);
-  document.getElementById('row13').querySelectorAll('td')[0].className='ux-subtotal';
-  document.getElementById('row13').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='ux-subtotal num neg'});
-  document.getElementById('execBar').style.width='90%';document.getElementById('execDetail').textContent='90% — Summary formatting';
-
-  // Row 15: Gross Profit total
-  await wait(400);
-  document.getElementById('row15').querySelectorAll('td')[0].className='ux-total';
-  document.getElementById('row15').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='ux-total num'});
-
-  // Row 16: percentage italic
-  await wait(300);
-  document.getElementById('row16').querySelectorAll('td')[0].className='ux-pct';
-  document.getElementById('row16').querySelectorAll('td').forEach((td,i)=>{if(i>0&&td.textContent)td.className='ux-pct num'});
+  if(!formattingRequested){
+    document.getElementById('execBar').style.width='100%';
+    document.getElementById('execBar').classList.add('complete');
+    document.getElementById('execLabel').textContent='✓ Plain sample output ready';
+    document.getElementById('execDetail').textContent='100% — Source formatting skipped by your selection';
+    return;
+  }
+  const rowStyles=['ux-h0','ux-h1','ux-h2','ux-detail','ux-detail','ux-detail','ux-h2','ux-subtotal','','ux-h1','ux-detail','ux-detail','ux-detail','ux-subtotal','','ux-total','ux-pct'];
+  for(let row=0;row<rowStyles.length;row++){
+    await wait(280);
+    const style=rowStyles[row];
+    if(!style)continue;
+    // Never format the sheet's row-number chrome or reserved column A.
+    const cells=document.getElementById('row'+row).querySelectorAll('td:not(.row-header):not(.sheet-gutter)');
+    cells[0].className=style;
+    cells.forEach((cell,index)=>{
+      if(index===0)return;
+      const band=['ux-h0','ux-h1','ux-subtotal','ux-total','ux-pct'].includes(style)?style+' ':'';
+      cell.className=band+'num'+(cell.textContent.startsWith('(')?' neg':'');
+    });
+    const pct=60+Math.round((row+1)/rowStyles.length*40);
+    document.getElementById('execBar').style.width=pct+'%';
+    document.getElementById('execDetail').textContent=pct+'% — Applying supported sample styles';
+  }
 
   document.getElementById('execBar').style.width='100%';
   document.getElementById('execBar').classList.add('complete');
@@ -380,24 +379,36 @@ async function scene6(){
   document.getElementById('execWidgetBtn').style.background='linear-gradient(135deg,#30D158,#34C759)';
   document.getElementById('execWidgetBtn').disabled=false;
 
-  document.getElementById('cellRef').textContent='A16';
+  document.getElementById('cellRef').textContent='B19';
   document.getElementById('formulaText').textContent='Gross Profit';
 
   // Add a note in sidebar
   const config=document.getElementById('widgetConfig');
   config.insertAdjacentHTML('beforeend',`
     <div style="background:#f0fdf4;border-radius:8px;padding:10px;margin-top:12px;font-size:11px;color:#059669;font-weight:500;animation:slideDown .3s ease">
-      ✓ Board formatting preserved:<br>
+      ${formattingRequested?`✓ Supported sample styles preserved:<br>
       • Hierarchy indentation (3 levels)<br>
       • Bold summaries & subtotals<br>
       • Number formats with commas<br>
-      • Red negatives for COGS/churn<br>
-      • Section headers with backgrounds
+      • Red negatives for costs<br>
+      • Section headers with backgrounds`:'✓ Plain sample output · Source formatting was not applied.'}<br><br>
+      USD · recognized revenue. FY26 amounts sum the four quarters; annual gross margin is annual gross profit ÷ annual revenue, not a sum of percentages.
     </div>
   `);
 }
 
 demoPlayer = new DemoPlayer({scenes:SCENES, actions:[scene1,scene2,scene3,scene4,scene5,scene6], reset:()=>{resetDemo();initGrid();}});
+// Keep the recorded default path unchanged. A manual plain-output branch uses
+// accurate notes instead of playing clips that claim formatting was applied.
+const formattingNarration=[4,5].map(index=>({index,clip:demoPlayer.clips?.[index],caption:demoPlayer.captions?.[index],name:SCENES[index].name}));
+if(demoPlayer.captions)demoPlayer.captions=[...demoPlayer.captions];
+function setFormattingPath(enabled){
+  for(const track of formattingNarration){
+    if(demoPlayer.clips){if(enabled)demoPlayer.clips[track.index]=track.clip;else delete demoPlayer.clips[track.index];}
+    if(demoPlayer.captions)demoPlayer.captions[track.index]=enabled?track.caption:track.index===4?'You chose plain sample output. Source UX formatting is skipped; the same selected data is retained.':'Review the plain sample output. Restart the walkthrough to compare it with the default source-formatted result.';
+    SCENES[track.index].name=enabled?track.name:track.index===4?'Skip Source Formatting':'Final Plain P&L';
+  }
+}
 demoPlayer.mount();
 </script>
 </body>

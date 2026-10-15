@@ -7,6 +7,10 @@ import { JSDOM } from 'jsdom';
 import FakeTimers from '@sinonjs/fake-timers';
 const root=path.resolve(import.meta.dirname,'..');
 const demos=fs.readdirSync(path.join(root,'demo')).filter(name=>name.endsWith('.html'));
+// Formatted UX is intentionally self-paced and has no audio/player. Its full
+// interaction lifecycle is covered by formatted-ux-v1.test.mjs; keep it in the
+// all-demo asset validation below.
+const autoplayDemos=demos.filter(name=>name!=='formatted-ux.html');
 function createDemo(file,query='') {
   const html=fs.readFileSync(path.join(root,'demo',file),'utf8');
   const dom=new JSDOM(html,{url:`https://example.test/demo/${file}${query}`,runScripts:'outside-only',pretendToBeVisual:true});
@@ -28,7 +32,7 @@ function createDemo(file,query='') {
   }
   return {window,clock,errors,player:window.testPlayer,close(){clock.uninstall();window.close()}};
 }
-for(const file of demos){
+for(const file of autoplayDemos){
   test(`${file}: paused start, narration, pause/resume, restart and complete`,async()=>{
     const demo=createDemo(file); const {player,window,clock,errors}=demo;
     try{

@@ -144,7 +144,9 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 @keyframes toastIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 .grid-data-cell{background:#e8fdf0!important;transition:background .5s}
 </style>
-<link rel="stylesheet" href="../assets/demo-responsive.css">
+<link rel="stylesheet" href="../assets/demo-responsive-v2.css">
+<link rel="stylesheet" href="../assets/demo-realism-v3.css">
+<script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
 <script src="../assets/demo-player.js"></script>
 
@@ -183,7 +185,7 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 
 <div class="browser-frame">
   <div class="sheets-toolbar"><div class="doc-icon">📊</div><div class="doc-name">FY26 Financial Planning</div></div>
-  <div class="formula-bar"><div class="cell-ref">A1</div><span class="fx">fx</span><span></span></div>
+  <div class="formula-bar"><div class="cell-ref" id="cellRef">A1</div><span class="fx">fx</span><span id="formulaText"></span></div>
   <div class="main-area">
     <div class="grid-area">
       <div class="grid-container"><table class="grid-table" id="gridTable"></table></div>
@@ -196,8 +198,8 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 </div>
 
 <div class="disc-overlay" id="discOverlay">
-  <div class="disc-modal">
-    <div class="disc-header"><h3 id="discTitle">Formatted UX Pages</h3><div style="font-size:12px;color:#6B7280" id="discSubtitle"></div></div>
+  <div class="disc-modal" role="dialog" aria-modal="true" aria-labelledby="discTitle" tabindex="-1">
+    <div class="disc-header"><button type="button" data-close-discovery aria-label="Close UX discovery" style="float:right;border:0;background:transparent;font-size:22px;cursor:pointer">×</button><h3 id="discTitle">Formatted UX Pages</h3><div style="font-size:12px;color:#6B7280" id="discSubtitle"></div></div>
     <div class="disc-body" id="discBody"></div>
     <div class="disc-footer" id="discFooter"></div>
   </div>
@@ -218,6 +220,28 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 <audio id="audio-4" src="audio/v2/discovery-4.mp3" preload="metadata"></audio>
 <audio id="audio-5" src="audio/v2/discovery-5.mp3" preload="metadata"></audio>
 <script>
+// Fictional quarterly expense records. Sep 26 means QTD Q3 and YTD Q1–Q3.
+const discoveryExpenseSource=[
+  {label:'Salaries',group:'headcount',actual:[875200,918450,946785],forecast:[900000,950000,990000],budget:[905000,935000,975000],priorQ3:875842,comment:'Owner note: Q3 hires deferred; confirm start dates'},
+  {label:'Bonus',group:'headcount',actual:[128400,146800,159933],forecast:[140000,155000,172000],budget:[135000,150000,165000],priorQ3:142415,comment:''},
+  {label:'SBC',group:'headcount',actual:[350000,363500,379426],forecast:[360000,370000,380000],budget:[355000,365000,375000],priorQ3:361358,comment:''},
+  {label:'Travel',group:'controllable',actual:[58900,71300,82400],forecast:[60000,70000,75000],budget:[60000,68000,75000],priorQ3:67541,comment:'Owner note: conference spend ahead; check timing'},
+  {label:'Marketing',group:'controllable',actual:[182400,203800,218500],forecast:[185000,198000,200000],budget:[180000,190000,200000],priorQ3:190000,comment:''},
+  {label:'Software',group:'controllable',actual:[132900,138200,142800],forecast:[145000,150000,155000],budget:[140000,147000,155000],priorQ3:138641,comment:''}
+];
+function buildDiscoveryFinancials(source=discoveryExpenseSource){
+  const sum=values=>values.reduce((total,value)=>total+value,0);
+  function calculate(label,records,total=false){
+    const actual=sum(records.map(row=>row.actual[2])),forecast=sum(records.map(row=>row.forecast[2]));
+    const prior=sum(records.map(row=>row.priorQ3)),ytdActual=sum(records.flatMap(row=>row.actual)),ytdBudget=sum(records.flatMap(row=>row.budget));
+    return{label,total,qtdActual:actual,qtdForecast:forecast,qtdVariance:forecast-actual,qtdVariancePercent:forecast===0?null:(forecast-actual)/forecast,qtdYoYPercent:prior===0?null:(actual-prior)/prior,priorQ3:prior,ytdActual,ytdBudget,ytdVariance:ytdBudget-ytdActual,comment:total?'':records[0].comment};
+  }
+  return ['headcount','controllable'].flatMap(group=>{
+    const records=source.filter(row=>row.group===group);
+    return [...records.map(row=>calculate(row.label,[row])),calculate(group==='headcount'?'Headcount Expense Total':'Controllable Total',records,true)];
+  });
+}
+window.DiscoveryFinancials={source:discoveryExpenseSource,build:buildDiscoveryFinancials};
 const SCENES=[
   {name:'Open Formatted UX Pages',duration:5000},
   {name:'Browse UX Apps',duration:6000},
@@ -225,11 +249,66 @@ const SCENES=[
   {name:'Pick a Grid Widget',duration:7000},
   {name:'Formatted Output in Sheets',duration:9000},
 ];
-let demoPlayer;
+let demoPlayer, discoveryStopped=false;
+const discoveryPages={
+  'Budget & Forecasts':[
+    {name:'Exec Owner Summary',widgets:'4 widgets · 2 grid'},
+    {name:'Avery Morgan — Budget Detail',widgets:'2 widgets · 1 grid · combined'},
+    {name:'Jordan Lee — Budget Detail',widgets:'2 widgets · 1 grid · combined'},
+    {name:'Dana Patel — Budget Detail',widgets:'2 widgets · 1 grid · combined'},
+    {name:'Quarterly Variance',widgets:'3 widgets · 1 grid'},
+    {name:'YTD Roll-forward',widgets:'2 widgets · 1 grid'}
+  ],
+  'P&L Statement':[
+    {name:'P&L by Account',widgets:'1 grid widget'},
+    {name:'P&L by Cost Center',widgets:'1 grid widget'},
+    {name:'P&L Variance Analysis',widgets:'2 grid widgets'},
+    {name:'P&L Quarterly Trend',widgets:'1 grid widget · 1 chart'}
+  ]
+};
+function discoveryPageRows(name){
+  const pages=discoveryPages[name];
+  if(!pages)return '<p style="padding:10px;font-size:12px;color:#51657c">Page previews for this app are not included in this sample.</p>';
+  return (name==='Budget & Forecasts'?'<div style="font-size:11px;font-weight:600;color:#5f6368;padding:10px 8px">▾ Budget Owner Review</div>':'')+pages.map(p=>'<div class="li-item"><span class="li-name">'+p.name+'</span><span class="li-type">Page</span><span class="li-dims">'+p.widgets+'</span></div>').join('');
+}
+function filterDiscovery(){
+  const query=document.getElementById('discSearchInput').value.trim().toLowerCase();
+  let count=0;
+  for(const app of document.querySelectorAll('#moduleTree .mod-tree-item')){
+    const appMatch=app.querySelector('.mod-name').textContent.toLowerCase().includes(query);
+    let pageMatch=false;
+    for(const row of app.querySelectorAll('.li-item')){
+      const matches=!query||appMatch||row.textContent.toLowerCase().includes(query);
+      row.style.display=matches?'':'none';
+      if(matches)pageMatch=true;
+    }
+    const matches=!query||appMatch||pageMatch;
+    app.style.display=matches?'':'none';
+    if(matches)count++;
+    if(query){
+      if(!('searchWasOpen' in app.dataset))app.dataset.searchWasOpen=String(app.classList.contains('open'));
+      app.classList.toggle('open',matches);
+    }else if('searchWasOpen' in app.dataset){
+      app.classList.toggle('open',app.dataset.searchWasOpen==='true');delete app.dataset.searchWasOpen;
+    }
+    app.querySelector('button').setAttribute('aria-expanded',String(app.classList.contains('open')));
+  }
+  document.getElementById('discSearchStatus').textContent=query?(count?count+' matching sample app'+(count===1?'':'s'):'No matching sample apps or pages'):'Search covers app names and the 10 included page previews.';
+}
+function closeDiscovery(){
+  discoveryStopped=true;demoPlayer.pause();demoPlayer.cancel();
+  document.getElementById('discOverlay').classList.remove('visible');
+  document.getElementById('playBtn').disabled=true;
+  document.getElementById('playBtn').textContent='Restart to replay';
+  document.getElementById('exploreBtn')?.focus();
+}
 
 const wait=ms=>demoPlayer.wait(ms);
 function resetDemo(){
+  discoveryStopped=false;document.getElementById('playBtn').disabled=false;
   document.getElementById('discOverlay').classList.remove('visible');
+  document.getElementById('discBody').replaceChildren();
+  document.getElementById('discFooter').replaceChildren();
 }
 
 function initGrid(){
@@ -255,6 +334,11 @@ async function scene1(){
       <button class="btn-primary" id="exploreBtn" style="background:linear-gradient(135deg,#00C7BE,#0891B2)">📑 Browse UX Pages</button>
     </div>
   `;
+  document.getElementById('exploreBtn').addEventListener('click',()=>{
+    demoPlayer.pause();
+    if(document.getElementById('discBody').children.length){document.getElementById('discOverlay').classList.add('visible');document.querySelector('#discOverlay .disc-modal').focus();}
+    else{demoPlayer.play();}
+  });
   await wait(2000);
   document.getElementById('exploreBtn').style.boxShadow='0 4px 20px rgba(0,199,190,0.4)';
 }
@@ -266,6 +350,7 @@ async function scene2(){
   btn.style.transform='scale(0.97)';await wait(150);btn.style.transform='';
   await wait(500);
   document.getElementById('discOverlay').classList.add('visible');
+  document.querySelector('#discOverlay .disc-modal').focus();
   document.getElementById('discTitle').textContent='Formatted UX Pages';
   document.getElementById('discSubtitle').textContent='Revenue & Headcount — FY26 Planning';
   document.getElementById('discBody').innerHTML=`
@@ -282,9 +367,9 @@ async function scene2(){
   document.getElementById('discFooter').innerHTML=`<span style="font-size:11px;color:#9ca3af">Loading time depends on app catalog size and model availability</span>`;
   const stages=[
     {pct:25,label:'Loading UX board definition...',detail:'Fetching app catalog'},
-    {pct:55,label:'Loading UX board definition...',detail:'Resolving 6 apps • 28 pages'},
+    {pct:55,label:'Loading sample UX catalog...',detail:'Resolving apps and page categories'},
     {pct:85,label:'Resolving widget metadata...',detail:'Mapping grid widgets to modules'},
-    {pct:100,label:'Ready to browse!',detail:'6 apps • 28 pages • 47 grid widgets'},
+    {pct:100,label:'Ready to browse!',detail:'Sample catalog ready'},
   ];
   for(const s of stages){
     await wait(700);
@@ -305,84 +390,58 @@ async function scene3(){
     {name:'P&L Statement',items:4,area:'Finance'},
     {name:'Revenue Planning',items:6,area:'Finance'},
     {name:'Headcount Reviews',items:7,area:'Workforce'},
-    {name:'Budget Review by Exec Owner',items:9,area:'Workforce'},
+    {name:'Budget & Forecasts',items:6,area:'Workforce'},
     {name:'Operating Expenses',items:3,area:'OpEx'},
   ];
   document.getElementById('discBody').innerHTML=`
-    <div class="disc-search"><svg viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input placeholder="Search apps and pages..." id="discSearchInput"></div>
+    <div class="disc-search"><svg viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><input placeholder="Search apps and pages..." aria-label="Search sample UX apps and pages" id="discSearchInput" disabled></div>
+    <p id="discSearchStatus" role="status" style="font-size:11px;color:#51657c">Search covers app names and the 10 included page previews.</p>
     <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
       <span style="font-size:10px;background:#dbeafe;color:#2563eb;padding:2px 8px;border-radius:8px;font-weight:600">6 apps</span>
-      <span style="font-size:10px;background:#fef3c7;color:#d97706;padding:2px 8px;border-radius:8px;font-weight:600">28 pages</span>
-      <span style="font-size:10px;background:#e0e7ff;color:#4f46e5;padding:2px 8px;border-radius:8px;font-weight:600">47 grid widgets</span>
+      <span style="font-size:10px;background:#fef3c7;color:#d97706;padding:2px 8px;border-radius:8px;font-weight:600">10 page previews</span>
+      <span style="font-size:10px;background:#e0e7ff;color:#4f46e5;padding:2px 8px;border-radius:8px;font-weight:600">Grid widgets supported</span>
     </div>
     <div id="moduleTree"></div>
   `;
   document.getElementById('discFooter').innerHTML=`
-    <span style="font-size:11px;color:#059669;font-weight:500">✓ Loaded in 1.4s</span>
-    <button style="padding:8px 16px;border:none;border-radius:8px;background:#e5e7eb;color:#374151;font-size:12px;font-weight:600;cursor:pointer">Close</button>
+    <span style="font-size:11px;color:#059669;font-weight:500">✓ Sample UX catalog loaded</span>
+    <button data-close-discovery style="padding:8px 16px;border:none;border-radius:8px;background:#e5e7eb;color:#374151;font-size:12px;font-weight:600;cursor:pointer">Close</button>
   `;
+  document.getElementById('discSearchInput').addEventListener('input',()=>{demoPlayer.pause();filterDiscovery();});
   const tree=document.getElementById('moduleTree');
   for(const a of apps){
     await wait(120);
     tree.insertAdjacentHTML('beforeend',`
       <div class="mod-tree-item" id="mt-${a.name.replace(/\W/g,'')}">
-        <div class="mod-tree-header" onclick="this.parentElement.classList.toggle('open')">
+        <button type="button" class="mod-tree-header" data-toggle-ux-app aria-expanded="false" style="width:100%;border:0;text-align:left">
           <span class="expand">▸</span>
           <span class="mod-name">${a.name}</span>
-          <span class="mod-count">${a.items} pages</span>
-        </div>
-        <div class="mod-tree-body" id="mtb-${a.name.replace(/\W/g,'')}"></div>
+          <span class="mod-count">${discoveryPages[a.name]?.length||0} page previews</span>
+        </button>
+        <div class="mod-tree-body" id="mtb-${a.name.replace(/\W/g,'')}">${discoveryPageRows(a.name)}</div>
       </div>
     `);
+    filterDiscovery();
   }
+  document.getElementById('discSearchInput').disabled=false;
 }
 
 // Scene 4: Expand an app to reveal its pages (each page with its grid-widget count)
 async function scene4(){
   await wait(700);
-  // Expand "Budget Review by Exec Owner" — the combined-grid widget app we ship demos against
-  const appId='mt-BudgetReviewbyExecOwner';
+  // Fictional app and people; follow the production app → category → page path.
+  const appId='mt-BudgetForecasts';
   const item=document.getElementById(appId);
   item.classList.add('open');
   item.style.borderColor='#00C7BE';
-  const body=document.getElementById('mtb-BudgetReviewbyExecOwner');
-  const pages=[
-    {name:'Exec Owner Summary',type:'Page',widgets:'4 widgets · 2 grid'},
-    {name:'Kyle Triplett — Budget Detail',type:'Page',widgets:'2 widgets · 1 grid · combined'},
-    {name:'Matt Baird — Budget Detail',type:'Page',widgets:'2 widgets · 1 grid · combined'},
-    {name:'Lisa Horner — Budget Detail',type:'Page',widgets:'2 widgets · 1 grid · combined'},
-    {name:'Quarterly Variance',type:'Page',widgets:'3 widgets · 1 grid'},
-    {name:'YTD Roll-forward',type:'Page',widgets:'2 widgets · 1 grid'},
-  ];
-  for(const p of pages){
-    await wait(180);
-    body.insertAdjacentHTML('beforeend',`
-      <div class="li-item">
-        <span class="li-name">${p.name}</span>
-        <span class="li-type">${p.type}</span>
-        <span class="li-dims">${p.widgets}</span>
-      </div>
-    `);
-  }
+  item.querySelector('button').setAttribute('aria-expanded','true');
   // Also expand a second app to give the eye more to scan
   await wait(900);
   const second=document.getElementById('mt-PLStatement');
   if(second){
     second.classList.add('open');
     second.style.borderColor='#00C7BE';
-    const sBody=document.getElementById('mtb-PLStatement');
-    const sPages=[
-      {name:'P&L by Account',widgets:'1 grid widget'},
-      {name:'P&L by Cost Center',widgets:'1 grid widget'},
-      {name:'P&L Variance Analysis',widgets:'2 grid widgets'},
-      {name:'P&L Quarterly Trend',widgets:'1 grid widget · 1 chart'},
-    ];
-    for(const p of sPages){
-      await wait(150);
-      sBody.insertAdjacentHTML('beforeend',`
-        <div class="li-item"><span class="li-name">${p.name}</span><span class="li-type">Page</span><span class="li-dims">${p.widgets}</span></div>
-      `);
-    }
+    second.querySelector('button').setAttribute('aria-expanded','true');
   }
 }
 
@@ -391,7 +450,7 @@ async function scene4(){
 async function scene5(){
   await wait(600);
   // Highlight one specific page as the "selected widget"
-  const targetPage=document.querySelector('#mtb-BudgetReviewbyExecOwner .li-item:nth-child(2)');
+  const targetPage=document.querySelectorAll('#mtb-BudgetForecasts .li-item')[1];
   if(targetPage){
     targetPage.style.background='rgba(0,199,190,0.12)';
     targetPage.style.borderLeft='3px solid #00C7BE';
@@ -399,37 +458,51 @@ async function scene5(){
   }
   // Show a toast / footer note
   document.getElementById('discFooter').innerHTML=`
-    <span style="font-size:11px;color:#00C7BE;font-weight:600">→ Opening pivot dialog with widget layout</span>
-    <button style="padding:8px 16px;border:none;border-radius:8px;background:linear-gradient(135deg,#00C7BE,#0891B2);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Use widget</button>
+    <span style="font-size:11px;color:#00C7BE;font-weight:600">✓ Grid 1 selected · Budget Review + Budget Comments</span>
+    <span style="padding:8px 16px;border-radius:8px;background:#008a83;color:#fff;font-size:12px;font-weight:600">Export selected grid</span>
   `;
   await wait(1800);
-  // Close the modal — pretend the pivot dialog took over
+  // Show the essential current production configuration, rather than skipping it.
+  document.getElementById('discTitle').textContent='Configure Pivot: Budget Review by Exec Owner';
+  document.getElementById('discSubtitle').textContent='Illustrative configuration preview · 2 combined modules';
+  document.getElementById('discBody').innerHTML=`
+    <div class="discovery-pivot-preview">
+      <h3>Budget Review by Exec Owner</h3>
+      <div class="preview-zone"><strong>Rows</strong><br>LISS_Budget Template · 8 of 26 items</div>
+      <div class="preview-zone"><strong>Columns</strong><br>Line Items · 8 of 29 items <span class="preview-native-chip">M2 Comment · 1 item</span></div>
+      <div class="preview-zone"><strong>Pages</strong><br><span class="preview-linked-chip">⚭ 2 Time · Sep 26</span><span class="preview-linked-chip">⚭ 2 Executive Owner · Avery Morgan</span><span class="preview-linked-chip">⚭ 2 Versions · FY26 Open Forecast</span></div>
+      <p style="font-size:12px;color:#51657c;line-height:1.6">Shared page filters are linked automatically. One selection supplies the same context to both grids.</p>
+      <div style="margin-top:12px;font-size:12px">Sheet Name: <strong>Avery Morgan — Budget Review</strong></div>
+    </div>`;
+  document.getElementById('discFooter').innerHTML='<span style="font-size:12px;color:#51657c">8 selected rows · 8 financial columns + 1 comment column</span><span style="padding:9px 16px;border-radius:8px;background:#007aff;color:white;font-size:12px">Create Pivot</span>';
+  await wait(3000);
+  document.getElementById('discFooter').innerHTML='<span style="font-size:12px;color:#059669">Sample sheet ready — shared page context retained</span>';
+  await wait(700);
   document.getElementById('discOverlay').classList.remove('visible');
-  // Render the combined-grid output into the Sheet
-  await wait(400);
   const t=document.getElementById('gridTable');
-  // Combined-grid Budget Review layout: 26 rows × 17 cols (LISS_Budget Template rows × line items + secondary region Comment)
-  const cols=['Line Item','QTD Actuals','QTD Forecast','QTD Variance','QTD Var %','QTD YoY','YTD Actuals','YTD Budget','YTD Variance','Comment'];
-  const rows=[
-    ['Salaries',{n:946785,t:'pos'},{n:990000,t:'pos'},{n:43215,t:'pos'},{n:'4.6%'},{n:'+8.1%'},{n:3782940},{n:3960000},{n:177060,t:'pos'},'On track — Q3 hires deferred'],
-    ['Bonus',{n:159933,t:'pos'},{n:172000,t:'pos'},{n:12067,t:'pos'},{n:'7.5%'},{n:'+12.3%'},{n:639732},{n:688000},{n:48268,t:'pos'},''],
-    ['SBC',{n:379426,t:'pos'},{n:380000,t:'pos'},{n:574,t:'pos'},{n:'0.2%'},{n:'+5.0%'},{n:1517704},{n:1520000},{n:2296,t:'pos'},''],
-    ['Headcount Expense Total',{n:1486144,t:'pos'},{n:1542000,t:'pos'},{n:55856,t:'pos'},{n:'3.8%'},{n:'+7.8%'},{n:5940376},{n:6168000},{n:227624,t:'pos'},'',true],
-    ['Travel',{n:82400,t:'pos'},{n:75000,t:'pos'},{n:-7400,t:'neg'},{n:'-9.0%'},{n:'+22%'},{n:329600},{n:300000},{n:-29600,t:'neg'},'Conference spend ahead'],
-    ['Marketing',{n:218500,t:'pos'},{n:200000,t:'pos'},{n:-18500,t:'neg'},{n:'-8.5%'},{n:'+15%'},{n:874000},{n:800000},{n:-74000,t:'neg'},''],
-    ['Software',{n:142800,t:'pos'},{n:155000,t:'pos'},{n:12200,t:'pos'},{n:'8.5%'},{n:'+3%'},{n:571200},{n:620000},{n:48800,t:'pos'},''],
-    ['Controllable Total',{n:443700,t:'pos'},{n:430000,t:'pos'},{n:-13700,t:'neg'},{n:'-3.1%'},{n:'+12%'},{n:1774800},{n:1720000},{n:-54800,t:'neg'},'',true],
-  ];
+  // Eight selected template rows; eight financial measures and one comment field.
+  const cols=['Line Item','QTD Actuals','QTD Forecast','QTD Variance','QTD Var %','QTD YoY %','YTD Actuals','YTD Budget','YTD Variance','Comment'];
+  const variance=value=>({n:value,t:value<0?'neg':'pos'});
+  const percent=value=>value===null?'—':(value*100).toFixed(1)+'%';
+  const rows=buildDiscoveryFinancials().map(row=>{
+    const cells=[row.label,{n:row.qtdActual},{n:row.qtdForecast},variance(row.qtdVariance),{n:percent(row.qtdVariancePercent)}, {n:percent(row.qtdYoYPercent)},{n:row.ytdActual},{n:row.ytdBudget},variance(row.ytdVariance),row.comment];
+    if(row.total)cells.push(true);
+    return cells;
+  });
   let html='<thead><tr><th class="corner"></th>';
-  cols.forEach((_,i)=>{const L='ABCDEFGHIJ'[i];html+=`<th class="col-header">${L}</th>`});
-  html+='</tr><tr><th class="row-header">1</th>';
-  cols.forEach(c=>{const isHC=c.startsWith('QTD');const isYTD=c.startsWith('YTD');const bg=isHC?'#1e40af':(isYTD?'#92400e':'#374151');html+=`<th style="font-size:10px;font-weight:600;padding:4px 6px;background:${bg};color:#fff;border-color:${bg}">${c}</th>`});
+  'ABCDEFGHIJK'.split('').forEach(L=>{html+=`<th class="col-header">${L}</th>`});
   html+='</tr></thead><tbody>';
+  [['','Budget Review · Sample report'],['','Time','Sep 26'],['','Executive Owner','Avery Morgan'],['','Versions','FY26 Open Forecast'],['']].forEach((values,i)=>{
+    html+=`<tr><td class="row-header">${i+1}</td>${Array.from({length:11},(_,c)=>`<td>${values[c]||''}</td>`).join('')}</tr>`;
+  });
+  html+='<tr><td class="row-header">6</td><td></td>';
+  cols.forEach(c=>{const isHC=c.startsWith('QTD');const isYTD=c.startsWith('YTD');const bg=isHC?'#1e40af':(isYTD?'#92400e':'#374151');html+=`<td style="font-size:11px;font-weight:600;padding:4px 6px;background:${bg};color:#fff;border-color:${bg}">${c}</td>`});
+  html+='</tr>';
   rows.forEach((r,i)=>{
     const isTotal=r[r.length-1]===true;
     const cls=isTotal?'total-row':'';
     const cellRows=isTotal?r.slice(0,-1):r;
-    html+=`<tr><td class="row-header">${i+2}</td>`;
+    html+=`<tr><td class="row-header">${i+7}</td><td></td>`;
     cellRows.forEach((cell,ci)=>{
       if(typeof cell==='string'){
         const isComment=ci===cols.length-1;
@@ -443,11 +516,13 @@ async function scene5(){
     });
     html+='</tr>';
   });
-  for(let r=rows.length+2;r<=25;r++){html+=`<tr><td class="row-header">${r}</td>${cols.map(()=>'<td></td>').join('')}</tr>`}
+  for(let r=rows.length+7;r<=30;r++){html+=`<tr><td class="row-header">${r}</td><td></td>${cols.map(()=>'<td></td>').join('')}</tr>`}
   html+='</tbody>';t.innerHTML=html;
   // Update sheet tab name to match the widget output
   const tab=document.querySelector('.sheet-tab.active');
-  if(tab) tab.textContent='Kyle Triplett';
+  if(tab) tab.textContent='Avery Morgan — Budget Review';
+  document.getElementById('cellRef').textContent='D7';
+  document.getElementById('formulaText').textContent='990000';
   // Caption / footer in sidebar showing what just happened
   const sb=document.getElementById('sidebarContent');
   sb.innerHTML=`
@@ -456,9 +531,9 @@ async function scene5(){
         <div style="width:24px;height:24px;background:#30D158;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700">✓</div>
         <div style="font-size:13px;font-weight:600;color:#1F2937">Widget exported</div>
       </div>
-      <div style="font-size:11px;color:#6B7280;line-height:1.45">Kyle Triplett — Budget Detail<br>Combined grid (2 modules)<br>26 rows × 17 cols<br>Anaplan UX formatting preserved</div>
+      <div style="font-size:11px;color:#6B7280;line-height:1.45">Avery Morgan — Budget Detail<br>Combined grid (2 modules)<br>${rows.length} rows × ${cols.length-1} data columns<br>Shared Time and Executive Owner filters<br>Supported UX formatting preserved</div>
     </div>
-    <div style="font-size:11px;color:#6B7280;line-height:1.5">Header band, entity row colors, conditional formatting, and column widths come from the source UX widget — no manual styling required in Sheets.</div>
+    <div style="font-size:11px;color:#6B7280;line-height:1.5">USD · Sep 26 close. QTD = Jul–Sep; YTD = Jan–Sep.<br>Expense variance = Forecast/Budget − Actual; positive is favorable. Variance % divides by the comparison amount. YoY % compares Q3 actual with prior-year Q3 actual.<br><br>Header band, entity row colors, conditional formatting, and column widths come from the source UX widget — no manual styling required in Sheets.</div>
   `;
 }
 
@@ -466,6 +541,22 @@ async function scene5(){
 // arc was split out. NL chat / "Ask About Your Model" now lives in demo/llm-agent.html.
 
 demoPlayer = new DemoPlayer({scenes:SCENES, actions:[scene1,scene2,scene3,scene4,scene5], reset:()=>{resetDemo();initGrid();}});
+const guidedDiscoveryPlay=demoPlayer.play;
+demoPlayer.play=()=>{if(!discoveryStopped)guidedDiscoveryPlay.call(demoPlayer);};
+document.getElementById('discOverlay').addEventListener('click',event=>{
+  if(event.target.closest('[data-close-discovery]'))closeDiscovery();
+  const heading=event.target.closest('[data-toggle-ux-app]');
+  if(heading){demoPlayer.pause();heading.parentElement.classList.toggle('open');heading.setAttribute('aria-expanded',String(heading.parentElement.classList.contains('open')));}
+});
+document.getElementById('discOverlay').addEventListener('keydown',event=>{
+  if(event.key==='Escape'){event.preventDefault();closeDiscovery();}
+  if(event.key==='Tab'){
+    const controls=[...document.querySelectorAll('#discOverlay button,#discOverlay input')].filter(control=>!control.disabled&&!control.closest('[style*="display: none"]'));
+    const first=controls[0],last=controls.at(-1);
+    if(event.shiftKey&&(document.activeElement===first||document.activeElement.classList.contains('disc-modal'))){event.preventDefault();last?.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+  }
+});
 demoPlayer.mount();
 </script>
 </body>

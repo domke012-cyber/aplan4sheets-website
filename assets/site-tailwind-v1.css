@@ -1,0 +1,28 @@
+/* Homepage/gallery only. Generate site-v1.css with npm run build:css. */
+@import "tailwindcss" source(none);
+@source "../index.html";
+@source "../demos.html";
+@theme {
+  --color-navy: #1a2744;
+  --color-navy-light: #243352;
+  --color-sheets-green: #0f9d58;
+  --color-sheets-green-dark: #0b8043;
+  --color-green-light: #e8f5e9;
+  --color-text-dark: #1a1a2e;
+  --color-text-muted: #6b7280;
+  --font-sans: Inter, system-ui, sans-serif;
+}
+/* Preserve the existing v3 gradient direction classes and soft shadows. */
+@utility bg-gradient-to-br {
+  --tw-gradient-position: to bottom right in srgb;
+  background-image: linear-gradient(var(--tw-gradient-stops));
+}
+@theme {
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / .05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-in { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .demo-card { transition: none !important; }
+}

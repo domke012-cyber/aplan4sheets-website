@@ -1,0 +1,240 @@
+@import url('./formatted-ux-v1.css');
+
+/* Screenshot-informed financial-grid presentation, using fictional data only.
+   v1 remains the shell/interaction checkpoint. Source and Sheet share these
+   rules; spreadsheet chrome and source formatting opt-out stay independent. */
+:root {
+  --fx-header-bg: #2f5496;
+  --fx-header-fg: #fff;
+  --fx-selected-fg: #ffa437;
+  --fx-label-header-bg: #d9d9d9;
+  --fx-financial-divider: #bfbfbf;
+  --fx-financial-grid: #e0e0e0;
+  --fx-favorable-text: #16b52c;
+  --fx-unfavorable-text: #cf2222;
+}
+
+.fx-workspace.expanded { grid-template-columns: minmax(0, 1fr); }
+.fx-workspace.expanded > .fx-sidebar { display: none; }
+.fx-grid-expand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid #cbd2db;
+  border-radius: 5px;
+  background: #fff;
+  color: #185abc;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fx-grid-expand:hover { background: #eef5ff; border-color: #9dbdeb; }
+.fx-grid-expand[aria-pressed='true'] { background: #eaf2ff; border-color: #a9c7f5; }
+
+.fx-data-table, .fx-sheet-grid table {
+  min-width: 1450px;
+  width: 100%;
+  table-layout: auto;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.25;
+  background: #fff;
+}
+.fx-data-table th, .fx-data-table td, .fx-sheet-grid th, .fx-sheet-grid td {
+  border-color: var(--fx-financial-grid);
+  padding: 5px 7px;
+}
+.fx-data-table thead th:not(.fx-row-number),
+.fx-sheet-grid thead th:not(.fx-row-number) {
+  min-width: 88px;
+  height: 44px;
+  padding: 7px 6px;
+  background: var(--fx-header-bg);
+  color: var(--fx-header-fg);
+  border-color: #31558f;
+  border-bottom: 3px solid var(--fx-financial-divider);
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  font-weight: 700;
+}
+.fx-data-table thead th.fx-label-header {
+  width: 250px;
+  min-width: 250px;
+  background: var(--fx-label-header-bg);
+  color: #000;
+  border-color: var(--fx-financial-divider);
+  border-right: 3px solid var(--fx-financial-divider);
+  padding: 7px 8px 4px;
+  text-align: left;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+.fx-data-table thead th.fx-actual-header,
+.fx-data-table thead th.fx-variance-header {
+  background: var(--fx-header-bg);
+  color: #fff;
+}
+.fx-data-table thead th.fx-forecast-header,
+.fx-data-table thead th.fx-ytd-actual-header,
+.fx-data-table thead th.fx-selected-header {
+  background: var(--fx-header-bg);
+  color: var(--fx-selected-fg);
+}
+.fx-data-table tbody td,
+.fx-data-table tbody th,
+.fx-sheet-grid tbody td,
+.fx-sheet-grid tbody th {
+  height: 27px;
+  background: #fff;
+  color: #000;
+  border-color: var(--fx-financial-grid);
+}
+.fx-data-table tbody td.fx-value { width: 88px; min-width: 88px; }
+.fx-data-table tbody .fx-row-label {
+  width: 250px;
+  min-width: 250px;
+  padding-left: 8px;
+  border-right: 3px solid var(--fx-financial-divider);
+  background: #fff;
+  color: #000;
+  text-align: left;
+  white-space: nowrap;
+}
+/* Section headings contain no measures. Subtotals and the bottom total keep
+   the source's bold type, not the colored summary fills used in v1. */
+.fx-data-table tbody tr.fx-section-heading > *,
+.fx-data-table tbody tr.fx-summary > *,
+.fx-data-table tbody tr.fx-total > * {
+  background: #fff;
+  color: #000;
+  font-weight: 700;
+  border-top: 1px solid var(--fx-financial-grid);
+}
+.fx-data-table tbody tr.fx-section-heading > .fx-row-label {
+  padding-top: 7px;
+  padding-bottom: 5px;
+}
+.fx-data-table tbody td.fx-comment {
+  width: 260px;
+  min-width: 260px;
+  max-width: 300px;
+  background: #fff;
+  color: #000;
+  white-space: normal;
+  line-height: 1.4;
+}
+.fx-comment-text {
+  display: block;
+  width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The fixture applies these classes only to QTD variance and attainment.
+   They deliberately change text, never the cell background or an entire
+   column. Growth and YTD measures retain ordinary black text. */
+.fx-data-table tbody td.fx-favorable,
+.fx-sheet-grid tbody td.fx-favorable {
+  background: #fff;
+  color: var(--fx-favorable-text);
+}
+.fx-data-table tbody td.fx-unfavorable,
+.fx-sheet-grid tbody td.fx-unfavorable {
+  background: #fff;
+  color: var(--fx-unfavorable-text);
+}
+.fx-data-table tbody td.fx-neutral { background: #fff; color: #000; }
+.fx-data-table .fx-cell-button { color: inherit; background: transparent; font-weight: inherit; }
+
+/* Narrow, empty separators delineate QTD / prior-year / YTD regions. */
+.fx-data-table td.fx-spacer,
+.fx-data-table th.fx-spacer,
+.fx-data-table thead th.fx-spacer,
+.fx-sheet-grid .fx-data-table td.fx-spacer,
+.fx-sheet-grid .fx-data-table th.fx-spacer {
+  width: 12px;
+  min-width: 12px;
+  max-width: 12px;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  color: #000;
+}
+.fx-grid-scroll .fx-financial-header th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* Keep column letters and row-number gutters neutral, including when a
+   section/total row is bold. The reserved column A is not a report region. */
+.fx-sheet-grid .fx-data-table .fx-column-letters th {
+  height: 24px;
+  min-width: 0;
+  padding: 3px 6px;
+  background: #f4f6f8;
+  color: #5f6368;
+  border: 1px solid #dce1e7;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  font-weight: 400;
+}
+.fx-sheet-grid .fx-data-table .fx-row-number {
+  width: 34px;
+  min-width: 34px;
+  max-width: 34px;
+  padding: 4px 6px;
+  background: #f4f6f8;
+  color: #68717d;
+  border: 1px solid #dce1e7;
+  font-weight: 400;
+}
+.fx-sheet-grid .fx-data-table .fx-empty-column {
+  width: 18px;
+  min-width: 18px;
+  max-width: 18px;
+  padding: 0;
+  background: #fff;
+  color: #000;
+  border: 1px solid #e2e6eb;
+  font-weight: 400;
+}
+.fx-data-table.fx-unformatted thead th:not(.fx-row-number) {
+  background: #f1f3f4;
+  color: #3c4043;
+  border-color: var(--fx-financial-grid);
+  border-width: 1px;
+  font-weight: 500;
+}
+.fx-data-table.fx-unformatted thead th.fx-spacer { background: #fff; border: 0; }
+.fx-data-table.fx-unformatted tbody .fx-row-label { border-right: 1px solid var(--fx-financial-grid); }
+.fx-sheet-grid .fx-data-table.fx-unformatted .fx-column-letters th {
+  background: #f4f6f8;
+  color: #5f6368;
+  border: 1px solid #dce1e7;
+  font-weight: 400;
+}
+
+#fxConfig .fx-mini-style { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#fxConfig .fx-mini-style span {
+  grid-column: auto;
+  padding: 10px 4px;
+  background: var(--fx-header-bg);
+  color: #fff;
+  border-right: 1px solid #31558f;
+  font-weight: 700;
+}
+#fxConfig .fx-mini-style span:nth-child(2) { color: var(--fx-selected-fg); }
+#fxConfig .fx-mini-style span:last-child { border-right: 0; }
+
+@media (max-width: 760px) {
+  .fx-grid-expand { min-height: 34px; white-space: normal; }
+  .fx-workspace.expanded { grid-template-columns: minmax(0, 1fr); }
+  .fx-data-table, .fx-sheet-grid table { min-width: 1450px; }
+  .fx-grid-scroll, .fx-sheet-grid { max-width: 100%; overflow-x: auto; }
+}

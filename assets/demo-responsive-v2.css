@@ -1,0 +1,204 @@
+/* Preserve the original layout checkpoint; fix nested clipping in both modes. */
+@import url('./demo-responsive.css');
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0 !important;
+}
+
+body .browser-frame,
+body .demo-shell,
+body.embed-mode .browser-frame,
+body.embed-mode .demo-shell {
+  flex: 1 1 auto;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.browser-frame,
+.demo-shell,
+.main-area,
+.grid-area,
+.sidebar-area,
+.sidebar-inner,
+.chat-wrap,
+.chat-messages {
+  min-width: 0;
+  min-height: 0;
+}
+
+.sheets-toolbar,
+.formula-bar,
+.sheet-tabs,
+.sidebar-header,
+.input-area {
+  flex-shrink: 0;
+}
+
+.sheets-toolbar,
+.formula-bar,
+.sheet-tabs,
+.grid-container {
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sheets-toolbar > *,
+.sheet-tab,
+.send-btn {
+  flex-shrink: 0;
+}
+
+.sidebar-inner {
+  overflow: auto;
+}
+
+body .chat-wrap {
+  height: 100% !important;
+  max-height: 100%;
+}
+
+.chat-messages {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.msg {
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.bubble,
+.input-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.msg.ai .bubble {
+  flex: 1 1 auto;
+  max-width: calc(100% - 38px);
+}
+
+.kpi-strip {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr));
+}
+
+.kpi,
+.kpi > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.pivot-modal,
+.disc-modal,
+.module-picker,
+.progress-modal {
+  min-width: 0;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
+}
+
+.module-picker,
+.progress-modal,
+.pivot-modal-content,
+.disc-body {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.module-picker-overlay:not(.visible),
+.progress-overlay:not(.visible) {
+  visibility: hidden;
+}
+
+.pivot-modal-content .dimension-manager {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pivot-modal-content .dimension-chip {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  flex-wrap: wrap;
+}
+
+.pivot-modal-content .actions,
+.disc-header,
+.disc-footer,
+.compat-module,
+.sidebar-title {
+  flex-wrap: wrap;
+}
+
+.sheet-callout,
+.toast {
+  max-width: calc(100vw - 48px);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  body .main-area {
+    flex-direction: column;
+  }
+
+  body .sidebar-area {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100%;
+    flex: 0 0 clamp(260px, 42dvh, 380px);
+    border-left: 0 !important;
+    border-top: 1px solid #dadce0;
+    transform: none !important;
+  }
+
+  body .grid-area {
+    flex: 1 1 auto;
+  }
+
+  /* Short embedded cards must scroll rather than collapse their grid to zero. */
+  body .main-area {
+    overflow-y: auto !important;
+  }
+
+  body .main-area > .grid-area {
+    min-height: 120px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .pivot-modal-content .dimension-manager {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .pivot-modal-content .actions > button {
+    flex: 1 1 auto;
+  }
+
+  .sidebar-header,
+  .chat-messages,
+  .input-area {
+    padding: 12px;
+  }
+
+  .marketplace-wordmark span {
+    font-size: 20px;
+    white-space: normal;
+  }
+
+  .install-btn {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .works-with,
+  .rating-meta,
+  .appbar-icons {
+    flex-wrap: wrap;
+  }
+}

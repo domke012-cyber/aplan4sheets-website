@@ -1,0 +1,191 @@
+@import url('./formatted-ux-v3.css');
+
+/* v4: keep financial rows compact and add accessible dimension rearranging.
+   The v3 auto-fit rule wrapped every long commentary cell, which made the
+   entire table row tall even while that column was horizontally off-screen.
+   Full commentary remains available in the existing hover title. */
+:is(#fxOutputTable, #fxCompareTable) { height:auto; }
+:is(#fxOutputTable, #fxCompareTable) tbody tr { height:24px; }
+:is(#fxOutputTable, #fxCompareTable) tbody :is(th, td) {
+  height:24px;
+  padding:3px 7px;
+  line-height:16px;
+  vertical-align:middle;
+  white-space:nowrap;
+}
+:is(#fxOutputTable, #fxCompareTable) tbody .fx-row-label,
+:is(#fxOutputTable, #fxCompareTable) tbody tr.fx-section-heading > .fx-row-label {
+  padding:3px 8px;
+}
+:is(#fxOutputTable, #fxCompareTable) tbody td.fx-comment {
+  width:260px;
+  min-width:260px;
+  max-width:300px;
+  white-space:nowrap;
+  line-height:16px;
+}
+:is(#fxOutputTable, #fxCompareTable) .fx-comment-text {
+  display:block;
+  width:260px;
+  max-height:16px;
+  line-height:16px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+:is(#fxOutputTable, #fxCompareTable) .fx-cell-button { line-height:16px; }
+/* Auto-fit uses comfortable 24px single-line rows; disabling it retains a
+   denser 21px Sheet row. Neither setting reintroduces wrapped commentary. */
+#fxOutputTable:not(.fx-auto-fit) tbody tr,
+#fxOutputTable:not(.fx-auto-fit) tbody :is(th, td) { height:21px; }
+#fxOutputTable:not(.fx-auto-fit) tbody :is(th, td),
+#fxOutputTable:not(.fx-auto-fit) tbody tr.fx-section-heading > .fx-row-label {
+  padding-top:2px;
+  padding-bottom:2px;
+}
+#fxOutputTable :is(.fx-sheet-blank, .fx-sheet-metadata) > :is(th, td) {
+  height:24px;
+  padding-top:3px;
+  padding-bottom:3px;
+  line-height:16px;
+}
+/* Financial header wrapping is intentional; do not compact its two-line labels. */
+:is(#fxOutputTable, #fxCompareTable) .fx-financial-header > th:not(.fx-row-number) {
+  height:44px;
+  padding-top:7px;
+  padding-bottom:7px;
+  line-height:14px;
+  white-space:normal;
+}
+
+/* Chips remain normal selection buttons. Their adjacent move button exposes
+   a keyboard/touch alternative to dragging; no absolute overlay is needed. */
+.fx-chip-list {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  align-content:flex-start;
+  gap:6px;
+  min-width:0;
+  min-height:34px;
+}
+.fx-chip-list.is-empty::after {
+  content:'Drop a dimension here';
+  padding:7px 4px;
+  color:#8491a3;
+  font-size:11px;
+  font-style:italic;
+}
+.fx-layout-note {
+  margin:0 2px 10px;
+  color:#68788e;
+  font-size:10px;
+  line-height:1.5;
+}
+.fx-reset-layout {
+  margin:0 3px 9px;
+  padding:5px 8px;
+  border:1px solid #c7d2e2;
+  border-radius:6px;
+  background:#fff;
+  color:#45668e;
+  font-size:10px;
+  cursor:pointer;
+}
+.fx-reset-layout:hover:not(:disabled) { background:#edf4ff; }
+.fx-reset-layout:disabled { opacity:.45; cursor:default; }
+.fx-chip-wrap {
+  display:inline-flex;
+  align-items:stretch;
+  gap:3px;
+  max-width:100%;
+  min-width:0;
+  vertical-align:middle;
+  border-radius:14px;
+}
+.fx-chip-wrap[draggable='true'] { cursor:grab; }
+.fx-chip-wrap[draggable='true']:active { cursor:grabbing; }
+.fx-chip-wrap > .fx-dim {
+  flex:1 1 auto;
+  min-width:0;
+  margin:0;
+  border-radius:14px 6px 6px 14px;
+}
+.fx-chip-move {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 28px;
+  width:28px;
+  min-height:30px;
+  padding:3px;
+  border:1px solid #b9cef0;
+  border-radius:6px 14px 14px 6px;
+  background:#f0f5fe;
+  color:#3567a8;
+  font:600 12px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  cursor:pointer;
+}
+.fx-chip-move:hover, .fx-chip-move[aria-expanded='true'] {
+  background:#e1edff;
+  border-color:#007aff;
+  color:#0059ba;
+}
+.fx-chip-move:focus-visible, .fx-chip-move-menu :is(button, select):focus-visible,
+.fx-reset-layout:focus-visible {
+  outline:2px solid #007aff;
+  outline-offset:2px;
+}
+.fx-chip-list > .fx-dim { margin:0; }
+.fx-chip-wrap.is-dragging { opacity:.4; }
+[data-axis-zone] { transition:border-color .12s, background-color .12s; }
+[data-axis-zone].is-drag-over {
+  border-color:#007aff;
+  border-style:solid;
+  background:#eef5ff;
+  outline:2px solid rgb(0 122 255 / 16%);
+  outline-offset:1px;
+}
+.fx-chip-move-menu {
+  position:static;
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:0 0 10px;
+  padding:9px;
+  border:1px solid #c7d8f3;
+  border-radius:9px;
+  background:#f5f8ff;
+  color:#36506e;
+  font-size:11px;
+  line-height:1.4;
+}
+.fx-chip-move-menu[hidden] { display:none; }
+.fx-chip-move-menu > strong { flex:1 0 100%; font-size:11px; font-weight:600; }
+.fx-chip-move-menu > label { font-size:11px; color:#596b82; }
+.fx-chip-move-menu :is(button, select) {
+  min-height:28px;
+  min-width:0;
+  margin:0;
+  padding:4px 7px;
+  border:1px solid #c3cede;
+  border-radius:6px;
+  background:#fff;
+  color:#355b8a;
+  font:500 11px/1.35 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+.fx-chip-move-menu select { flex:1 1 84px; }
+.fx-chip-move-menu button { cursor:pointer; }
+.fx-chip-move-menu button:hover:not(:disabled) { background:#eaf1ff; border-color:#8eaed9; }
+.fx-chip-move-menu button:disabled { opacity:.45; cursor:default; }
+
+@media (max-width:760px) {
+  .fx-chip-list { gap:5px; }
+  .fx-chip-wrap > .fx-dim { font-size:11px; padding:5px 8px; gap:5px; }
+  .fx-chip-move { flex-basis:32px; width:32px; min-height:32px; }
+  .fx-chip-move-menu :is(button, select) { min-height:32px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  [data-axis-zone] { transition:none; }
+}

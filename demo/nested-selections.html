@@ -17,7 +17,9 @@
     @media(max-width:900px){.workspace{grid-template-columns:1fr}.choices{grid-template-columns:repeat(2,minmax(0,1fr));max-height:230px}.browser-frame{padding:14px}.intro h1{font-size:22px}}
     @media(max-width:500px){.choices{grid-template-columns:1fr}.site-nav{padding:12px}.site-nav a{font-size:12px}}
   </style>
-  <link rel="stylesheet" href="../assets/demo-responsive.css">
+  <link rel="stylesheet" href="../assets/demo-responsive-v2.css">
+<link rel="stylesheet" href="../assets/demo-realism-v3.css">
+<script src="../assets/demo-realism-v3.js" defer></script>
   <script src="../assets/demo-narration.js"></script><script src="../assets/demo-player.js"></script>
 </head>
 <body>
@@ -27,21 +29,36 @@
   <main class="browser-frame">
     <div class="intro"><h1>A different selection under each year</h1><p>Illustrative layout using sample data. Try the checkboxes, or play the narrated walkthrough. This page does not connect to Anaplan.</p></div>
     <div class="workspace">
-      <section class="preview"><h2>Data preview</h2><div class="grid-scroll"><div id="dimensions"></div><table id="previewTable" aria-label="Nested column preview"></table></div><div class="summary" id="layoutSummary"></div></section>
-      <section class="selection-panel"><h2>Show / Hide combinations</h2><div class="selection-body"><p>Each checkbox controls one exact occurrence—not every item with the same label.</p><label for="depth">Nested dimensions</label><select id="depth"><option value="2">Time → Line Items</option><option value="3">Region → Time → Line Items</option></select><div class="choices" id="choices"></div><label class="merge-option"><input type="checkbox" id="merge"> Merge adjacent repeated outer headers</label><button class="choice-button" id="apply">Apply selections to this preview</button></div></section>
+      <section class="preview"><h2>Data preview</h2><div class="grid-scroll"><div id="dimensions"></div><table id="previewTable" aria-label="Nested column preview"></table></div><div class="summary" id="layoutSummary"></div><p class="summary">USD millions. FY26 YoY = FY26 Forecast − FY25 Actual; FY27 YoY = FY27 Budget − FY26 Forecast. YoY % divides by that prior-year baseline. North America and Europe sum to the total.</p></section>
+      <section class="selection-panel"><h2>Show / Hide combinations</h2><div class="selection-body"><p>Each checkbox controls one exact occurrence—not every item with the same label. Changes update this preview immediately and stop the tour; Restart returns to the guided example.</p><label for="depth">Nested dimensions</label><select id="depth"><option value="2">Time → Line Items</option><option value="3">Region → Time → Line Items</option></select><div class="choices" id="choices"></div><label class="merge-option"><input type="checkbox" id="merge"> Merge adjacent repeated outer headers</label><p id="interactionStatus" role="status"></p></div></section>
     </div>
   </main>
   <audio src="audio/v2/nested-selections-1.mp3" preload="metadata"></audio><audio src="audio/v2/nested-selections-2.mp3" preload="metadata"></audio><audio src="audio/v2/nested-selections-3.mp3" preload="metadata"></audio><audio src="audio/v2/nested-selections-4.mp3" preload="metadata"></audio>
   <script>
     const measures=['Forecast','Budget','YoY','YoY %'], years=['FY26','FY27'];
-    let selected, depth=2;
+    let selected, depth=2, exploring=false, demoPlayer;
+    const nestedSource={Revenue:{priorActual:90,FY26:{Forecast:100,Budget:102},FY27:{Forecast:116,Budget:120}},'Operating profit':{priorActual:15,FY26:{Forecast:18,Budget:19},FY27:{Forecast:22,Budget:24}}};
+    function buildNestedFinancials(source=nestedSource){
+      return Object.fromEntries(Object.entries(source).map(([name,record])=>[name,Object.fromEntries(years.map(year=>{
+        const prior=year==='FY26'?record.priorActual:record.FY26.Forecast;
+        const compared=year==='FY26'?record.FY26.Forecast:record.FY27.Budget;
+        return[year,[record[year].Forecast,record[year].Budget,compared-prior,prior===0?null:(compared-prior)/prior*100]];
+      }))]));
+    }
+    window.NestedFinancials={source:nestedSource,build:buildNestedFinancials};
+    function manual(){
+      exploring=true;
+      demoPlayer.pause();demoPlayer.cancel();
+      const play=document.getElementById('playBtn');play.disabled=true;play.textContent='Restart to replay';
+      document.getElementById('interactionStatus').textContent='Exploring your selections. The tour is stopped; use Restart to reset the example.';
+    }
     const key=t=>JSON.stringify(t);
     const tuples=()=> (depth===3?['North America','Europe']:['']).flatMap(region=>years.flatMap(year=>measures.map(measure=>[region,year,measure])));
     function renderChoices(){
       document.getElementById('choices').replaceChildren();
       for(const tuple of tuples()){
         const label=document.createElement('label'), input=document.createElement('input');input.type='checkbox';input.checked=selected.has(key(tuple));
-        input.addEventListener('change',()=>{input.checked?selected.add(key(tuple)):selected.delete(key(tuple));renderTable()});
+        input.addEventListener('change',()=>{manual();input.checked?selected.add(key(tuple)):selected.delete(key(tuple));renderTable()});
         label.append(input,document.createTextNode(tuple.filter(Boolean).join(' › ')));document.getElementById('choices').append(label);
       }
     }
@@ -51,18 +68,20 @@
       let head='<thead><tr><th scope="col" rowspan="'+depth+'">Metric</th>';
       const levels=depth===3?[0,1,2]:[1,2];
       levels.forEach((level,i)=>{if(i)head+='<tr>';for(let c=0;c<columns.length;){let span=1;if(merge&&i===0)while(c+span<columns.length&&columns[c][level]===columns[c+span][level])span++;head+='<th scope="'+(span>1?'colgroup':'col')+'" colspan="'+span+'">'+columns[c][level]+'</th>';c+=span;}head+='</tr>'});
-      const data={Revenue:{FY26:[100,102,2,2],FY27:[116,120,20,20]},'Operating profit':{FY26:[18,19,1,5.6],FY27:[22,24,6,33.3]}};
-      let body='<tbody>';for(const [name,values]of Object.entries(data)){body+='<tr><th scope="row">'+name+'</th>';for(const [region,year,measure]of columns){const n=values[year][measures.indexOf(measure)]*(region==='Europe'&&measure!=='YoY %'?.4:1);body+='<td>'+(measure==='YoY %'?n.toFixed(1)+'%':'$'+n.toFixed(1)+'M')+'</td>';}body+='</tr>'}
+      const data=buildNestedFinancials();
+      let body='<tbody>';for(const [name,values]of Object.entries(data)){body+='<tr><th scope="row">'+name+'</th>';for(const [region,year,measure]of columns){const value=values[year][measures.indexOf(measure)],share=region==='North America'?.6:region==='Europe'?.4:1,n=value===null?null:value*(measure==='YoY %'?1:share);body+='<td>'+(n===null?'—':measure==='YoY %'?n.toFixed(1)+'%':'$'+n.toFixed(1)+'M')+'</td>';}body+='</tr>'}
       document.getElementById('previewTable').innerHTML=head+'</thead>'+body+'</tbody>';
       document.getElementById('layoutSummary').textContent=columns.length+' of '+tuples().length+' combinations shown · '+(merge?'Adjacent outer headers merged':'Repeated outer headers');
     }
-    function reset(){depth=2;document.getElementById('depth').value='2';document.getElementById('merge').checked=false;selected=new Set(tuples().map(key));renderChoices();renderTable()}
+    function reset(){exploring=false;document.getElementById('playBtn').disabled=false;document.getElementById('interactionStatus').textContent='';depth=2;document.getElementById('depth').value='2';document.getElementById('merge').checked=false;selected=new Set(tuples().map(key));renderChoices();renderTable()}
     function chooseReport(){selected=new Set(tuples().filter(([,year,m])=>year==='FY26'?m==='Forecast':['Budget','YoY','YoY %'].includes(m)).map(key));renderChoices();renderTable()}
-    document.getElementById('depth').addEventListener('change',e=>{depth=Number(e.target.value);selected=new Set(tuples().map(key));renderChoices();renderTable()});
-    document.getElementById('merge').addEventListener('change',renderTable);
-    document.getElementById('apply').addEventListener('click',renderTable);
+    document.getElementById('depth').addEventListener('change',e=>{manual();depth=Number(e.target.value);selected=new Set(tuples().map(key));renderChoices();renderTable()});
+    document.getElementById('merge').addEventListener('change',()=>{manual();renderTable()});
     const scenes=[{name:'Preview all combinations',duration:7000},{name:'Choose exact occurrences',duration:9000},{name:'Add a third dimension',duration:10000},{name:'Merge and review',duration:9000}];
-    const demoPlayer=new DemoPlayer({scenes,reset,actions:[()=>{},chooseReport,()=>{depth=3;document.getElementById('depth').value='3';chooseReport()},()=>{document.getElementById('merge').checked=true;renderTable()}]});demoPlayer.mount();
+    demoPlayer=new DemoPlayer({scenes,reset,actions:[()=>{},chooseReport,()=>{depth=3;document.getElementById('depth').value='3';chooseReport()},()=>{document.getElementById('merge').checked=true;renderTable()}]});
+    const guidedPlay=demoPlayer.play.bind(demoPlayer);
+    demoPlayer.play=()=>{if(!exploring)guidedPlay()};
+    demoPlayer.mount();
   </script>
 </body>
 </html>
