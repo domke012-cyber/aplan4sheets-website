@@ -5,17 +5,20 @@
   <title>From Anaplan UX to a formatted Sheet — aPlan4Sheets</title>
   <meta name="description" content="Explore the connector's real sidebar, UX page directory, persistent hierarchy selector and formatted Sheets export in an interactive demo with fictional data.">
   <link rel="canonical" href="https://aplan4sheets.com/demo/formatted-ux.html">
-  <link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../assets/formatted-ux-v4.css">
+  <link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../assets/formatted-ux-v6.css">
   <script defer src="../assets/budget-review-data-v2.js"></script>
   <script defer src="../assets/formatted-ux-data-v2.js"></script>
-  <script defer src="../assets/formatted-ux-v4.js"></script>
+  <script defer src="../assets/formatted-ux-narration-v1.js"></script>
+  <script defer src="../assets/formatted-ux-voice-v1.js"></script>
+  <script defer src="../assets/formatted-ux-v6.js"></script>
 </head>
 <body class="fx-demo">
   <header class="fx-topbar"><a class="fx-brand" href="/">a4 <span>aPlan4Sheets</span></a><nav aria-label="Website"><a href="../demos.html">All demos</a><a href="budget-review.html">Budget reporting demo ↗</a></nav></header>
   <section class="fx-intro"><div><p class="fx-eyebrow">FORMATTED UX PAGES · INTERACTIVE WALKTHROUGH</p><h1>The connector, as your team uses it.</h1><p>Browse your UX. Shape the hierarchy. Bring a formatted report into Sheets.</p></div><span class="fx-badge">Fictional data · no sign-in</span></section>
   <main class="fx-shell">
     <div class="fx-tour"><nav class="fx-steps" aria-label="Workflow"><button data-step="0" aria-current="step"><span>1</span> Open the connector</button><button data-step="1"><span>2</span> Browse UX Pages</button><button data-step="2"><span>3</span> Configure Pivot</button><button data-step="3"><span>4</span> Review in Sheets</button></nav><button id="fxRestart" class="fx-btn quiet">↻ Restart</button></div>
-    <div class="fx-caption"><p id="fxCaption">Start with Browse UX Pages in the connector sidebar.</p><div><button id="fxPrev" class="fx-btn quiet">← Back</button><button id="fxNext" class="fx-btn primary">Browse UX Pages →</button></div></div>
+    <div class="fx-caption" id="fxGuideBar"><div class="fx-guide-copy"><span class="fx-guide-label" id="fxGuideLabel">Start here · Step 1 of 4</span><p id="fxCaption" role="status" aria-live="polite">Open the sample UX directory to begin your walkthrough.</p></div><div class="fx-guide-actions"><button id="fxPrev" class="fx-btn quiet">← Back</button><button id="fxNext" class="fx-btn primary">Start walkthrough →</button><button id="fxMotionToggle" class="fx-motion-toggle" hidden>Pause animation</button></div></div>
+    <div class="fx-voice-tools" role="group" aria-label="Narration controls"><button type="button" data-voice-toggle aria-label="Voice guidance" aria-pressed="true">Voice on</button><button type="button" data-voice-replay disabled>Replay</button><small data-voice-status>AI narration · starts when you begin</small><details hidden><summary>Transcript</summary><p data-voice-transcript></p></details></div>
     <p class="fx-disclosure">Interactive simulation based on the connector UI. Names, model references and values are fictional. No sign-in, live data or file changes. <button id="fxExpand" class="fx-grid-expand" aria-pressed="false">Expand report area</button></p>
 
     <div class="fx-workspace" id="fxWorkbook">
@@ -58,11 +61,13 @@
     <p id="fxStatus" class="fx-status" role="status" aria-live="polite">Ready to browse the sample UX page.</p>
     <div id="fxParity" class="fx-parity" hidden></div>
     <details class="fx-compare" id="fxComparison" hidden><summary>Compare with the source UX formatting reference</summary><p id="fxCompareContext" class="fx-muted"></p><div class="fx-grid-scroll" tabindex="0" aria-label="Scrollable source comparison"><table id="fxCompareTable" class="fx-data-table" aria-label="Source formatting reference for exported selection"></table></div><p class="fx-muted">This separate comparison illustrates the source formatting with fictional values. The connector's discovery thumbnail shows structure, not financial data.</p></details>
-    <details class="fx-about"><summary>What is real about this walkthrough?</summary><p>The sidebar, UX directory, structural grid preview and two-pane Pivot configuration follow the real connector workflow. Select items directly in the left pane; changes immediately update the dimension chips on the right. Shared Time and Executive Owner filters control both modules.</p><p>This fictional model has an illustrative expense hierarchy to demonstrate level selection. Its dimensions and item counts are not an exact copy of the reference model's flat line-item subset. The exported financial grid follows the supplied UX styling reference. All numbers, names and commentary are fictional. No customer screenshot or private data is embedded. Refresh rereads this local fixture; this self-paced walkthrough has no audio.</p><a href="mailto:ryan.domke@aplan4sheets.com?subject=Formatted%20UX%20Pages%20live%20demo">Request a live demonstration with your model →</a></details>
+    <details class="fx-about"><summary>What is real about this walkthrough?</summary><p>The sidebar, UX directory, structural grid preview and two-pane Pivot configuration follow the real connector workflow. Select items directly in the left pane; changes immediately update the dimension chips on the right. Shared Time and Executive Owner filters control both modules.</p><p>This fictional model has an illustrative expense hierarchy to demonstrate level selection. Its dimensions and item counts are not an exact copy of the reference model's flat line-item subset. The exported financial grid follows the supplied UX styling reference. All numbers, names and commentary are fictional. No customer screenshot or private data is embedded. Refresh rereads this local fixture; optional AI narration follows each step and can be turned off at any time.</p><a href="mailto:ryan.domke@aplan4sheets.com?subject=Formatted%20UX%20Pages%20live%20demo">Request a live demonstration with your model →</a></details>
   </main>
 
   <dialog id="fxUxDialog" class="fx-app-dialog fx-ux-dialog" aria-labelledby="fxUxDialogTitle">
     <header class="fx-dialog-head"><h2 id="fxUxDialogTitle">Formatted UX Pages</h2><button id="fxCloseUx" class="fx-dialog-close" aria-label="Close Formatted UX Pages">×</button></header>
+    <div class="fx-guide"><span class="fx-guide-label">Next · Step 2 of 4</span><p id="fxUxGuideText" role="status" aria-live="polite" aria-atomic="true"></p></div>
+    <div class="fx-voice-tools" role="group" aria-label="Narration controls"><button type="button" data-voice-toggle aria-label="Voice guidance" aria-pressed="true">Voice on</button><button type="button" data-voice-replay disabled>Replay</button><small data-voice-status>AI narration · starts when you begin</small><details hidden><summary>Transcript</summary><p data-voice-transcript></p></details></div>
     <div class="fx-dialog-body">
       <div class="fx-directory-toolbar"><label class="fx-sr-only" for="fxPageSearch">Search apps and pages</label><input id="fxPageSearch" type="search" placeholder="Search apps and pages…"><button id="fxRefreshDirectory">Refresh UX Structure</button></div>
       <section class="fx-directory" id="fxDirectory" aria-label="UX page directory">
@@ -84,6 +89,8 @@
 
   <dialog id="fxPivotDialog" class="fx-app-dialog fx-pivot-dialog" aria-labelledby="fxPivotDialogTitle">
     <header class="fx-dialog-head"><h2 id="fxPivotDialogTitle">Configure Pivot: Budget Review by Exec Owner [Combined Grid Section 1 of 2]</h2><button id="fxClosePivot" class="fx-dialog-close" aria-label="Close Configure Pivot">×</button></header>
+    <div class="fx-guide"><span class="fx-guide-label" id="fxPivotGuideLabel">Next · Step 3 of 4</span><p id="fxPivotGuideText" role="status" aria-live="polite" aria-atomic="true"></p></div>
+    <div class="fx-voice-tools" role="group" aria-label="Narration controls"><button type="button" data-voice-toggle aria-label="Voice guidance" aria-pressed="true">Voice on</button><button type="button" data-voice-replay disabled>Replay</button><small data-voice-status>AI narration · starts when you begin</small><details hidden><summary>Transcript</summary><p data-voice-transcript></p></details></div>
     <div class="fx-dialog-body fx-pivot-body" id="fxConfig">
       <div class="fx-view-banner"><span>VIEW:</span><strong>Budget Review by Exec Owner</strong></div>
       <div class="fx-dimension-manager">
@@ -114,5 +121,6 @@
     </div>
     <footer class="fx-pivot-footer"><span id="fxCompletionStatus" role="status" aria-live="polite"></span><button id="fxCancelConfig" class="fx-btn">Cancel</button><button id="fxCreate" class="fx-btn primary">Create Pivot</button></footer>
   </dialog>
+  <audio id="fxNarrationAudio" preload="none" hidden></audio>
 </body>
 </html>

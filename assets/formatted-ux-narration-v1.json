@@ -1,0 +1,19 @@
+{
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-3%",
+  "clips": {
+    "app": "Begin by opening Northstar Planning. Its U X pages provide the source for your formatted report.",
+    "category": "Open Budget Owner Review to locate the report page.",
+    "discover": "Choose Discover modules. This identifies the grids and underlying modules on the page.",
+    "grid": "Select the Budget Review grid. It combines financial results with owner commentary.",
+    "export": "Choose Export selected grid to review the report's rows, columns, and shared filters.",
+    "rows": "Select the row dimension to explore the account hierarchy. You can also keep the default selections and create the pivot.",
+    "hierarchy": "Open Hierarchy Selectors to select a complete level. You can also choose individual accounts below.",
+    "create": "Review your selections, then choose Create Pivot. Time and Executive Owner apply to both module regions.",
+    "done": "Your sample report is ready. Select Done to review the formatted sheet.",
+    "complete": "The report preserves source formatting, hierarchy totals, and shared filters. Use Repivot to adjust selections, or Refresh to reload the sample.",
+    "search": "No page matches this search. Clear or change the search text to continue.",
+    "selection": "Select at least one row and one line item before creating your report.",
+    "name": "Enter a valid sheet name, then choose Create Pivot again. The message on screen identifies the required correction."
+  }
+}

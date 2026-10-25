@@ -37,7 +37,7 @@ test('Self-paced Formatted UX uses dedicated versioned CSS with responsive inter
   const dom = new JSDOM(fs.readFileSync(path.join(root, 'demo/formatted-ux.html'), 'utf8'));
   try {
     const stylesheets = Array.from(dom.window.document.querySelectorAll('link[rel="stylesheet"]'), link => link.getAttribute('href'));
-    assert.deepEqual(stylesheets, ['../assets/formatted-ux-v4.css']);
+    assert.deepEqual(stylesheets, ['../assets/formatted-ux-v6.css']);
     for (const id of ['fxOutputTable', 'fxCompareTable']) {
       assert.ok(dom.window.document.getElementById(id).closest('.fx-grid-scroll'), `${id} has a scrollable wrapper`);
     }

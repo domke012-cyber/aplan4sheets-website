@@ -61,7 +61,8 @@ All amounts, owner names and commentary are fictional; no reference screenshot
 or customer financial values are included. Expense variance is actual less
 forecast/budget, with negative expense variance favorable. QTD uses the selected
 quarter and YTD sums through that quarter; ratios use aggregate denominators. The
-walkthrough has no audio and makes no network calls.
+original v4 walkthrough had no audio or remote data requests. The October 26
+v6 release below adds static, optional narration.
 
 The v4 interface keeps report rows compact, with full commentary available on
 hover. All dimension chips can be dragged within or between axes, with an
@@ -122,6 +123,28 @@ external analytics collector, cookies, visitor IDs, or credentials are used.
 This is instrumentation preparation, not a deployed analytics service.
 
 ## Release
+
+### Formatted UX guidance and narration — October 26, 2026
+
+The Formatted UX page uses v6 interface assets. Guidance
+stays inside the active dialog, names the next action, and marks one control
+with two gentle halo cycles followed by a static outline. Reduced-motion
+preferences disable the animation. Guidance follows directory navigation,
+selection, configuration, busy/Done states, and recovery from empty selections
+or unmatched searches; the completed report has no animated prompt. The v4/v5
+assets and HTML fixtures remain preserved. See the original review notes in
+`docs/formatted-ux-v5-review-20261025.md`.
+
+The v6 refinement gives the opening Start walkthrough button a larger target
+and a continuous, pausable halo. It adds optional Andrew neural narration,
+generated from the public script in `assets/formatted-ux-narration-v1.json`.
+Static MP3 clips live under `demo/audio/formatted-ux-v1/`; no visitor text is
+sent to a speech service. Playback starts only after a user action, switches
+with the active step, and includes mute, replay and transcripts. The generated
+manifest is `assets/formatted-ux-narration-v1.js`; the runtime is
+`assets/formatted-ux-voice-v1.js`. The release passes all 143 automated tests.
+The user approved publication on October 26 after reviewing the local preview.
+See `docs/formatted-ux-v6-review-20261025.md` for behavior and verification.
 
 Review the homepage, all demos, and the corrected privacy disclosures before
 merging. A push to `main` publishes to the existing GitHub Pages site. No
