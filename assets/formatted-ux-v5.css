@@ -1,0 +1,50 @@
+@import url('./formatted-ux-v4.css');
+
+/* v5: guidance stays inside the active window. Only the next action pulses. */
+.fx-guide {
+  flex-shrink:0;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  margin:0 20px 4px;
+  padding:12px 14px;
+  border:1px solid #c9d9f5;
+  border-radius:10px;
+  background:#f0f5ff;
+  color:#193962;
+}
+.fx-guide-label {
+  flex-shrink:0;
+  display:block;
+  color:#28549a;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.07em;
+  line-height:1.5;
+  text-transform:uppercase;
+}
+.fx-guide .fx-guide-label { padding-top:2px; }
+.fx-guide p { margin:0; font-size:13px; line-height:1.5; }
+.fx-caption > .fx-guide-copy { display:block; flex:1; min-width:0; }
+.fx-guide-copy .fx-guide-label { margin-bottom:4px; }
+.fx-next-action {
+  outline:2px solid #477bcb;
+  outline-offset:3px;
+  animation:fx-next-halo 2.4s ease-in-out 2;
+}
+/* Keep labels steady and readable; animate only a soft surrounding halo. */
+@keyframes fx-next-halo {
+  0%, 100% { box-shadow:0 0 0 4px rgb(71 123 203 / 8%); }
+  50% { box-shadow:0 0 0 9px rgb(71 123 203 / 19%); }
+}
+.fx-next-action:hover,
+.fx-next-action:focus-visible { animation:none; }
+.fx-next-action:focus-visible { outline:3px solid #163e7c; }
+.fx-directory-tree summary.fx-next-action { border-radius:7px; }
+@media (max-width:600px) {
+  .fx-guide { flex-direction:column; gap:3px; margin:0 10px 4px; padding:10px 12px; }
+  .fx-guide p { font-size:12px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .fx-next-action { animation:none; }
+}

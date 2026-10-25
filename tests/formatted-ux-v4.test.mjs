@@ -14,7 +14,7 @@ const canonical = {
 };
 
 function fixture() {
-  const dom = new JSDOM(fs.readFileSync(path.join(root, 'demo/formatted-ux.html'), 'utf8'), {
+  const dom = new JSDOM(fs.readFileSync(path.join(root, 'tests/fixtures/formatted-ux-v4.html'), 'utf8'), {
     url: 'https://example.test/demo/formatted-ux.html', runScripts: 'outside-only', pretendToBeVisual: true
   });
   const { window } = dom, errors = [], network = [];

@@ -1,0 +1,52 @@
+@import url('./formatted-ux-v5.css');
+
+/* v6: give the opening action a clear invitation and a persistent gentle pulse. */
+.fx-caption.is-start {
+  padding:22px 24px;
+  gap:24px;
+  background:linear-gradient(110deg,#edf4ff,#f8fbff);
+  border-bottom-color:#cfddf3;
+}
+.fx-caption.is-start .fx-guide-label { font-size:11px; color:#164ea3; margin-bottom:7px; }
+.fx-caption.is-start #fxCaption { font-size:15px; line-height:1.5; color:#233b5e; max-width:600px; }
+.fx-caption > .fx-guide-actions { align-items:center; flex-wrap:wrap; }
+.fx-caption.is-start #fxPrev { display:none; }
+#fxNext.fx-start-action {
+  min-height:54px;
+  min-width:220px;
+  padding:15px 25px;
+  border-radius:10px;
+  border-color:#124eb0;
+  background:#155bd0;
+  font-size:16px;
+  font-weight:700;
+  outline:none;
+  animation:fx-start-pulse 3s ease-in-out infinite;
+}
+@keyframes fx-start-pulse {
+  0%,100% { box-shadow:0 3px 9px rgb(21 91 208 / 18%),0 0 0 3px rgb(21 91 208 / 7%); }
+  50% { box-shadow:0 5px 18px rgb(21 91 208 / 27%),0 0 0 11px rgb(21 91 208 / 16%); }
+}
+#fxNext.fx-start-action:hover,
+#fxNext.fx-start-action:focus-visible { animation:none; box-shadow:0 0 0 5px rgb(21 91 208 / 18%); }
+#fxNext.fx-start-action:focus-visible { outline:3px solid #143d7e; outline-offset:4px; }
+.fx-motion-toggle { padding:5px 8px; border:0; background:transparent; color:#435d80; font-size:11px; text-decoration:underline; text-underline-offset:3px; }
+.fx-motion-paused .fx-next-action,
+.fx-motion-paused #fxNext.fx-start-action { animation:none; }
+.fx-voice-tools { display:flex; align-items:center; flex-wrap:wrap; gap:6px 10px; padding:8px 22px; background:#fff; border-bottom:1px solid #e7edf6; font-size:11px; }
+.fx-voice-tools button, .fx-voice-tools summary { font:inherit; cursor:pointer; }
+.fx-voice-tools button { padding:5px 9px; border:1px solid #d5dfef; border-radius:6px; color:#38516f; background:#fff; }
+.fx-voice-tools [data-voice-toggle][aria-pressed='true'] { color:#174d98; border-color:#bfd1ee; background:#eef4ff; }
+.fx-voice-tools small { color:#64748b; font-size:10px; }
+.fx-voice-tools details { flex-basis:100%; color:#435570; }
+.fx-voice-tools details p { padding-top:5px; line-height:1.5; }
+.fx-app-dialog > .fx-voice-tools { flex-shrink:0; padding:5px 22px 9px; }
+@media (max-width:760px) {
+  .fx-caption.is-start { flex-direction:column; align-items:stretch; padding:20px; gap:18px; }
+  .fx-caption.is-start > .fx-guide-actions { flex-direction:column; align-items:stretch; gap:10px; }
+  #fxNext.fx-start-action { width:100%; min-width:0; }
+}
+@media (prefers-reduced-motion:reduce) {
+  #fxNext.fx-start-action { animation:none; box-shadow:0 0 0 4px rgb(21 91 208 / 12%); }
+  .fx-motion-toggle { display:none; }
+}
