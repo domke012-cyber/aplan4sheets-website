@@ -17,6 +17,7 @@ function fixture(name){
   for(const script of window.document.querySelectorAll('script')){
     window.eval(script.src?fs.readFileSync(path.resolve(root,'demo',script.getAttribute('src')),'utf8'):script.textContent+(script.textContent.includes('demoPlayer.mount()')?'\nwindow.testPlayer=demoPlayer;':''));
   }
+  window.document.querySelector('.demo-controls [data-tour-auto]:not(:checked)')?.click();
   return{
     window,document:window.document,clock,errors,player:window.testPlayer,
     async until(condition){for(let i=0;i<240;i++){if(condition())return;await clock.tickAsync(250);}assert.fail('Expected walkthrough state was not reached');},
@@ -195,7 +196,7 @@ test('Pivot guided preview prevents fake edits while scripted selections and pla
     for(const id of ['sidebarContent','pivotContent']){
       const preview=d.document.getElementById(id);
       assert.equal(preview.tagName,'FIELDSET');assert.equal(preview.disabled,true);
-      assert.match(d.document.getElementById(preview.getAttribute('aria-describedby')).textContent,/Guided preview.*read-only.*Play \/ Restart/);
+      assert.match(d.document.getElementById(preview.getAttribute('aria-describedby')).textContent,/Guided preview.*read-only.*Start walkthrough \/ Next step \/ Restart/);
       for(const control of preview.querySelectorAll('input,button,select'))assert.equal(control.matches(':disabled'),true);
     }
     const checkbox=d.document.querySelector('#li0 input'),before=checkbox.checked;
@@ -221,7 +222,7 @@ test('Multi-module guided preview keeps module and item choices read-only throug
     await d.until(()=>d.document.querySelectorAll('#compatList .compat-module').length===7);
     const picker=d.document.getElementById('pickerContent');
     assert.equal(picker.tagName,'FIELDSET');assert.equal(picker.disabled,true);
-    assert.match(d.document.getElementById(picker.getAttribute('aria-describedby')).textContent,/Guided preview.*read-only.*Play \/ Restart/);
+    assert.match(d.document.getElementById(picker.getAttribute('aria-describedby')).textContent,/Guided preview.*read-only.*Start walkthrough \/ Next step \/ Restart/);
     assert.equal(d.document.getElementById('addModuleBtn').matches(':disabled'),true);
     await d.until(()=>d.document.querySelectorAll('#secLineItems input').length===5);
     const checkbox=d.document.querySelector('#sli3 input'),before=checkbox.checked;
@@ -230,7 +231,7 @@ test('Multi-module guided preview keeps module and item choices read-only throug
     assert.equal(d.document.querySelector('#sli3 input').checked,true,'The guided selection still runs');
     assert.equal(d.document.getElementById('execBtn').matches(':disabled'),true);
     assert.match(d.document.getElementById('gridTable').textContent,/Ending HC Δ/);
-    assert.match(d.document.getElementById('multiModulePreviewNote').textContent,/Guided preview.*read-only.*Play \/ Restart/);
+    assert.match(d.document.getElementById('multiModulePreviewNote').textContent,/Guided preview.*read-only.*Start walkthrough \/ Next step \/ Restart/);
     assert.equal(d.document.getElementById('playBtn').matches(':disabled'),false);
     d.player.restart();await d.clock.tickAsync(300000);assert.equal(d.player.finished,true);
     assert.equal(d.document.getElementById('sidebarContent').disabled,true);

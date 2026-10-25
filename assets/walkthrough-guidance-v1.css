@@ -1,0 +1,45 @@
+/* Shared cues for the controls that actually advance the walkthrough. */
+.demo-controls { position:relative; z-index:10001; flex-wrap:wrap; gap:10px; padding:12px 20px; background:#f5f8ff; }
+.demo-controls [hidden], .walkthrough-dialog-controls [hidden] { display:none!important; }
+.demo-controls [data-tour-play], .demo-controls [data-tour-next],
+.walkthrough-dialog-controls [data-tour-play], .walkthrough-dialog-controls [data-tour-next] {
+  min-height:44px; padding:11px 20px; border:1px solid #124eb0; border-radius:9px;
+  background:#155bd0; color:#fff; font-size:14px; font-weight:700;
+}
+.walkthrough-next-action { outline:2px solid #4a83dc; outline-offset:3px; animation:walkthrough-pulse 3s ease-in-out infinite!important; }
+@keyframes walkthrough-pulse {
+  0%,100% { box-shadow:0 2px 8px rgb(21 91 208 / 16%),0 0 0 3px rgb(21 91 208 / 7%); }
+  50% { box-shadow:0 4px 16px rgb(21 91 208 / 23%),0 0 0 9px rgb(21 91 208 / 15%); }
+}
+.walkthrough-next-action:hover, .walkthrough-next-action:focus-visible,
+.walkthrough-motion-paused .walkthrough-next-action { animation:none!important; }
+.walkthrough-next-action:focus-visible { outline:3px solid #143d7e; outline-offset:4px; }
+.walkthrough-next-action:disabled { animation:none!important; outline:none; box-shadow:none; }
+/* The OAuth wizard controls are a read-only simulation, not the next action. */
+.btn-wizard-primary.pulse, .pulse:disabled, .pulse[aria-disabled='true'] { animation:none!important; }
+.walkthrough-auto { display:inline-flex; align-items:center; gap:6px; padding:0; margin:0; border:0; color:#435570; font-size:11px; white-space:nowrap; }
+.walkthrough-auto input { accent-color:#155bd0; margin:0; width:15px; height:15px; }
+.demo-controls [data-tour-motion], .walkthrough-dialog-controls [data-tour-motion] {
+  border:0; padding:5px; background:transparent; color:#506684; font-size:10px;
+  font-weight:400; text-decoration:underline; text-underline-offset:3px;
+}
+.demo-controls [data-tour-replay] { font-size:11px; }
+.demo-controls .demo-status { flex-basis:100%; text-align:center; }
+.walkthrough-dialog-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; flex-shrink:0; padding:12px 20px; background:#f5f8ff; border-bottom:1px solid #dbe4f1; }
+.walkthrough-dialog-controls button { font:inherit; font-size:11px; cursor:pointer; }
+.walkthrough-step-label, .walkthrough-step-note { flex-basis:100%; margin:0; color:#435570; font-size:11px; line-height:1.5; }
+.walkthrough-step-label { font-weight:650; }
+.budget-demo .walkthrough-action-note { padding:10px 14px; margin:0; color:#24466f; background:#edf4ff; border-bottom:1px solid #d8e4f6; font-size:12px; line-height:1.5; }
+.budget-demo .walkthrough-action-note:empty { display:none; }
+.walkthrough-exploring .walkthrough-dialog-controls { display:none!important; }
+.embed-mode .walkthrough-dialog-controls { display:none!important; }
+@media(max-width:640px) {
+  .demo-controls { padding:10px; gap:8px; }
+  .demo-controls [data-tour-play], .demo-controls [data-tour-next] { min-height:46px; padding:10px 16px; }
+  .walkthrough-dialog-controls { padding:9px 12px; gap:7px; }
+  .walkthrough-dialog-controls .walkthrough-step-note { max-height:58px; overflow:auto; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .walkthrough-next-action { animation:none!important; box-shadow:0 0 0 4px rgb(21 91 208 / 12%); }
+  [data-tour-motion] { display:none!important; }
+}

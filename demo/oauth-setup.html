@@ -199,7 +199,7 @@ fieldset.sidebar-inner{border:0;margin:0;min-width:0;min-height:0}
 <link rel="stylesheet" href="../assets/demo-realism-v3.css">
 <script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
-<script src="../assets/demo-player.js"></script>
+<script src="../assets/demo-player-v2.js"></script>
 
 <script>
 (function(){
@@ -217,6 +217,7 @@ fieldset.sidebar-inner{border:0;margin:0;min-width:0;min-height:0}
   // Embedded narration is disabled by the shared player.
 })();
 </script>
+<link rel="stylesheet" href="../assets/walkthrough-guidance-v1.css">
 </head>
 <body>
 
@@ -278,19 +279,19 @@ fieldset.sidebar-inner{border:0;margin:0;min-width:0;min-height:0}
       </div>
     </div>
     <div class="sidebar-area" id="sidebar">
-      <p id="oauthPreviewNote" class="oauth-preview-note">Guided, read-only setup preview. Play advances the example; no credentials are collected, copied, validated or saved, and no account or model connection is created.</p>
+      <p id="oauthPreviewNote" class="oauth-preview-note">Guided, read-only setup preview. Start walkthrough and Next step advance the example; no credentials are collected, copied, validated or saved, and no account or model connection is created.</p>
       <fieldset class="sidebar-inner connector-ui" id="sidebarContent" disabled aria-describedby="oauthPreviewNote"></fieldset>
     </div>
   </div>
 </div>
 
-<audio src="audio/v2/oauth-setup-1.mp3" preload="metadata"></audio>
-<audio src="audio/v2/oauth-setup-2.mp3" preload="metadata"></audio>
-<audio src="audio/v2/oauth-setup-3.mp3" preload="metadata"></audio>
-<audio src="audio/v2/oauth-setup-4.mp3" preload="metadata"></audio>
-<audio src="audio/v2/oauth-setup-5.mp3" preload="metadata"></audio>
-<audio src="audio/v2/oauth-setup-6.mp3" preload="metadata"></audio>
-<audio src="audio/v2/oauth-setup-7.mp3" preload="metadata"></audio>
+<audio src="audio/v4/oauth-setup-1.mp3" preload="metadata"></audio>
+<audio src="audio/v4/oauth-setup-2.mp3" preload="metadata"></audio>
+<audio src="audio/v4/oauth-setup-3.mp3" preload="metadata"></audio>
+<audio src="audio/v4/oauth-setup-4.mp3" preload="metadata"></audio>
+<audio src="audio/v4/oauth-setup-5.mp3" preload="metadata"></audio>
+<audio src="audio/v4/oauth-setup-6.mp3" preload="metadata"></audio>
+<audio src="audio/v4/oauth-setup-7.mp3" preload="metadata"></audio>
 <script>
 const SCENES=[
   {name:'Opening Extensions Menu',duration:6000},

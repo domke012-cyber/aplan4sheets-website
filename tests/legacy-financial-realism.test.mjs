@@ -16,6 +16,7 @@ function fixture(file){
   window.HTMLMediaElement.prototype.play=function(){this._timer=window.setTimeout(()=>this.dispatchEvent(new window.Event('ended')),500);return Promise.resolve();};
   window.HTMLMediaElement.prototype.pause=function(){window.clearTimeout(this._timer);};
   for(const script of window.document.querySelectorAll('script'))window.eval(script.src?fs.readFileSync(path.resolve(root,'demo',script.getAttribute('src')),'utf8'):script.textContent+(script.textContent.includes('demoPlayer.mount()')?'\nwindow.testPlayer=demoPlayer;':''));
+  window.document.querySelector('.demo-controls [data-tour-auto]:not(:checked)')?.click();
   return{window,clock,errors,player:window.testPlayer,close(){clock.uninstall();window.close();}};
 }
 

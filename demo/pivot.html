@@ -155,7 +155,7 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
 <link rel="stylesheet" href="../assets/demo-realism-v3.css">
 <script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
-<script src="../assets/demo-player.js"></script>
+<script src="../assets/demo-player-v2.js"></script>
 
 <script>
 (function(){
@@ -176,6 +176,7 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
   // Embedded narration is disabled by the shared player.
 })();
 </script>
+<link rel="stylesheet" href="../assets/walkthrough-guidance-v1.css">
 </head>
 <body>
 
@@ -202,7 +203,7 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
       <div class="sheet-tabs" id="sheetTabs"><div class="sheet-tab active">Sheet1</div></div>
     </div>
     <div class="sidebar-area visible" id="sidebar">
-      <p class="guided-preview-note" id="pivotPreviewNote">Guided preview — controls are read-only. Use Play / Restart above to follow the sample workflow.</p>
+      <p class="guided-preview-note" id="pivotPreviewNote">Guided preview — controls are read-only. Use Start walkthrough / Next step / Restart above to follow the sample workflow.</p>
       <fieldset class="sidebar-inner connector-ui guided-preview" id="sidebarContent" disabled aria-label="Pivot sidebar preview" aria-describedby="pivotPreviewNote"></fieldset>
     </div>
   </div>
@@ -210,18 +211,18 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
 
 <div class="pivot-overlay" id="pivotOverlay">
   <div class="pivot-modal">
-    <p class="guided-preview-note" id="pivotDialogPreviewNote">Guided preview — selections are read-only. Use Play / Restart above; no report is created in a live workbook.</p>
+    <p class="guided-preview-note" id="pivotDialogPreviewNote">Guided preview — selections are read-only. Use Start walkthrough / Next step / Restart above; no report is created in a live workbook.</p>
     <fieldset class="pivot-modal-content guided-preview" id="pivotContent" disabled aria-label="Pivot configuration preview" aria-describedby="pivotDialogPreviewNote"></fieldset>
   </div>
 </div>
 
-<audio id="audio-1" src="audio/v2/pivot-1.mp3" preload="metadata"></audio>
-<audio id="audio-2" src="audio/v2/pivot-2.mp3" preload="metadata"></audio>
-<audio id="audio-3" src="audio/v2/pivot-3.mp3" preload="metadata"></audio>
-<audio id="audio-4" src="audio/v2/pivot-4.mp3" preload="metadata"></audio>
-<audio id="audio-5" src="audio/v2/pivot-5.mp3" preload="metadata"></audio>
-<audio id="audio-6" src="audio/v2/pivot-6.mp3" preload="metadata"></audio>
-<audio id="audio-7" src="audio/v2/pivot-7.mp3" preload="metadata"></audio>
+<audio id="audio-1" src="audio/v4/pivot-1.mp3" preload="metadata"></audio>
+<audio id="audio-2" src="audio/v4/pivot-2.mp3" preload="metadata"></audio>
+<audio id="audio-3" src="audio/v4/pivot-3.mp3" preload="metadata"></audio>
+<audio id="audio-4" src="audio/v4/pivot-4.mp3" preload="metadata"></audio>
+<audio id="audio-5" src="audio/v4/pivot-5.mp3" preload="metadata"></audio>
+<audio id="audio-6" src="audio/v4/pivot-6.mp3" preload="metadata"></audio>
+<audio id="audio-7" src="audio/v4/pivot-7.mp3" preload="metadata"></audio>
 <script>
 const pivotPnlSource={
   saas:[11760000,12930000,13640000,14420000],services:[1380000,1480000,1560000,1630000],
