@@ -46,13 +46,14 @@ img{max-width:100%;display:block}
 <link rel="stylesheet" href="../assets/demo-responsive-v2.css">
 <link rel="stylesheet" href="../assets/demo-realism-v3.css">
 <script src="../assets/demo-realism-v3.js" defer></script>
-<script src="../assets/demo-narration.js"></script><script src="../assets/demo-player.js"></script>
+<script src="../assets/demo-narration.js"></script><script src="../assets/demo-player-v2.js"></script>
 <script>
 (function(){
   const params=new URLSearchParams(location.search);
   if(params.has('embed'))document.addEventListener('DOMContentLoaded',()=>document.body.classList.add('embed-mode'));
 })();
 </script>
+<link rel="stylesheet" href="../assets/walkthrough-guidance-v1.css">
 </head>
 <body>
 <nav class="site-nav">
@@ -131,7 +132,7 @@ img{max-width:100%;display:block}
     </div>
   </div>
 </div>
-<audio src="audio/v2/marketplace-install-1.mp3" preload="metadata"></audio><audio src="audio/v2/marketplace-install-2.mp3" preload="metadata"></audio><audio src="audio/v2/marketplace-install-3.mp3" preload="metadata"></audio>
+<audio src="audio/v4/marketplace-install-1.mp3" preload="metadata"></audio><audio src="audio/v4/marketplace-install-2.mp3" preload="metadata"></audio><audio src="audio/v4/marketplace-install-3.mp3" preload="metadata"></audio>
 <script>
 const scenes=[
   {label:'Find the connector listing',duration:2200,run:()=>setState(0)},

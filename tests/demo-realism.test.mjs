@@ -28,7 +28,7 @@ function createDemo(name) {
   window.DemoPlayer = SceneHarness;
   for (const script of window.document.querySelectorAll('script')) {
     const src = script.getAttribute('src');
-    if (src?.endsWith('demo-player.js')) continue;
+    if (/demo-player(?:-v2)?\.js$/.test(src || '')) continue;
     if (src) window.eval(fs.readFileSync(path.resolve(root, 'demo', src), 'utf8'));
     else window.eval(script.textContent);
   }

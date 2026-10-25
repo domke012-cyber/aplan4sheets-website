@@ -7,9 +7,8 @@ import { JSDOM } from 'jsdom';
 import FakeTimers from '@sinonjs/fake-timers';
 const root=path.resolve(import.meta.dirname,'..');
 const demos=fs.readdirSync(path.join(root,'demo')).filter(name=>name.endsWith('.html'));
-// Formatted UX is intentionally self-paced and has no audio/player. Its full
-// interaction lifecycle is covered by formatted-ux-v1.test.mjs; keep it in the
-// all-demo asset validation below.
+// Formatted UX uses its own step-driven narration controller. Keep it in
+// the all-demo asset validation; its lifecycle has separate regression coverage.
 const autoplayDemos=demos.filter(name=>name!=='formatted-ux.html');
 function createDemo(file,query='') {
   const html=fs.readFileSync(path.join(root,'demo',file),'utf8');
@@ -30,6 +29,7 @@ function createDemo(file,query='') {
     if(script.src){window.eval(fs.readFileSync(path.resolve(root,'demo',script.getAttribute('src')),'utf8'));}
     else window.eval(script.textContent+(script.textContent.includes('demoPlayer.mount()')?'\nwindow.testPlayer=demoPlayer;':''));
   }
+  window.document.querySelector('.demo-controls [data-tour-auto]:not(:checked)')?.click();
   return {window,clock,errors,player:window.testPlayer,close(){clock.uninstall();window.close()}};
 }
 for(const file of autoplayDemos){
@@ -39,7 +39,7 @@ for(const file of autoplayDemos){
       assert.ok(player,'Shared player mounted');
       await clock.tickAsync(0);
       assert.equal(player.running,false);
-      assert.equal(window.document.getElementById('playBtn').textContent,'▶ Play');
+      assert.equal(window.document.getElementById('playBtn').textContent,'Start walkthrough →');
       window.document.getElementById('playBtn').click();
       await clock.tickAsync(1200);
       window.document.getElementById('playBtn').click();

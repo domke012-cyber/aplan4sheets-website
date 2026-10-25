@@ -259,7 +259,7 @@ test('Focus mode changes only the viewport presentation and retains financial st
   }finally{f.close();}
 });
 
-test('V2 is wired without modifying the preserved V1 source checkpoint',()=>{
+test('V3 guidance is wired with V2 data and preserved V1 source checkpoints',()=>{
   const expected={
     'budget-review-data-v1.js':'6a5987f7d3b47f5a82674b54969a938cf2d5eec4fef0598eb686ec8bc53a8da7',
     'budget-review-v1.js':'4180a03b683a452e84ffa97b42d1bffcd8bcf01dece00b9b3e4da8d39e0fd6f6',
@@ -267,5 +267,5 @@ test('V2 is wired without modifying the preserved V1 source checkpoint',()=>{
   };
   for(const [name,sha]of Object.entries(expected))assert.equal(createHash('sha256').update(fs.readFileSync(path.join(root,'assets',name))).digest('hex'),sha,name+' remains unchanged');
   const html=fs.readFileSync(path.join(root,'demo/budget-review.html'),'utf8');
-  for(const asset of ['budget-review-data-v2.js','budget-review-v2.js','budget-review-v2.css'])assert.ok(html.includes('../assets/'+asset));
+  for(const asset of ['budget-review-data-v2.js','budget-review-v3.js','budget-review-v2.css'])assert.ok(html.includes('../assets/'+asset));
 });

@@ -140,7 +140,7 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
 <link rel="stylesheet" href="../assets/demo-realism-v3.css">
 <script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
-<script src="../assets/demo-player.js"></script>
+<script src="../assets/demo-player-v2.js"></script>
 
 <script>
 (function(){
@@ -161,6 +161,7 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
   // Embedded narration is disabled by the shared player.
 })();
 </script>
+<link rel="stylesheet" href="../assets/walkthrough-guidance-v1.css">
 </head>
 <body>
 
@@ -222,17 +223,17 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
       </div>
     </div>
     <div class="sidebar-area" id="sidebar">
-      <p class="guided-preview-note" id="setupPreviewNote">Guided preview — controls are read-only. Use Play / Restart above. No sign-in or model configuration is performed.</p>
+      <p class="guided-preview-note" id="setupPreviewNote">Guided preview — controls are read-only. Use Start walkthrough / Next step / Restart above. No sign-in or model configuration is performed.</p>
       <fieldset class="sidebar-inner connector-ui guided-preview" id="sidebarContent" disabled aria-label="Connection setup preview" aria-describedby="setupPreviewNote"></fieldset>
     </div>
   </div>
 </div>
 
-<audio id="audio-1" src="audio/v2/setup-1.mp3" preload="metadata"></audio>
-<audio id="audio-2" src="audio/v2/setup-2.mp3" preload="metadata"></audio>
-<audio id="audio-3" src="audio/v2/setup-3.mp3" preload="metadata"></audio>
-<audio id="audio-4" src="audio/v2/setup-4.mp3" preload="metadata"></audio>
-<audio id="audio-5" src="audio/v2/setup-5.mp3" preload="metadata"></audio>
+<audio id="audio-1" src="audio/v4/setup-1.mp3" preload="metadata"></audio>
+<audio id="audio-2" src="audio/v4/setup-2.mp3" preload="metadata"></audio>
+<audio id="audio-3" src="audio/v4/setup-3.mp3" preload="metadata"></audio>
+<audio id="audio-4" src="audio/v4/setup-4.mp3" preload="metadata"></audio>
+<audio id="audio-5" src="audio/v4/setup-5.mp3" preload="metadata"></audio>
 <script>
 const SCENES=[
   {name:'Extensions Menu',duration:8000},

@@ -17,8 +17,10 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 Open `http://127.0.0.1:8765/` for the site and `/demo.html` for the walkthrough
 hub. These are illustrative HTML simulations, not recordings of live customer
-models. Standalone demos start paused; Play starts narration. Embedded previews
-remain silent. Reduced-motion users are not automatically started.
+models. Standalone demos start paused; Start walkthrough begins narration,
+and Next step advances after the current step finishes. Auto-play steps enables
+continuous playback. Embedded previews remain silent and automatic, except
+when reduced motion is preferred.
 
 Walkthroughs use `assets/demo-responsive-v2.css`, which preserves the original
 layout checkpoint and fixes nested card/grid/dialog clipping in standalone and
@@ -91,10 +93,17 @@ The build pins Tailwind 4.3.3 and overrides its file watcher to the patched
 
 ## Narration
 
-Scripts and visible scene notes live in `assets/demo-narration.js`. New audio
-lives in `demo/audio/v2/`; original tracks remain unchanged. The v2 narration
-uses the Microsoft Aria neural voice through `edge-tts`, with two-pass ffmpeg
-loudness normalization. Keep provider usage terms in mind when regenerating.
+Scripts and visible scene notes live in `assets/demo-narration.js` and the
+budget-review data fixture. Current narration uses the same Microsoft
+`en-US-AndrewMultilingualNeural` voice and -3% rate as Formatted UX. The 63 clips
+for the other 11 walkthroughs live in `demo/audio/v4/`, with their public script
+and voice settings in `assets/walkthrough-narration-v4.json`. Generate with
+`tooling/build-walkthrough-narration-v4.py` in a Python environment containing
+`edge-tts` and `imageio-ffmpeg`; existing files are preserved. Visitors download
+static same-site MP3s, with no browser TTS or visitor text sent to a speech service.
+
+Earlier Aria recordings in `demo/audio/v2/` and `v3/` remain available as
+historical versions. All audio uses two-pass FFmpeg loudness normalization.
 
 `tooling/build-narration.mjs` generates a fresh set using explicit executable
 paths. It does not need or store API credentials. Existing output is not
@@ -123,6 +132,20 @@ external analytics collector, cookies, visitor IDs, or credentials are used.
 This is instrumentation preparation, not a deployed analytics service.
 
 ## Release
+
+### Consistent walkthrough voice and guidance — October 26, 2026
+
+All eleven other walkthroughs now use `assets/demo-player-v2.js` and
+`assets/walkthrough-guidance-v1.css`. Start walkthrough, Resume step, and Next
+step get a gentle, pausable halo when they are the next action. Each standalone
+step waits for its scene and narration to finish, then pauses for Next step.
+Auto-play steps retains continuous playback; embedded previews remain silent.
+Replay voice, mute, scene notes, and reduced-motion support are included.
+Budget Review uses `assets/budget-review-v3.js` to keep controls in the active
+dialog and guide manual exploration through export, configuration, execution,
+chart, slide, and refresh. Old player/runtime versions and audio are preserved.
+See `docs/walkthrough-guidance-v2-release-20261026.md` for verification.
+
 
 ### Formatted UX guidance and narration — October 26, 2026
 

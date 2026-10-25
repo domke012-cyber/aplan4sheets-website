@@ -29,6 +29,7 @@ function fixture() {
       ? fs.readFileSync(path.resolve(root,'demo',script.getAttribute('src')),'utf8')
       : script.textContent+(script.textContent.includes('demoPlayer.mount()')?'\nwindow.testPlayer=demoPlayer;':''));
   }
+  window.document.querySelector('.demo-controls [data-tour-auto]:not(:checked)')?.click();
   return {window,clock,errors,player:window.testPlayer,api:window.AIRealismDemo,
     el:id=>window.document.getElementById(id),
     close(){clock.uninstall();window.close();}};

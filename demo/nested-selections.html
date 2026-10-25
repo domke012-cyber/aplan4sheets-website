@@ -20,7 +20,8 @@
   <link rel="stylesheet" href="../assets/demo-responsive-v2.css">
 <link rel="stylesheet" href="../assets/demo-realism-v3.css">
 <script src="../assets/demo-realism-v3.js" defer></script>
-  <script src="../assets/demo-narration.js"></script><script src="../assets/demo-player.js"></script>
+  <script src="../assets/demo-narration.js"></script><script src="../assets/demo-player-v2.js"></script>
+<link rel="stylesheet" href="../assets/walkthrough-guidance-v1.css">
 </head>
 <body>
   <nav class="site-nav"><strong>aPlan4Sheets</strong><a href="/demos.html">← All demos</a></nav>
@@ -33,7 +34,7 @@
       <section class="selection-panel"><h2>Show / Hide combinations</h2><div class="selection-body"><p>Each checkbox controls one exact occurrence—not every item with the same label. Changes update this preview immediately and stop the tour; Restart returns to the guided example.</p><label for="depth">Nested dimensions</label><select id="depth"><option value="2">Time → Line Items</option><option value="3">Region → Time → Line Items</option></select><div class="choices" id="choices"></div><label class="merge-option"><input type="checkbox" id="merge"> Merge adjacent repeated outer headers</label><p id="interactionStatus" role="status"></p></div></section>
     </div>
   </main>
-  <audio src="audio/v2/nested-selections-1.mp3" preload="metadata"></audio><audio src="audio/v2/nested-selections-2.mp3" preload="metadata"></audio><audio src="audio/v2/nested-selections-3.mp3" preload="metadata"></audio><audio src="audio/v2/nested-selections-4.mp3" preload="metadata"></audio>
+  <audio src="audio/v4/nested-selections-1.mp3" preload="metadata"></audio><audio src="audio/v4/nested-selections-2.mp3" preload="metadata"></audio><audio src="audio/v4/nested-selections-3.mp3" preload="metadata"></audio><audio src="audio/v4/nested-selections-4.mp3" preload="metadata"></audio>
   <script>
     const measures=['Forecast','Budget','YoY','YoY %'], years=['FY26','FY27'];
     let selected, depth=2, exploring=false, demoPlayer;
