@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create an Anaplan OAuth Client — aPlan4Sheets Demo</title>
+  <meta name="description" content="A narrated, step-by-step demo of creating an OAuth client in Anaplan Administration, choosing the grant type, adding the callback URL, and continuing in aPlan4Sheets.">
+  <link rel="canonical" href="https://aplan4sheets.com/demo/oauth-client.html">
+  <meta property="og:title" content="Create an Anaplan OAuth Client — aPlan4Sheets">
+  <meta property="og:description" content="Follow eight guided steps from Anaplan Administration to connector setup, with optional narration.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://aplan4sheets.com/demo/oauth-client.html">
+  <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg">
+  <link rel="stylesheet" href="../assets/demo-responsive-v2.css">
+  <link rel="stylesheet" href="../assets/walkthrough-guidance-v1.css">
+  <link rel="stylesheet" href="../assets/oauth-client-v1.css">
+  <script src="../assets/demo-player-v2.js"></script>
+  <script src="../assets/oauth-client-data-v1.js"></script>
+  <script src="../assets/oauth-client-v1.js"></script>
+</head>
+<body class="oauth-client-demo">
+  <nav class="site-nav" aria-label="Website"><a class="brand" href="/">aPlan4Sheets</a><a href="/demos.html">← All walkthroughs</a></nav>
+  <div class="demo-controls" aria-label="Walkthrough controls">
+    <button id="playBtn" type="button">Start walkthrough →</button>
+    <button id="restartBtn" type="button">↻ Restart</button>
+    <button id="muteBtn" type="button">Voice on</button>
+    <span class="step-indicator">Step <span id="stepNum">1</span> / 8 · <span id="stepLabel">Before you begin</span></span>
+  </div>
+  <div class="global-progress" aria-hidden="true"><div id="globalProgress"></div></div>
+  <main class="browser-frame">
+    <header class="intro">
+      <div><p class="eyebrow">ADMINISTRATOR SETUP · ABOUT 2 MINUTES</p><h1>Create your Anaplan OAuth client</h1><p class="intro-copy">From Anaplan Administration to aPlan4Sheets, one step at a time.</p></div>
+      <span class="preview-label">Illustrative demo · sample values</span>
+    </header>
+    <div class="lesson-layout">
+      <section class="lesson" aria-labelledby="lessonHeading">
+        <p class="eyebrow" id="lessonCount">STEP 01 OF 08</p>
+        <h2 id="lessonHeading">Have the right access and callback URL ready.</h2>
+        <p id="lessonTip"></p>
+        <ol class="step-rail" id="stepRail" aria-label="Walkthrough stages"></ol>
+        <div class="lesson-footnote">Use Start walkthrough, then Next step. The Anaplan screens are read-only illustrations.</div>
+      </section>
+      <section class="admin-window" aria-label="Illustrative Anaplan Administration screen">
+        <div class="window-bar"><span class="window-dots" aria-hidden="true">● ● ●</span><span id="windowLocation">aPlan4Sheets · OAuth setup</span><span class="mock-badge">DEMO</span></div>
+        <div id="adminStage"></div>
+      </section>
+    </div>
+    <footer class="demo-footer">
+      <p>This simulation creates no client and collects no credentials. Anaplan screen details may vary.</p>
+      <p>Based on Anaplan’s <a href="https://help.anaplan.com/create-an-oauth-20-client-0984a799-a667-4e70-8759-a134be32f48c" target="_blank" rel="noopener">client creation guide</a> and <a href="https://help.anaplan.com/manage-oauth-20-clients-c24f32f2-b314-45be-9cdd-f537d1504bb0" target="_blank" rel="noopener">client management guide</a>. <a href="/guide.html#step-3">Connection guide →</a></p>
+    </footer>
+    <noscript><p>Enable JavaScript to run this walkthrough, or follow the linked Anaplan client creation guide.</p></noscript>
+  </main>
+  <audio src="audio/oauth-client-v1/oauth-client-1.mp3" preload="metadata"></audio>
+  <audio src="audio/oauth-client-v1/oauth-client-2.mp3" preload="metadata"></audio>
+  <audio src="audio/oauth-client-v1/oauth-client-3.mp3" preload="metadata"></audio>
+  <audio src="audio/oauth-client-v1/oauth-client-4.mp3" preload="metadata"></audio>
+  <audio src="audio/oauth-client-v1/oauth-client-5.mp3" preload="metadata"></audio>
+  <audio src="audio/oauth-client-v1/oauth-client-6.mp3" preload="metadata"></audio>
+  <audio src="audio/oauth-client-v1/oauth-client-7.mp3" preload="metadata"></audio>
+  <audio src="audio/oauth-client-v1/oauth-client-8.mp3" preload="metadata"></audio>
+  <script>
+    const demoPlayer = OAuthClientDemo.create();
+    demoPlayer.mount();
+  </script>
+</body>
+</html>
