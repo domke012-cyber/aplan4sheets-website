@@ -5,12 +5,12 @@
   <script>document.documentElement.classList.add('js')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Getting Started — aPlan4Sheets</title>
-  <meta name="description" content="Step-by-step setup guide for aPlan4Sheets — the Anaplan connector for Google Sheets. Install, connect, and start pulling data in minutes.">
+  <meta name="description" content="Set up the aPlan4Sheets beta connector for Google Sheets. Review installation permissions, connect to Anaplan, configure a model, and create your first pivot.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://aplan4sheets.com/guide.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Getting Started — aPlan4Sheets Setup Guide">
-  <meta property="og:description" content="Step-by-step setup guide for aPlan4Sheets — the Anaplan connector for Google Sheets. Install, connect, and start pulling data in minutes.">
+  <meta property="og:description" content="Set up the aPlan4Sheets beta connector for Google Sheets. Review permissions, connect to Anaplan, and create your first pivot.">
   <meta property="og:url" content="https://aplan4sheets.com/guide.html">
   <meta property="og:site_name" content="aPlan4Sheets">
   <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
@@ -34,7 +34,6 @@
     "@type": "HowTo",
     "name": "How to set up aPlan4Sheets for Anaplan and Google Sheets",
     "description": "Install aPlan4Sheets from the Google Workspace Marketplace, connect to Anaplan, configure a model, and create a pivot in Google Sheets.",
-    "totalTime": "PT10M",
     "tool": [
       {"@type": "HowToTool", "name": "Google Sheets"},
       {"@type": "HowToTool", "name": "aPlan4Sheets"},
@@ -46,7 +45,8 @@
       {"@type": "HowToStep", "position": 3, "name": "Connect to Anaplan", "url": "https://aplan4sheets.com/guide.html#step-3", "text": "Authenticate with Anaplan using OAuth or basic authentication, depending on your workspace setup."},
       {"@type": "HowToStep", "position": 4, "name": "Configure Your Model", "url": "https://aplan4sheets.com/guide.html#step-4", "text": "Choose the tenant, workspace, model, modules, and views you want to work with in Sheets."},
       {"@type": "HowToStep", "position": 5, "name": "Create Your First Pivot", "url": "https://aplan4sheets.com/guide.html#step-5", "text": "Use the pivot interface to arrange Anaplan dimensions and write the result to Google Sheets."},
-      {"@type": "HowToStep", "position": 6, "name": "Schedule Refreshes", "url": "https://aplan4sheets.com/guide.html#step-6", "text": "Set an automatic refresh schedule so connected reports stay current."}
+      {"@type": "HowToStep", "position": 6, "name": "Export Anaplan Views", "url": "https://aplan4sheets.com/guide.html#step-6", "text": "Choose accessible Anaplan views and export them to Google Sheets."},
+      {"@type": "HowToStep", "position": 7, "name": "Refresh Your Data", "url": "https://aplan4sheets.com/guide.html#step-7", "text": "Refresh connected reports manually or configure a recurring schedule."}
     ]
   }
   </script>
@@ -271,16 +271,16 @@
           <div class="step-number">1</div>
           <div>
             <h2 class="text-2xl md:text-3xl font-bold text-navy">Install from Google Workspace Marketplace</h2>
-            <p class="mt-1 text-text-muted">Add aPlan4Sheets to your Google Sheets in one click.</p>
+            <p class="mt-1 text-text-muted">Review the listing and install the beta connector.</p>
           </div>
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-4">
-            aPlan4Sheets is a Google Sheets add-on available on the <strong>Google Workspace Marketplace</strong>. It installs directly into your Google Sheets — no desktop software, no downloads, no IT tickets.
+            aPlan4Sheets is a beta Google Sheets add-on available on the <strong>Google Workspace Marketplace</strong> under the name <strong>Anaplan Connector for Sheets™</strong>. No desktop client is required. Your Google Workspace administrator may need to approve installation or access to the requested permissions.
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
             <li>Visit the <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="text-sheets-green font-semibold hover:underline">aPlan4Sheets Marketplace listing</a></li>
-            <li>Click <strong>"Install"</strong> and grant the required permissions</li>
+            <li>Click <strong>"Install"</strong>, review the requested permissions, and follow your organization's approval process</li>
             <li>Open any Google Sheet — the add-on is now available</li>
           </ol>
           <div class="guide-demo-card mb-6">
@@ -548,9 +548,9 @@
             <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
               <h3 class="font-bold text-navy mb-2 flex items-center gap-2">
                 <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
-                "Unverified app" warning screen
+                Installation blocked or unexpected warning
               </h3>
-              <p class="text-sm text-text-muted leading-relaxed">When first authorizing the add-on, Google may show an "unverified app" warning. This is normal during the verification process. Click <strong>"Advanced"</strong> at the bottom left, then click <strong>"Go to Anaplan Connector for Sheets™ (unsafe)"</strong> to proceed. The app is safe — this screen appears for all new Workspace add-ons.</p>
+              <p class="text-sm text-text-muted leading-relaxed">If Google blocks installation or shows an unexpected verification warning, stop and confirm that you opened the Marketplace listing linked in this guide. Ask your Google Workspace administrator to review the app and permissions, or <a href="mailto:ryan.domke@aplan4sheets.com" class="text-sheets-green hover:underline">contact support</a> with the warning text. Do not bypass your organization's access controls.</p>
             </div>
 
             <!-- Issue 3 -->
