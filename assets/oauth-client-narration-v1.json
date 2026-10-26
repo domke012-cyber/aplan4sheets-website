@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-3%",
+  "clips": [
+    {
+      "file": "oauth-client-1.mp3",
+      "text": "A tenant security administrator creates this client. In the installed aPlan4Sheets OAuth setup wizard, copy the Redirect URI. You will use that exact address shortly. This walkthrough uses sample values only."
+    },
+    {
+      "file": "oauth-client-2.mp3",
+      "text": "In Anaplan, open the navigation menu at the top left and choose Administration. Then go to Security and OAuth Clients."
+    },
+    {
+      "file": "oauth-client-3.mp3",
+      "text": "If this is the first time your tenant opens OAuth Clients, choose Enable OAuth. If a client list is already visible, continue directly to New."
+    },
+    {
+      "file": "oauth-client-4.mp3",
+      "text": "Choose New to open the client form. Enter a name such as Aplan4Sheets. Keep the name alphanumeric so it meets Anaplan’s naming rules."
+    },
+    {
+      "file": "oauth-client-5.mp3",
+      "text": "Set Type to Authorization code grant. This matches the connector’s browser sign-in flow, where the user signs in to Anaplan and returns to the connector."
+    },
+    {
+      "file": "oauth-client-6.mp3",
+      "text": "Paste the Redirect URI from the installed connector into Allowed callback URLs. Check the complete address, then choose Create client. The address shown here is only a placeholder."
+    },
+    {
+      "file": "oauth-client-7.mp3",
+      "text": "The confirmation shows your Client ID and Client secret. Use Copy client secret and keep both values in your organization’s approved secure location. Then choose Done."
+    },
+    {
+      "file": "oauth-client-8.mp3",
+      "text": "The new client is enabled by default. Return to aPlan4Sheets and enter its Client ID and Client secret in the OAuth setup wizard. Continue with the linked walkthrough for validation and sign-in."
+    }
+  ]
+}

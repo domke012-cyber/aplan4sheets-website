@@ -133,6 +133,23 @@ This is instrumentation preparation, not a deployed analytics service.
 
 ## Release
 
+### Anaplan Administration OAuth client demo — October 26, 2026
+
+`/demo/oauth-client.html` adds eight narrated steps for a tenant security
+administrator: obtain the connector's Redirect URI, navigate to OAuth Clients,
+enable OAuth on first use, name the client, choose Authorization code grant,
+add the callback URL, retain the credentials, and continue in the existing
+connector setup demo. The gallery, walkthrough hub, guide, and OAuth setup
+page link to it.
+
+The demo uses the shared v2 player and v1 guidance, with new versioned
+`oauth-client-*-v1` assets and eight Andrew voice clips under
+`demo/audio/oauth-client-v1/`. Generate them with
+`tooling/build-oauth-client-narration-v1.py`. Its screens are illustrative;
+the callback uses the reserved `.invalid` domain and no credentials are
+collected or copied. See `docs/oauth-client-v1-review-20261026.md` for the
+source review and validation.
+
 ### Consistent walkthrough voice and guidance — October 26, 2026
 
 All eleven other walkthroughs now use `assets/demo-player-v2.js` and

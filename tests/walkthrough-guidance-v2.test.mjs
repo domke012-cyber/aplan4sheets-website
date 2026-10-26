@@ -107,7 +107,7 @@ test('All eleven walkthroughs use the approved Andrew voice and matching public 
   const expected = Object.entries(context.window.DemoNarration).flatMap(([slug, captions]) => captions.map((text, i) => ({ file: `${slug}-${i + 1}.mp3`, text })));
   expected.push(...context.window.BudgetReviewData.scenes.map((s, i) => ({ file: `budget-review-${i + 1}.mp3`, text: s.caption })));
   assert.deepEqual(spec.clips, JSON.parse(JSON.stringify(expected)));
-  for (const file of demos) {
+  for (const file of demos.filter(file => file !== 'oauth-client.html')) {
     const dom = new JSDOM(fs.readFileSync(path.join(root, 'demo', file), 'utf8'));
     assert.ok(dom.window.document.querySelector('script[src="../assets/demo-player-v2.js"]'));
     for (const audio of dom.window.document.querySelectorAll('audio')) {
