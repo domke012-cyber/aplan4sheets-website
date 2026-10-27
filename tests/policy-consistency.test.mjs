@@ -19,7 +19,7 @@ test('policy identity and canonical URLs identify aPlan4Sheets with the existing
       assert.equal(document.querySelector('link[rel="canonical"]').href, `https://aplan4sheets.com/${file}`);
       const identity = text(section(document, heading));
       assert.match(identity, /aPlan4Sheets \("the Add-on", also known as Anaplan Connector for Sheets™\)/);
-      assert.match(document.querySelector('main > p').textContent, /Last Updated: October 26, 2026/);
+      assert.match(document.querySelector('main > p').textContent, /Last Updated: October 27, 2026/);
       for (const link of document.querySelectorAll('a[href^="/"]')) {
         const target = link.getAttribute('href') === '/' ? 'index.html' : link.getAttribute('href').slice(1);
         assert.ok(fs.existsSync(path.join(root, target)), `${file}: ${target}`);

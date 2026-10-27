@@ -48,7 +48,7 @@
   </nav>
   <main class="pt-28 pb-20 max-w-4xl mx-auto px-6">
     <h1 class="text-3xl md:text-4xl font-bold text-navy mb-2">Privacy Policy</h1>
-    <p class="text-sm text-gray-500 mb-10">Last Updated: October 26, 2026</p>
+    <p class="text-sm text-gray-500 mb-10">Last Updated: October 27, 2026</p>
     <div class="prose prose-gray max-w-none space-y-8 text-gray-700 leading-relaxed">
 
       <section>
@@ -59,8 +59,8 @@
       <section>
         <h2 class="text-xl font-bold text-navy mb-3">Information We Access</h2>
         <ul class="list-disc pl-6 space-y-1">
-          <li><strong>Google Sheets™ Data:</strong> Only the spreadsheets where you explicitly install and use the add-on</li>
-          <li><strong>Anaplan Credentials:</strong> Your Anaplan authentication tokens (stored securely in Google's Properties Service)</li>
+          <li><strong>Google Sheets™ Data:</strong> Spreadsheet content and configuration used for the reports, refreshes, and workbook copies you request or schedule</li>
+          <li><strong>Anaplan Authentication:</strong> OAuth tokens and configured OAuth client information; if you choose Basic Auth, your Anaplan email and password are also retained to authenticate and renew sessions</li>
           <li><strong>User Email:</strong> Used for account identification, authentication, support, first-party product usage analysis, and enabled export notifications</li>
         </ul>
       </section>
@@ -69,8 +69,8 @@
         <h2 class="text-xl font-bold text-navy mb-3">Information We Store</h2>
         <ul class="list-disc pl-6 space-y-1">
           <li><strong>Configuration Data:</strong> Your Anaplan workspace/model selections, stored in Google Properties Service</li>
-          <li><strong>Schedule Settings:</strong> Export schedules you create, stored in Google Script Properties</li>
-          <li><strong>Authentication Tokens:</strong> Encrypted and stored in Google's secure Properties Service</li>
+          <li><strong>Schedule Settings:</strong> Workbook-specific schedule definitions are stored in Google Apps Script Document Properties. Execution metadata is also retained in user-specific Apps Script storage and the Google-hosted scheduling service.</li>
+          <li><strong>Authentication Records:</strong> Interactive authentication state is retained in Google Apps Script storage. Schedules can retain separate authentication records in workbook-specific Apps Script storage and the Google-hosted execution service.</li>
           <li><strong>Server Processing:</strong> Google-hosted services process Anaplan queries and write results to the selected Google Sheet</li>
           <li><strong>Operational Records:</strong> Account email/domain and usage metadata are retained in our Google Cloud project for support and product usage analysis. These are not third-party advertising records.</li>
         </ul>
@@ -82,7 +82,7 @@
         <ul class="list-disc pl-6 space-y-1 mt-2">
           <li>Authenticate with Anaplan on your behalf</li>
           <li>Execute data exports from Anaplan to Google Sheets™</li>
-          <li>Run scheduled exports at your specified times</li>
+          <li>Run the scheduled exports you enable; timing is approximate and depends on authentication and source availability</li>
           <li>Send notification emails about export status (only if enabled)</li>
           <li>Provide requested AI analysis and model exploration</li>
           <li>Diagnose service failures and understand first-party product usage</li>
@@ -98,10 +98,10 @@
       <section>
         <h2 class="text-xl font-bold text-navy mb-3">Data Security</h2>
         <ul class="list-disc pl-6 space-y-1">
-          <li>All data is transmitted over HTTPS</li>
-          <li>Authentication tokens are encrypted</li>
-          <li>We follow Google's security best practices</li>
-          <li>OAuth 2.0 is used for Anaplan authentication</li>
+          <li>Requests to Anaplan and the Google-hosted connector services use HTTPS</li>
+          <li>Authentication records are held in the Google-hosted storage described above</li>
+          <li>Anaplan access depends on your account's model and data permissions</li>
+          <li>The connector supports OAuth/SSO and Basic Auth, subject to your organization's configuration</li>
         </ul>
       </section>
 
@@ -110,7 +110,9 @@
         <ul class="list-disc pl-6 space-y-1">
           <li>Saved connection and schedule configurations are retained in Google Apps Script storage until removed through the relevant controls</li>
           <li>Authentication tokens expire according to Anaplan's policies</li>
-          <li>Logout clears authentication state; it does not delete server-side operational usage records</li>
+          <li>Logout clears the current sign-in method's interactive tokens or Basic Auth credentials. It does not remove saved OAuth client settings, schedules, separate schedule authentication records, or server-side operational usage records.</li>
+          <li>To stop scheduled refreshes, disable or delete each schedule and check the result. A successful schedule deletion stops its execution and removes its local schedule definition and schedule authentication record; this is not a promise to erase every server-side operational record.</li>
+          <li>Uninstalling or ending use is not an automatic deletion request for all retained authentication or configuration data. Contact us to request deletion of retained records.</li>
           <li>Legacy usage records and aggregate account profiles do not currently have automatic expiry. Uninstalling the add-on does not delete these records; contact us to request their deletion.</li>
         </ul>
       </section>
@@ -120,8 +122,8 @@
         <p>You can:</p>
         <ul class="list-disc pl-6 space-y-1 mt-2">
           <li>Remove the add-on at any time (Extensions → Add-ons → Manage add-ons)</li>
-          <li>Clear all stored credentials using the logout function</li>
-          <li>Delete scheduled exports through the add-on interface</li>
+          <li>Sign out of the current interactive authentication session using the logout function</li>
+          <li>Disable or delete scheduled exports through the add-on interface and check the confirmation</li>
           <li>Request data deletion by contacting us at <a href="mailto:ryan.domke@aplan4sheets.com" class="text-sheets-green hover:underline">ryan.domke@aplan4sheets.com</a></li>
         </ul>
       </section>

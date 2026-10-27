@@ -276,7 +276,7 @@
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-4">
-            aPlan4Sheets is a beta Google Sheets add-on available on the <strong>Google Workspace Marketplace</strong> under the name <strong>Anaplan Connector for Sheets™</strong>. No desktop client is required. Your Google Workspace administrator may need to approve installation or access to the requested permissions.
+            aPlan4Sheets is a beta Google Sheets add-on available through the <strong>Google Workspace Marketplace</strong> listing linked below. The listing or Extensions menu may still display the earlier name <strong>Anaplan Connector for Sheets™</strong> during the name update. No desktop client is required. Your Google Workspace administrator may need to approve installation or access to the requested permissions.
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
             <li>Visit the <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="text-sheets-green font-semibold hover:underline">aPlan4Sheets Marketplace listing</a></li>
@@ -311,8 +311,8 @@
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
             <li>Open any Google Sheet</li>
-            <li>Go to <strong>Extensions</strong> → <strong>Anaplan Connector for Sheets™</strong> → <strong>📊 Open Sidebar</strong></li>
-            <li>If needed, you can also access <strong>🔑 Login to Anaplan</strong> and <strong>🔧 Setup OAuth Credentials</strong> from the same menu</li>
+            <li>Go to <strong>Extensions</strong>, select the installed connector (which may appear as <strong>Anaplan Connector for Sheets™</strong>), and choose <strong>Open Sidebar</strong></li>
+            <li>Depending on your authorization state, the menu can also show <strong>Sign in to Anaplan</strong>, <strong>Set Up OAuth</strong>, or <strong>Set Up OAuth Credentials</strong></li>
             <li>The aPlan4Sheets sidebar will appear on the right side of your spreadsheet</li>
           </ol>
           <div class="guide-demo-card mb-6">
@@ -334,12 +334,12 @@
           <div class="step-number">3</div>
           <div>
             <h2 class="text-2xl md:text-3xl font-bold text-navy">Connect to Anaplan</h2>
-            <p class="mt-1 text-text-muted">Choose a Login Method, then follow the path that matches your account.</p>
+            <p class="mt-1 text-text-muted">Choose a Sign-in method, then follow the path that matches your account.</p>
           </div>
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-6">
-            The sidebar opens on a login-first screen with a <strong>Login Method</strong> selector. Start there, then use the branch below that matches your account setup.
+            The sidebar opens on a login-first screen with a <strong>Sign-in method</strong> selector. Start there, then use the branch below that matches your account setup.
           </p>
 
           <!-- Option A -->
@@ -349,11 +349,11 @@
               <h3 class="text-lg font-bold text-navy">Option A: OAuth/SSO</h3>
             </div>
             <p class="text-text-dark text-sm leading-relaxed mb-3">
-              This is the default <strong>Login Method</strong>. Most work accounts should use this path.
+              This is the default <strong>Sign-in method</strong>. Most work accounts should use this path.
             </p>
             <ol class="list-decimal list-inside space-y-2 text-sm text-text-dark">
-              <li>Leave <strong>Login Method</strong> set to <strong>OAuth/SSO</strong></li>
-              <li>Click <strong>"Login with Anaplan SSO"</strong></li>
+              <li>Leave <strong>Sign-in method</strong> set to <strong>OAuth/SSO</strong></li>
+              <li>Click <strong>"Sign in with Anaplan SSO"</strong></li>
               <li>A popup window will open so you can complete your organization's SSO login</li>
               <li>After successful authentication, return to the sidebar and continue setup</li>
             </ol>
@@ -382,7 +382,7 @@
           <div class="callout">
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-              <p class="text-sm text-text-dark"><strong>Security note:</strong> For the basic-auth path, credentials are encrypted and stored securely in Google infrastructure. OAuth/SSO continues to use Anaplan's official authentication flow.</p>
+              <p class="text-sm text-text-dark"><strong>Authentication storage:</strong> Basic Auth retains your Anaplan email and password in user-specific Google Apps Script storage. Schedules can retain separate authentication records. OAuth/SSO uses Anaplan's authentication flow. See the <a href="/privacy.html" class="text-sheets-green hover:underline">Privacy Policy</a> for storage and retention details.</p>
             </div>
           </div>
         </div>
@@ -403,9 +403,9 @@
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
             <li>Click the <strong>"Add Model"</strong> button in the sidebar</li>
-            <li>Select your <strong>Workspace</strong> from the dropdown — all workspaces you have access to will appear</li>
-            <li>Select the <strong>Model</strong> from the second dropdown</li>
-            <li>Click <strong>"Save"</strong> to add the model to your configuration</li>
+            <li>Select the <strong>Tenant</strong>, then choose an available <strong>Workspace</strong></li>
+            <li>Select the <strong>Model</strong> you are authorized to access</li>
+            <li>Click <strong>"Save Model"</strong> to add the model to your configuration</li>
           </ol>
           <div class="guide-demo-card mb-6">
             <iframe src="/demo/setup.html?embed=1&loop=1" title="Add model configuration demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
@@ -445,7 +445,7 @@
               </ul>
             </li>
             <li><strong>Select items</strong> for each page dimension to filter your data</li>
-            <li>Use <strong>"Repivot Current Sheet"</strong> later if you want to rerun the current pivot with updated settings</li>
+            <li>Use the sidebar's <strong>"Repivot"</strong> control later to reopen a saved pivot with updated settings</li>
           </ol>
           <div class="guide-demo-card mb-6">
             <iframe src="/demo/pivot.html?embed=1&loop=1" title="Pivot configuration demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
@@ -465,28 +465,29 @@
         <div class="flex items-start gap-5 mb-6">
           <div class="step-number">6</div>
           <div>
-            <h2 class="text-2xl md:text-3xl font-bold text-navy">Run Pre-Defined Exports and Filter Views</h2>
-            <p class="mt-1 text-text-muted">Use the current sidebar labels to pull exports or filter views into Sheets.</p>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Run Export Actions and Saved Views</h2>
+            <p class="mt-1 text-text-muted">Use the current sidebar labels to pull exports or saved views into Sheets.</p>
           </div>
         </div>
         <div class="ml-0 sm:ml-[68px]">
           <p class="text-text-dark leading-relaxed mb-4">
-            The sidebar has separate <strong>Pre-Defined Exports</strong> and <strong>Filter Views</strong> cards. Use the one that matches the object you want to run.
+            The sidebar has separate <strong>Export Actions</strong> and <strong>Saved Views</strong> cards. Use the one that matches the object you want to run.
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
-            <li>Open the <strong>"Pre-Defined Exports"</strong> card and use <strong>"Search exports..."</strong> if you need to filter the list</li>
-            <li>Select one or more exports, then click <strong>"Refresh Selected Exports"</strong></li>
-            <li>For saved views, switch to the <strong>"Filter Views"</strong> card</li>
+            <li>Open the <strong>"Export Actions"</strong> card and use <strong>"Search exports..."</strong> if you need to filter the list</li>
+            <li>Select one or more exports, then click <strong>"Run Selected Exports"</strong></li>
+            <li>For saved views, switch to the <strong>"Saved Views"</strong> card</li>
             <li>Select the view you want and click <strong>"Export View"</strong></li>
+            <li>Review the destination warning before choosing <strong>"Confirm exports"</strong> or <strong>"Confirm export"</strong>. Existing destination data and formulas can be replaced. Choose <strong>"Cancel"</strong> to leave the workbook unchanged.</li>
           </ol>
           <div class="guide-demo-card mb-6">
-            <iframe src="/demo/discovery.html?embed=1" title="Exports and filter views demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
-            <div class="guide-demo-caption">Example of browsing model content and running data pulls from the sidebar.</div>
+            <iframe src="/demo/discovery.html?embed=1" title="Exports and saved views demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption">Illustrative browsing workflow. Demo labels may differ from the current controls described above.</div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 callout-icon mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-              <p class="text-sm text-text-dark"><strong>Tip:</strong> If Pre-Defined Exports do not populate after adding more than one model, retry with a single configured model first. Filter Views and Pivot Views may be a better fallback while the multi-model export issue remains unresolved.</p>
+              <p class="text-sm text-text-dark"><strong>Tip:</strong> If Export Actions do not populate after adding more than one model, retry with a single configured model first. Saved Views and Pivot Views may be a better fallback while the multi-model export issue remains unresolved.</p>
             </div>
           </div>
         </div>
@@ -507,6 +508,7 @@
           </p>
           <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
             <li>Click <strong>"Refresh Sheets"</strong> in the sidebar</li>
+            <li>Select the saved reports to update, then click the dialog's <strong>"Refresh"</strong> button, which shows the number of selected configurations</li>
             <li>To automate updates, open <strong>"Scheduled Refreshes"</strong> and click <strong>"+ Add Schedule"</strong></li>
             <li>Choose the scope, such as <strong>"All Configured Sheets"</strong>, then click <strong>"Save Schedule"</strong></li>
             <li>Use <strong>"Email Notification Settings"</strong> if you want schedule-related email updates</li>

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-10-27",
+  "status": "local candidate; not published",
+  "websiteBase": {
+    "repository": "https://github.com/domke012-cyber/aplan4sheets-website",
+    "remoteMainCommit": "ee85475da1da4b18a8266acb8738d54ee15196cb",
+    "branch": "codex/policy-ui-readiness-20261027"
+  },
+  "scope": [
+    "Correct factual authentication storage and retention disclosures in privacy.html",
+    "Remove automatic credential-erasure promise and describe one-way retrieval in terms.html",
+    "Align guide.html labels with the reviewed connector and its explicit export confirmation",
+    "Preserve current-domain URLs, existing listing ID, policy identity alias, AI processing disclosure, terms effective date and illustrative demo assets"
+  ],
+  "evidence": [
+    {
+      "source": "immutable Apps Script version 487: auth.js",
+      "functions": ["storeBasicCredentials", "storeOAuthTokens", "logout", "clearBasicAuthCompletely", "clearOAuthTokens", "storeScheduleTokens", "syncCloudScheduleConnectionsForOwner", "deleteScheduleTokens"],
+      "observed": "Interactive Basic Auth stores email/password in UserProperties; OAuth stores tokens. Logout clears the current auth method but does not remove saved OAuth client settings or separately retained schedule credentials. Schedule credentials have distinct storage, synchronization and deletion paths."
+    },
+    {
+      "source": "immutable Apps Script version 487: schedule.js",
+      "functions": ["getScheduleProps", "getScheduleTriggerProps", "deleteSchedule", "purgeDeletedScheduleLocally"],
+      "observed": "Schedule definitions use DocumentProperties. Trigger/registry state is user-scoped. Successful deletion requires remote unregister confirmation before local schedule and schedule-token removal. This is not proof that every server-side operational record is erased."
+    },
+    {
+      "source": "immutable Apps Script version 487: ui.js and sidebar.html",
+      "functions": ["createDynamicMenu"],
+      "observed": "Current labels include Open Sidebar, Sign in to Anaplan, Set Up OAuth, Set Up OAuth Credentials, Sign-in method, Sign in with Anaplan SSO, Tenant, Workspace, Model, Save Model, Export Actions, Saved Views and Run Selected Exports. Repivot is available in the sidebar."
+    },
+    {
+      "source": "reviewed sidebar v254 / UI v89 release candidate",
+      "bundleSha256": "d7e0be3e6662feb68f2796ff55e75f995dcb58410c7d3d4af4b7f2b591f7cc97",
+      "sidebarSha256": "45ea3c311926f55b96e682734b059f52e69b1a79529e0347173835764d20ef76",
+      "uiSha256": "a380b825c1fc4c689d909add62fdc2d91260c2b5d6d68a01e292e939d5ced079",
+      "observed": "Explicit Cancel / Confirm export(s) panel precedes manual View and Actions exports. Guide publication must be coordinated with this release; this document does not attest that it is already the published production version."
+    }
+  ],
+  "limits": [
+    "No application, backend, schedule, credential, permission or Marketplace configuration changes are part of this website patch",
+    "No claim of application-level encryption strength, all-data erasure, legal compliance certification or completed live retention testing is made",
+    "Google-hosted backend retention was not exhaustively audited; copy avoids promising complete remote credential or operational-record erasure",
+    "Existing illustrative demo internals and narration are unchanged; guide notes that illustrated labels may differ"
+  ],
+  "verification": {
+    "focusedTest": "tests/policy-ui-readiness-v1.test.mjs",
+    "existingPolicyTest": "tests/policy-consistency.test.mjs",
+    "fullCommand": "npm test",
+    "fullResult": "PASS: 171 tests, 0 failures, 0 skipped",
+    "testDurationMs": 62154.56575,
+    "testOutputCaveat": "Existing illustrative demo tests emitted non-fatal scene diagnostics; the test runner completed successfully with no failed assertions.",
+    "visualReview": "Main-agent isolated cloud-browser rendering of these exact public HTML candidates passed: desktop1280x900 Privacy storage/retention and Terms termination sections; mobile390x844 Guide step6 export warning readable without horizontal overflow. Preview used current public assets via a base URL; no live website DOM was modified.",
+    "publication": "not performed"
+  },
+  "releaseConstraints": {
+    "source": "README.md Release section",
+    "workflow": "Review before merge; pushing main publishes the existing GitHub Pages website",
+    "forbiddenInPublicRepository": ["application secrets", "customer data", "private backend code"],
+    "notIncluded": ["Apps Script deployment", "App Engine deployment", "Marketplace submission"]
+  }
+}
