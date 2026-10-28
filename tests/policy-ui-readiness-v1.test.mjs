@@ -63,7 +63,7 @@ test('guide uses current menu, authentication, model and export labels with expl
     assert.match(exports, /Export Actions.*Run Selected Exports.*Saved Views.*Export View/);
     assert.match(exports, /Confirm exports.*Confirm export.*Cancel.*workbook unchanged/);
     assert.match(exports, /Existing destination data and formulas can be replaced/);
-    assert.match(exports, /Demo labels may differ/);
+    assert.match(d.querySelector('#step-6 iframe').getAttribute('src'), /^\/demo\/exports\.html\?embed=1/);
     assert.match(text(d.getElementById('step-7')), /Select the saved reports.*number of selected configurations/);
     assert.doesNotMatch(text(d.body), /Pre-Defined Exports|Filter Views|Refresh Selected Exports|Login with Anaplan SSO|credentials are encrypted and stored securely/);
     assert.equal(d.querySelectorAll('iframe').length, 7, 'illustrative demo embeds are preserved');

@@ -147,12 +147,27 @@
       }
     }
     .guide-demo-caption {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 1rem;
       padding: 0.875rem 1rem;
       font-size: 0.875rem;
       color: #6b7280;
       background: #f9fafb;
       border-top: 1px solid #e5e7eb;
     }
+    .guide-demo-caption > span { flex: 1 1 20rem; }
+    .guide-demo-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: #0b8043;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .guide-demo-link:focus-visible { outline: 3px solid #2563eb; outline-offset: 4px; border-radius: 4px; }
     .guide-connector {
       position: absolute;
       left: 23px;
@@ -285,7 +300,7 @@
           </ol>
           <div class="guide-demo-card mb-6">
             <iframe src="/demo/marketplace-install.html?embed=1&loop=1" title="aPlan4Sheets Marketplace install demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
-            <div class="guide-demo-caption">Focused walkthrough of the Google Workspace Marketplace listing, install click, and permission handoff before opening Sheets.</div>
+            <div class="guide-demo-caption"><span>Silent preview of the Marketplace listing, installation, and permission handoff before opening Sheets.</span><a class="guide-demo-link" href="/demo/marketplace-install.html" aria-label="Open narrated walkthrough: Install from Google Workspace Marketplace">Open narrated walkthrough →</a></div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
@@ -317,7 +332,7 @@
           </ol>
           <div class="guide-demo-card mb-6">
             <iframe src="/demo/setup.html?embed=1&loop=1" title="Open the aPlan4Sheets sidebar demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
-            <div class="guide-demo-caption">Shows the Extensions menu path and the sidebar opening inside Google Sheets.</div>
+            <div class="guide-demo-caption"><span>Silent preview of the Extensions menu path and the sidebar opening inside Google Sheets.</span><a class="guide-demo-link" href="/demo/setup.html" aria-label="Open narrated walkthrough: Open the sidebar and get connected">Open narrated walkthrough →</a></div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
@@ -362,7 +377,7 @@
           <div class="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
             <h3 class="text-lg font-bold text-navy mb-3">Need to create the OAuth client first?</h3>
             <p class="text-text-dark text-sm leading-relaxed mb-3">A tenant security administrator creates the client in Anaplan Administration. The walkthrough shows the grant type, callback URL, and credentials to keep for connector setup.</p>
-            <a href="/demo/oauth-client.html" class="text-sheets-green font-semibold text-sm">Watch: Create an Anaplan OAuth client →</a>
+            <a href="/demo/oauth-client.html" class="text-sheets-green font-semibold text-sm">Open narrated walkthrough: Create an Anaplan OAuth client →</a>
           </div>
 
           <!-- OAuth account eligibility -->
@@ -376,7 +391,7 @@
 
           <div class="guide-demo-card mb-6">
             <iframe src="/demo/oauth-setup.html?embed=1&loop=1" title="Anaplan login and OAuth setup demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
-            <div class="guide-demo-caption">Covers the login-first sidebar flow and OAuth setup sequence.</div>
+            <div class="guide-demo-caption"><span>Silent preview of OAuth credential setup, connection validation, and sign-in.</span><a class="guide-demo-link" href="/demo/oauth-setup.html" aria-label="Open narrated walkthrough: Connect with OAuth">Open narrated walkthrough →</a></div>
           </div>
 
           <div class="callout">
@@ -408,8 +423,8 @@
             <li>Click <strong>"Save Model"</strong> to add the model to your configuration</li>
           </ol>
           <div class="guide-demo-card mb-6">
-            <iframe src="/demo/setup.html?embed=1&loop=1" title="Add model configuration demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
-            <div class="guide-demo-caption">Demonstrates adding a workspace and model after authentication.</div>
+            <iframe src="/demo/setup.html?focus=model&embed=1&loop=1" title="Add model configuration demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption"><span>Silent preview of adding a workspace and model after authentication.</span><a class="guide-demo-link" href="/demo/setup.html?focus=model" aria-label="Open narrated walkthrough: Add your model">Open narrated walkthrough →</a></div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
@@ -445,11 +460,13 @@
               </ul>
             </li>
             <li><strong>Select items</strong> for each page dimension to filter your data</li>
+            <li>Click <strong>"Create Pivot"</strong> to retrieve the selected data and write the report into Google Sheets. Wait for the completion message.</li>
+            <li><strong>Review the resulting Sheet:</strong> check the page filters, row and column headers, and a few values against the source Anaplan view to confirm the report matches your selection.</li>
             <li>Use the sidebar's <strong>"Repivot"</strong> control later to reopen a saved pivot with updated settings</li>
           </ol>
           <div class="guide-demo-card mb-6">
             <iframe src="/demo/pivot.html?embed=1&loop=1" title="Pivot configuration demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
-            <div class="guide-demo-caption">Walkthrough of selecting a Pivot View and configuring the pivot layout.</div>
+            <div class="guide-demo-caption"><span>Silent preview of selecting a Pivot View, creating the pivot, and checking the resulting Sheet.</span><a class="guide-demo-link" href="/demo/pivot.html" aria-label="Open narrated walkthrough: Create your first pivot">Open narrated walkthrough →</a></div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
@@ -481,8 +498,8 @@
             <li>Review the destination warning before choosing <strong>"Confirm exports"</strong> or <strong>"Confirm export"</strong>. Existing destination data and formulas can be replaced. Choose <strong>"Cancel"</strong> to leave the workbook unchanged.</li>
           </ol>
           <div class="guide-demo-card mb-6">
-            <iframe src="/demo/discovery.html?embed=1" title="Exports and saved views demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
-            <div class="guide-demo-caption">Illustrative browsing workflow. Demo labels may differ from the current controls described above.</div>
+            <iframe src="/demo/exports.html?embed=1&loop=1" title="Export Actions and Saved Views demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption"><span>Silent preview of Export Actions and Saved Views, including the destination confirmation before writing data.</span><a class="guide-demo-link" href="/demo/exports.html" aria-label="Open narrated walkthrough: Run Export Actions and Saved Views">Open narrated walkthrough →</a></div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">
@@ -515,7 +532,7 @@
           </ol>
           <div class="guide-demo-card mb-6">
             <iframe src="/demo/schedule.html?embed=1&loop=1" title="Refresh and scheduled refresh demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
-            <div class="guide-demo-caption">Shows the refresh flow and scheduled refresh configuration pattern.</div>
+            <div class="guide-demo-caption"><span>Silent preview of refreshing reports and configuring scheduled refreshes.</span><a class="guide-demo-link" href="/demo/schedule.html" aria-label="Open narrated walkthrough: Refresh your data">Open narrated walkthrough →</a></div>
           </div>
           <div class="callout">
             <div class="flex items-start gap-3">

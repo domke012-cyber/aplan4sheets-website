@@ -140,7 +140,8 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
 <link rel="stylesheet" href="../assets/demo-realism-v3.css">
 <script src="../assets/demo-realism-v3.js" defer></script>
 <script src="../assets/demo-narration.js"></script>
-<script src="../assets/demo-player-v2.js"></script>
+<script src="../assets/walkthrough-journey-v1.js"></script>
+<script src="../assets/demo-player-v3.js"></script>
 
 <script>
 (function(){
@@ -162,6 +163,7 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
 })();
 </script>
 <link rel="stylesheet" href="../assets/walkthrough-guidance-v1.css">
+<link rel="stylesheet" href="../assets/walkthrough-journey-v1.css">
 </head>
 <body>
 
@@ -178,7 +180,7 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
   <button class="ctrl-play" id="playBtn">⏸ Pause</button>
   <button class="ctrl-restart">↻ Restart</button>
   <button class="ctrl-mute" id="muteBtn" title="Enable narration" aria-label="Enable narration">🔇</button>
-  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / 5 — <span id="stepLabel">Extensions Menu</span></div>
+  <div class="step-indicator">Step <span class="current" id="stepNum">1</span> / <span id="stepTotal">5</span> — <span id="stepLabel">Extensions Menu</span></div>
 </div>
 
 <div class="global-progress"><div class="global-progress-fill" id="globalProgress"></div></div>
@@ -191,7 +193,7 @@ fieldset.guided-preview{border:0;margin:0;min-width:0;min-height:0}
   </div>
 
   <!-- Menu bar -->
-  <div style="display:flex;align-items:center;height:24px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368;gap:12px">
+  <div class="setup-menu" style="display:flex;align-items:center;height:24px;background:#fff;border-bottom:1px solid #e0e0e0;padding:0 8px;font-size:12px;color:#5f6368;gap:12px">
     <span>File</span><span>Edit</span><span>View</span><span>Insert</span><span>Format</span><span>Data</span><span>Tools</span>
     <span id="extMenuLabel" style="cursor:default;padding:2px 6px;border-radius:3px;transition:background .15s">Extensions</span>
     <span>Help</span>
@@ -242,6 +244,7 @@ const SCENES=[
   {name:'User Authenticated',duration:7000},
   {name:'Add Model Configuration',duration:15000},
 ];
+const modelOnly = new URLSearchParams(location.search).get('focus') === 'model';
 let demoPlayer;
 const checkSVG=`<svg class="inline-checkmark" viewBox="0 0 16 16" style="width:14px;height:14px"><path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm-1.5 12L3 8.5l1.06-1.06L6.5 9.88l5.44-5.44L13 5.5l-6.5 6.5z"/></svg>`;
 const wait=ms=>demoPlayer.wait(ms);
@@ -250,6 +253,7 @@ function resetDemo(){
   document.getElementById('sidebarContent').innerHTML='';
   document.getElementById('extDrop').classList.remove('show');
   document.getElementById('extSubDrop').classList.remove('show');
+  if (modelOnly) prepareModelPreview();
 }
 
 // Empty grid
@@ -366,6 +370,14 @@ async function scene4(){
   `;
 }
 
+function prepareModelPreview() {
+  document.getElementById('sidebar').classList.add('visible');
+  document.getElementById('sidebarContent').innerHTML = `
+    <div class="success-badge">✓ Signed in to Anaplan</div>
+    <p style="margin:12px 4px;color:#435570;font-size:12px;line-height:1.5">Add the model you want to use for your first report.</p>
+    <div id="configSection"><button class="btn-primary" disabled>+ Add Model</button></div>`;
+}
+
 // Scene 5: Add Model → tenant/workspace/model cascade
 async function scene5(){
   await wait(800);
@@ -408,6 +420,7 @@ async function scene5(){
           <div class="ios-toggle-option"><span class="ios-toggle-option-text">OpEx Budget</span><span class="ios-toggle-option-check"></span></div>
         </div>
       </div>
+      <button class="btn-primary" id="saveModelPreview" disabled style="margin-top:12px">Save Model</button>
       <div id="saveStatus" style="display:none;text-align:center;margin-top:12px"></div>
     </div>
   `;
@@ -441,15 +454,28 @@ async function scene5(){
 
   // Save
   await wait(800);
+  document.getElementById('saveModelPreview').textContent='Saving...';
   document.getElementById('modelStatus').textContent='Saving...';
   await wait(1000);
   document.getElementById('modelStatus').innerHTML='<span style="color:#059669;font-weight:600">✓ Model saved</span>';
+  document.getElementById('saveModelPreview').textContent='Saved';
   const ss=document.getElementById('saveStatus');
   ss.style.display='block';
   ss.innerHTML='<div class="success-badge" style="display:inline-flex">✓ Model saved successfully</div>';
 }
 
-demoPlayer = new DemoPlayer({scenes:SCENES, actions:[scene1,scene2,scene3,scene4,scene5], reset:()=>{resetDemo();initGrid();}});
+if (modelOnly) {
+  document.body.classList.add('model-only');
+  document.title = 'Add an Anaplan Model — aPlan4Sheets Demo';
+  document.getElementById('stepTotal').textContent = '1';
+  document.querySelectorAll('audio').forEach((audio, index) => { if (index !== 4) audio.remove(); });
+}
+demoPlayer = new DemoPlayer({
+  scenes:modelOnly ? [SCENES[4]] : SCENES,
+  actions:modelOnly ? [scene5] : [scene1,scene2,scene3,scene4,scene5],
+  captions:modelOnly ? [DemoNarration.setup[4]] : DemoNarration.setup,
+  reset:()=>{resetDemo();initGrid();}
+});
 demoPlayer.mount();
 </script>
 </body>

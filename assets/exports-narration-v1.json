@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "voice": "en-US-AndrewMultilingualNeural",
+  "rate": "-3%",
+  "clips": [
+    {
+      "file": "exports-1.mp3",
+      "text": "With your model connected, open Export Actions. Use Search exports to find a prepared export, select it, then choose Run Selected Exports. This example uses a fictional Revenue Summary."
+    },
+    {
+      "file": "exports-2.mp3",
+      "text": "Review the destination warning. Existing destination data and formulas can be replaced. Choose Confirm exports only when the destination is correct, or Cancel to leave the workbook unchanged."
+    },
+    {
+      "file": "exports-3.mp3",
+      "text": "After confirming, review the exported report in its destination tab. Our fictional Revenue Summary shows a total budget of one hundred twenty million dollars. Next, we will export a saved view."
+    },
+    {
+      "file": "exports-4.mp3",
+      "text": "For a saved view, open Saved Views, find the relevant module, and select the view you want. Choose Export View to continue. Here, we select Operating Results from the Financial Planning module."
+    },
+    {
+      "file": "exports-5.mp3",
+      "text": "The saved view also requires a destination review. Existing destination data and formulas can be replaced. Choose Confirm export to proceed, or Cancel to keep the workbook unchanged."
+    },
+    {
+      "file": "exports-6.mp3",
+      "text": "Review the saved-view result in its destination tab. You have now seen both export paths: prepared Export Actions and Saved Views. Continue to refresh and scheduling to learn how to update connected reports."
+    }
+  ]
+}
