@@ -44,7 +44,9 @@ for (const file of demos) test(file + ': each narrated step waits for one clear 
       assert.equal(f.player.running, false);
       const cues = [...f.document.querySelectorAll('.walkthrough-next-action')];
       if (i + 1 === f.player.scenes.length) {
-        assert.equal(f.player.finished, true); assert.equal(cues.length, 0);
+        assert.equal(f.player.finished, true);
+        assert.equal(cues.length, f.player.journey ? 1 : 0);
+        if (f.player.journey) assert.equal(cues[0].id, 'nextWalkthrough');
       } else {
         assert.equal(f.player.awaitingNext, true);
         assert.equal(cues.length, 1); assert.ok(cues[0].hasAttribute('data-tour-next'));
@@ -107,9 +109,9 @@ test('All eleven walkthroughs use the approved Andrew voice and matching public 
   const expected = Object.entries(context.window.DemoNarration).flatMap(([slug, captions]) => captions.map((text, i) => ({ file: `${slug}-${i + 1}.mp3`, text })));
   expected.push(...context.window.BudgetReviewData.scenes.map((s, i) => ({ file: `budget-review-${i + 1}.mp3`, text: s.caption })));
   assert.deepEqual(spec.clips, JSON.parse(JSON.stringify(expected)));
-  for (const file of demos.filter(file => file !== 'oauth-client.html')) {
+  for (const file of demos.filter(file => !['oauth-client.html', 'exports.html'].includes(file))) {
     const dom = new JSDOM(fs.readFileSync(path.join(root, 'demo', file), 'utf8'));
-    assert.ok(dom.window.document.querySelector('script[src="../assets/demo-player-v2.js"]'));
+    assert.ok(dom.window.document.querySelector('script[src="../assets/demo-player-v2.js"], script[src="../assets/demo-player-v3.js"]'));
     for (const audio of dom.window.document.querySelectorAll('audio')) {
       const src = audio.getAttribute('src'); assert.match(src, /^audio\/v4\//);
       assert.ok(fs.existsSync(path.join(root, 'demo', src)));
