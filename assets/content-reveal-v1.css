@@ -1,0 +1,33 @@
+/* Content is readable before, during and without JavaScript enhancement. */
+.fade-in,
+.fade-in.visible {
+  opacity: 1 !important;
+  transform: none;
+  translate: none;
+}
+
+/* Applied only after an element enters the viewport; no waiting/hidden state. */
+.fade-in.content-reveal-enter {
+  animation: content-reveal-v1 380ms ease-out;
+}
+
+@keyframes content-reveal-v1 {
+  from { translate: 0 8px; }
+  to { translate: 0 0; }
+}
+
+.fade-in:focus,
+.fade-in:focus-within {
+  animation: none !important;
+  translate: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .fade-in.content-reveal-enter {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    translate: none !important;
+  }
+}

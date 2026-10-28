@@ -152,19 +152,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site-v1.css">
-  <style>
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
   <link rel="stylesheet" href="/assets/homepage-enhancements-v1.css">
+  <link rel="stylesheet" href="/assets/product-preview-v1.css">
+  <link rel="stylesheet" href="/assets/content-reveal-v1.css">
   <script src="/assets/homepage-navigation-v1.js" defer></script>
+  <script src="/assets/content-reveal-v1.js" defer></script>
 </head>
 <body class="font-sans text-text-dark bg-white antialiased">
 
@@ -201,7 +193,7 @@
 
   <!-- Hero -->
   <section class="home-hero bg-gradient-to-br from-navy via-navy-light to-navy">
-    <div class="max-w-6xl mx-auto px-6 text-center">
+    <div class="home-hero-layout">
       <div class="hero-content">
         <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white/10 text-green-light text-sm font-medium px-4 py-1.5 rounded-full mb-8 hover:bg-white/20 transition-colors">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
@@ -210,7 +202,7 @@
         <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight tracking-tight max-w-4xl mx-auto">
           Anaplan, meet <span class="text-sheets-green">Google Sheets</span>
         </h1>
-        <p class="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+        <p class="home-hero-description mt-6 text-gray-300 max-w-2xl mx-auto">
           The browser-native connector that brings your Anaplan models directly into Google Sheets. Works on Mac, PC, and Chromebook — no Excel required.
         </p>
         <div class="home-hero-actions">
@@ -224,9 +216,16 @@
         <ol class="home-setup-path" aria-label="Setup journey">
           <li>Install</li><li>Connect</li><li>Add a model</li><li>Create a report</li><li>Refresh</li>
         </ol>
-        <p class="mt-5 text-sm text-gray-300">Budget review demo: fictional data, no sign-in, about 2 minutes. <a class="text-white underline underline-offset-4" href="mailto:ryan.domke@aplan4sheets.com?subject=Aplan4Sheets%20live%20demo">Request a live demo →</a></p>
-        <p class="mt-5 text-sm text-gray-300"><a class="text-white underline underline-offset-4" href="/demo/formatted-ux.html">Explore UX navigation, hierarchy selection and source formatting →</a></p>
+        <p class="home-hero-note">Want a guided introduction? <a href="mailto:ryan.domke@aplan4sheets.com?subject=Aplan4Sheets%20live%20demo">Request a live demo →</a></p>
       </div>
+      <figure class="home-product-preview">
+        <a class="product-preview-link" href="/demo/budget-review.html" aria-label="Try the interactive budget review shown in this preview">
+          <div class="product-preview-flow"><span>Anaplan source view</span><span aria-hidden="true">→</span><span>Google Sheets report</span></div>
+          <img class="product-preview-image" src="/assets/demo/budget-review-v1.jpg" width="1224" height="751" fetchpriority="high" decoding="async" alt="Fictional budget review workspace with aPlan4Sheets sidebar, forecast and budget totals, and a spend-by-category chart.">
+          <div class="product-preview-caption"><div><strong>From planning data to a budget review</strong><small>Select your data. Build the report. Refresh when plans change.</small></div><span class="product-preview-cta">Try the demo <span aria-hidden="true">→</span></span></div>
+        </a>
+        <figcaption>Interactive simulation · Fictional data · No sign-in · About 2 minutes<br><a href="/demo/formatted-ux.html">Explore the UX page to Sheet walkthrough →</a></figcaption>
+      </figure>
     </div>
   </section>
 
@@ -671,18 +670,5 @@
     </div>
   </footer>
 
-  <script>
-    // Fade-in on scroll
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-  </script>
 </body>
 </html>
