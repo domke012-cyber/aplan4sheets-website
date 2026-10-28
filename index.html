@@ -92,60 +92,60 @@
   </script>
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is aPlan4Sheets?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "aPlan4S is a Google Sheets add-on that connects directly to your Anaplan workspace. It lets you pull Anaplan model data into Google Sheets, configure views and layouts, and refresh data with a single click — all from your browser."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Does it work on Mac?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Since aPlan4S runs in your browser through Google Sheets, it works on any operating system — macOS, Windows, ChromeOS, and Linux. No virtual machines or workarounds needed."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I get started?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Simply install aPlan4S from the Google Workspace Marketplace and follow our setup guide — you'll be connected to your Anaplan workspace in minutes."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is my Anaplan data secure?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "aPlan4Sheets supports Anaplan OAuth/SSO and Basic Auth, subject to your organization's configuration and permissions. Authentication details are retained in user-specific Google Apps Script storage. Google-hosted services process requests and write results to your Sheets over HTTPS. See our Privacy Policy for AI processing and operational usage records."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What Anaplan modules are supported?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Connect accessible Anaplan modules, saved views, exports, and supported UX grid widgets. Configure rows, columns, page selectors, line-item selections, and compatible combined grids. Availability depends on source structure and Anaplan permissions. The workflows shown here retrieve Anaplan data; exporting an AI result to Sheets is not Anaplan model write-back."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is aPlan4Sheets in beta?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. aPlan4Sheets is currently in beta and available through the Google Workspace Marketplace for teams that want to evaluate the connector."
-        }
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is aPlan4Sheets?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "aPlan4Sheets is a Google Sheets add-on that connects directly to your Anaplan workspace. It lets you pull Anaplan model data into Google Sheets, configure views and layouts, and refresh data with a single click — all from your browser."
       }
-    ]
-  }
+    },
+    {
+      "@type": "Question",
+      "name": "Is aPlan4Sheets in beta?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. aPlan4Sheets is currently in beta and available through the Google Workspace Marketplace for evaluation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work on Mac?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Since aPlan4Sheets runs in your browser through Google Sheets, it works on any operating system — macOS, Windows, ChromeOS, and Linux. No virtual machines or workarounds needed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I get started?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Follow the setup guide to install aPlan4Sheets from the Google Workspace Marketplace, connect to Anaplan, and create your first report. Your organization may need to approve installation and configure the OAuth client. You can also preview the steps in the installation walkthrough."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my Anaplan data secure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "aPlan4Sheets supports Anaplan OAuth/SSO and Basic Auth, subject to your organization's configuration and permissions. Interactive authentication state is retained in Google Apps Script storage. If you choose Basic Auth, your Anaplan email and password are also retained to authenticate and renew sessions. Schedules can retain separate authentication records in workbook-specific Apps Script storage and the Google-hosted execution service. Google-hosted services process requests and write results to your Sheets over HTTPS. See the Privacy Policy for full storage and retention details, AI processing, and operational usage records."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What Anaplan modules are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Connect accessible Anaplan modules, saved views, exports, and supported UX grid widgets. Configure rows, columns, page selectors, line-item selections, and compatible combined grids. Availability depends on source structure and Anaplan permissions. The workflows shown here retrieve Anaplan data; exporting an AI result to Sheets is not Anaplan model write-back."
+      }
+    }
+  ]
+}
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,28 +162,16 @@
       opacity: 1;
       transform: translateY(0);
     }
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s ease;
-    }
-    .faq-answer.open {
-      max-height: 400px;
-    }
-    .faq-icon {
-      transition: transform 0.3s ease;
-    }
-    .faq-icon.rotate {
-      transform: rotate(45deg);
-    }
   </style>
+  <link rel="stylesheet" href="/assets/homepage-enhancements-v1.css">
+  <script src="/assets/homepage-navigation-v1.js" defer></script>
 </head>
 <body class="font-sans text-text-dark bg-white antialiased">
 
-  <!-- Nav -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
-    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2.5">
+  <!-- Navigation remains usable without JavaScript. -->
+  <nav id="homepageNav" class="home-nav" aria-label="Main navigation">
+    <div class="home-nav-inner">
+      <a id="homeBrand" href="/" class="home-brand" aria-label="aPlan4Sheets home">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="36" height="36" rx="8" fill="#1a2744"/>
           <rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/>
@@ -191,30 +179,28 @@
           <rect x="6" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/>
           <rect x="18" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.35"/>
         </svg>
-        <span class="text-lg font-bold text-navy">aPlan4Sheets</span>
+        <span>aPlan4Sheets</span>
       </a>
-      <div class="flex items-center gap-3">
-        <a href="/demos.html" class="hidden sm:inline-flex items-center px-4 py-2.5 text-navy text-sm font-semibold hover:text-sheets-green transition-colors">
-          Demos
-        </a>
-        <a href="/guide.html" class="hidden sm:inline-flex items-center px-4 py-2.5 text-navy text-sm font-semibold hover:text-sheets-green transition-colors">
-          Setup Guide
-        </a>
-        <a href="/blog/" class="hidden sm:inline-flex items-center px-4 py-2.5 text-navy text-sm font-semibold hover:text-sheets-green transition-colors">
-          Resources
-        </a>
-        <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center px-5 py-2.5 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
-          Marketplace Listing
-        </a>
-        <a href="/demo/budget-review.html" class="sm:hidden inline-flex items-center px-4 py-2 bg-sheets-green text-white text-sm font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors">
-          Demo
-        </a>
+      <div class="home-nav-links">
+        <a href="/demos.html">Demos</a>
+        <a href="/guide.html">Setup Guide</a>
+        <a href="/blog/">Resources</a>
+        <a class="home-marketplace" href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener">Marketplace Listing</a>
       </div>
+      <button id="mobileMenuToggle" type="button" aria-controls="mobileMenu" aria-expanded="false" hidden>
+        <span>Menu</span><svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="home-mobile-links">
+      <a href="/demos.html">Demos</a>
+      <a href="/guide.html">Setup Guide</a>
+      <a href="/blog/">Resources</a>
+      <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener">Marketplace Listing <span aria-hidden="true">↗</span></a>
     </div>
   </nav>
 
   <!-- Hero -->
-  <section class="pt-32 pb-20 md:pt-40 md:pb-28 bg-gradient-to-br from-navy via-navy-light to-navy">
+  <section class="home-hero bg-gradient-to-br from-navy via-navy-light to-navy">
     <div class="max-w-6xl mx-auto px-6 text-center">
       <div class="hero-content">
         <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-white/10 text-green-light text-sm font-medium px-4 py-1.5 rounded-full mb-8 hover:bg-white/20 transition-colors">
@@ -227,16 +213,18 @@
         <p class="mt-6 text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
           The browser-native connector that brings your Anaplan models directly into Google Sheets. Works on Mac, PC, and Chromebook — no Excel required.
         </p>
-        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/demo/budget-review.html" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-sheets-green text-white font-semibold rounded-lg hover:bg-sheets-green-dark transition-colors text-lg">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <div class="home-hero-actions">
+          <a id="getStarted" href="/guide.html" class="home-hero-primary">Get started <span aria-hidden="true">→</span></a>
+          <a href="/demo/budget-review.html" class="home-hero-secondary">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Try a budget review
           </a>
-          <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-colors text-lg">
-            Marketplace Listing
-          </a>
         </div>
-        <p class="mt-5 text-sm text-gray-300">Interactive sample · no sign-in · about 2 minutes. <a class="text-white underline underline-offset-4" href="mailto:ryan.domke@aplan4sheets.com?subject=Aplan4Sheets%20live%20demo">Request a live demo for your model →</a></p>
+        <p class="home-setup-intro">Follow the setup guide and narrated walkthroughs from installation to your first refreshed report.</p>
+        <ol class="home-setup-path" aria-label="Setup journey">
+          <li>Install</li><li>Connect</li><li>Add a model</li><li>Create a report</li><li>Refresh</li>
+        </ol>
+        <p class="mt-5 text-sm text-gray-300">Budget review demo: fictional data, no sign-in, about 2 minutes. <a class="text-white underline underline-offset-4" href="mailto:ryan.domke@aplan4sheets.com?subject=Aplan4Sheets%20live%20demo">Request a live demo →</a></p>
         <p class="mt-5 text-sm text-gray-300"><a class="text-white underline underline-offset-4" href="/demo/formatted-ux.html">Explore UX navigation, hierarchy selection and source formatting →</a></p>
       </div>
     </div>
@@ -572,72 +560,66 @@
   </section>
 
   <!-- FAQ -->
-  <section class="py-20 md:py-28 bg-white">
+  <section id="faq" aria-labelledby="faqHeading" class="py-20 md:py-28 bg-white">
     <div class="max-w-3xl mx-auto px-6">
-      <div class="text-center fade-in">
-        <h2 class="text-3xl md:text-4xl font-bold text-navy">Frequently asked questions</h2>
+      <div class="text-center">
+        <h2 id="faqHeading" class="text-3xl md:text-4xl font-bold text-navy">Frequently asked questions</h2>
       </div>
-      <div class="mt-14 space-y-3 fade-in">
-        <!-- FAQ 1 -->
-        <div class="border border-gray-200 rounded-xl">
-          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
-            <span class="font-semibold text-navy pr-4">What is aPlan4S?</span>
-            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
-          </button>
+      <div class="mt-14 space-y-3">
+        <details id="faq-product" class="faq-item border border-gray-200 rounded-xl">
+          <summary class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left">
+            <span class="font-semibold text-navy pr-4">What is aPlan4Sheets?</span>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none" aria-hidden="true">+</span>
+          </summary>
           <div class="faq-answer">
-            <p class="px-6 pb-5 text-text-muted leading-relaxed">aPlan4S is a Google Sheets add-on that connects directly to your Anaplan workspace. It lets you pull Anaplan model data into Google Sheets, configure views and layouts, and refresh data with a single click — all from your browser.</p>
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">aPlan4Sheets is a Google Sheets add-on that connects directly to your Anaplan workspace. It lets you pull Anaplan model data into Google Sheets, configure views and layouts, and refresh data with a single click — all from your browser.</p>
           </div>
-        </div>
-        <!-- FAQ 2 -->
-        <div class="border border-gray-200 rounded-xl">
-          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
-            <span class="font-semibold text-navy pr-4">Is aPlan4S in beta?</span>
-            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
-          </button>
+        </details>
+        <details id="faq-beta" class="faq-item border border-gray-200 rounded-xl">
+          <summary class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left">
+            <span class="font-semibold text-navy pr-4">Is aPlan4Sheets in beta?</span>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none" aria-hidden="true">+</span>
+          </summary>
           <div class="faq-answer">
-            <p class="px-6 pb-5 text-text-muted leading-relaxed">Yes. aPlan4S is currently in beta and available through the Google Workspace Marketplace for evaluation.</p>
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">Yes. aPlan4Sheets is currently in beta and available through the Google Workspace Marketplace for evaluation.</p>
           </div>
-        </div>
-        <!-- FAQ 3 -->
-        <div class="border border-gray-200 rounded-xl">
-          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+        </details>
+        <details id="faq-mac" class="faq-item border border-gray-200 rounded-xl">
+          <summary class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left">
             <span class="font-semibold text-navy pr-4">Does it work on Mac?</span>
-            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
-          </button>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none" aria-hidden="true">+</span>
+          </summary>
           <div class="faq-answer">
-            <p class="px-6 pb-5 text-text-muted leading-relaxed">Yes. Since aPlan4S runs in your browser through Google Sheets, it works on any operating system — macOS, Windows, ChromeOS, and Linux. No virtual machines or workarounds needed.</p>
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">Yes. Since aPlan4Sheets runs in your browser through Google Sheets, it works on any operating system — macOS, Windows, ChromeOS, and Linux. No virtual machines or workarounds needed.</p>
           </div>
-        </div>
-        <!-- FAQ 4 -->
-        <div class="border border-gray-200 rounded-xl">
-          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+        </details>
+        <details id="faq-start" class="faq-item border border-gray-200 rounded-xl">
+          <summary class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left">
             <span class="font-semibold text-navy pr-4">How do I get started?</span>
-            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
-          </button>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none" aria-hidden="true">+</span>
+          </summary>
           <div class="faq-answer">
-            <p class="px-6 pb-5 text-text-muted leading-relaxed">Simply install aPlan4S from the <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" class="text-sheets-green hover:underline font-medium" target="_blank" rel="noopener">Google Workspace Marketplace</a> and follow our <a href="/guide.html" class="text-sheets-green hover:underline font-medium">setup guide</a> to get started — you'll be connected to your Anaplan workspace in minutes.</p>
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">Follow the <a href="/guide.html" class="text-sheets-green hover:underline font-medium">setup guide</a> to install aPlan4Sheets from the <a href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107" class="text-sheets-green hover:underline font-medium" target="_blank" rel="noopener">Google Workspace Marketplace</a>, connect to Anaplan, and create your first report. Your organization may need to approve installation and configure the OAuth client. You can also preview the steps in the <a href="/demo/marketplace-install.html" class="text-sheets-green hover:underline font-medium">installation walkthrough</a>.</p>
           </div>
-        </div>
-        <!-- FAQ 5 -->
-        <div class="border border-gray-200 rounded-xl">
-          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+        </details>
+        <details id="faq-security" class="faq-item border border-gray-200 rounded-xl">
+          <summary class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left">
             <span class="font-semibold text-navy pr-4">Is my Anaplan data secure?</span>
-            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
-          </button>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none" aria-hidden="true">+</span>
+          </summary>
           <div class="faq-answer">
-            <p class="px-6 pb-5 text-text-muted leading-relaxed">aPlan4Sheets supports Anaplan OAuth/SSO and Basic Auth, subject to your organization's configuration and permissions. Authentication details are retained in user-specific Google Apps Script storage. Google-hosted services process requests and write results to your Sheets over HTTPS. See our Privacy Policy for AI processing and operational usage records.</p>
+            <p class="px-6 pb-5 text-text-muted leading-relaxed">aPlan4Sheets supports Anaplan OAuth/SSO and Basic Auth, subject to your organization's configuration and permissions. Interactive authentication state is retained in Google Apps Script storage. If you choose Basic Auth, your Anaplan email and password are also retained to authenticate and renew sessions. Schedules can retain separate authentication records in workbook-specific Apps Script storage and the Google-hosted execution service. Google-hosted services process requests and write results to your Sheets over HTTPS. See the <a href="/privacy.html" class="text-sheets-green hover:underline font-medium">Privacy Policy</a> for full storage and retention details, AI processing, and operational usage records.</p>
           </div>
-        </div>
-        <!-- FAQ 6 -->
-        <div class="border border-gray-200 rounded-xl">
-          <button class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left" aria-expanded="false">
+        </details>
+        <details id="faq-modules" class="faq-item border border-gray-200 rounded-xl">
+          <summary class="faq-toggle w-full flex items-center justify-between px-6 py-5 text-left">
             <span class="font-semibold text-navy pr-4">What Anaplan modules are supported?</span>
-            <span class="faq-icon text-2xl text-text-muted leading-none select-none">+</span>
-          </button>
+            <span class="faq-icon text-2xl text-text-muted leading-none select-none" aria-hidden="true">+</span>
+          </summary>
           <div class="faq-answer">
             <p class="px-6 pb-5 text-text-muted leading-relaxed">Connect accessible Anaplan modules, saved views, exports, and supported UX grid widgets. Configure rows, columns, page selectors, line-item selections, and compatible combined grids. Availability depends on source structure and Anaplan permissions. The workflows shown here retrieve Anaplan data; exporting an AI result to Sheets is not Anaplan model write-back.</p>
           </div>
-        </div>
+        </details>
       </div>
     </div>
   </section>
@@ -700,27 +682,6 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // FAQ accordion
-    document.querySelectorAll('.faq-toggle').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const answer = btn.nextElementSibling;
-        const icon = btn.querySelector('.faq-icon');
-        const isOpen = answer.classList.contains('open');
-
-        // Close all
-        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
-        document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('rotate'));
-        document.querySelectorAll('.faq-toggle').forEach(b => b.setAttribute('aria-expanded', 'false'));
-
-        // Open clicked (if it was closed)
-        if (!isOpen) {
-          answer.classList.add('open');
-          icon.classList.add('rotate');
-          btn.setAttribute('aria-expanded', 'true');
-        }
-      });
-    });
 
   </script>
 </body>
