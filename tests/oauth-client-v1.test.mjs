@@ -34,7 +34,7 @@ test('Administration sequence teaches the correct grant, deployment-specific cal
       assert.equal(f.document.querySelectorAll('#adminStage button:not(:disabled), #adminStage input:not(:disabled), #adminStage [contenteditable]').length, 0, 'The illustration cannot collect credentials or perform admin actions');
       if (index === 1) assert.match(content, /Administration → Security → OAuth Clients/);
       if (index === 2) { assert.match(content, /Enable OAuth/); assert.match(content, /Already see the client list/); }
-      if (index === 3) { assert.match(content, /New/); assert.equal(f.document.getElementById('sampleName').value, 'Aplan4Sheets'); }
+      if (index === 3) { assert.match(content, /New/); assert.equal(f.document.getElementById('sampleName').value, 'aPlan4Sheets'); }
       if (index === 4) assert.match(f.document.querySelector('.grant-options .chosen').textContent, /Authorization code grant/);
       if (index === 5) { assert.match(content, /Allowed callback URLs/); assert.match(content, /actual Redirect URI/); assert.match(content, /Create client/); }
       if (index === 6) { assert.match(content, /DEMO_CLIENT_ID_NOT_VALID/); assert.match(content, /Copy client secret/); assert.match(content, /Done/); }

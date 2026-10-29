@@ -85,9 +85,11 @@ release was approved for publication after local review. The final v4 candidate
 passes all 130 automated tests; browser checks confirmed compact 24px report
 rows, movable chips, the fixed sample output, and the narrow-screen controls.
 
-Homepage/gallery styling is prebuilt into `assets/site-v1.css` from
-`assets/site-tailwind-v1.css`. Run `npm run build:css` after changing their
-utility classes. The existing guides/blogs still use their original styling.
+All Tailwind-styled pages (homepage, gallery, 404, setup guide, policies and
+blog posts) share the prebuilt `assets/site-v1.css`, generated from
+`assets/site-tailwind-v1.css`. Run `npm run build:css` after changing utility
+classes on any of those pages, and add an `@source` line there when a new page
+uses Tailwind classes. No page loads the Tailwind Play CDN.
 The build pins Tailwind 4.3.3 and overrides its file watcher to the patched
 2.6.0 release; do not remove the override without checking `npm audit`.
 

@@ -10,7 +10,7 @@ const destinations = [
   ['/demos.html', 'Demos'],
   ['/guide.html', 'Setup Guide'],
   ['/blog/', 'Resources'],
-  ['https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107', 'Marketplace Listing']
+  ['https://workspace.google.com/marketplace/app/aplan4sheets/751768451107', 'Marketplace Listing']
 ];
 const links = prefix => destinations.map(([href, label], index) => `<a id="${prefix}${index}" href="${href}"${index === 3 ? ' target="_blank" rel="noopener"' : ''}>${label}</a>`).join('');
 
