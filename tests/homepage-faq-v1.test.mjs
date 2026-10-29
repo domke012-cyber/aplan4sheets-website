@@ -94,7 +94,7 @@ test('Getting started links to the real guide and optional installation walkthro
     const answer = dom.window.document.querySelector('#faq-start .faq-answer');
     assert.ok(answer.querySelector('a[href="/guide.html"]'));
     assert.ok(answer.querySelector('a[href="/demo/marketplace-install.html"]'));
-    assert.ok(answer.querySelector('a[href="https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107"]'));
+    assert.ok(answer.querySelector('a[href="https://workspace.google.com/marketplace/app/aplan4sheets/751768451107"]'));
     assert.match(text(answer), /organization may need to approve installation and configure the OAuth client/);
     assert.doesNotMatch(text(answer), /in minutes|within \d+ minutes/i);
     for (const link of answer.querySelectorAll('a[href^="/"]')) {

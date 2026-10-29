@@ -1,7 +1,16 @@
-/* Homepage/gallery only. Generate site-v1.css with npm run build:css. */
+/* Shared utility build for every Tailwind-styled page. Generate site-v1.css with npm run build:css. */
 @import "tailwindcss" source(none);
 @source "../index.html";
 @source "../demos.html";
+@source "../404.html";
+@source "../guide.html";
+@source "../privacy.html";
+@source "../terms.html";
+@source "../blog/*.html";
+/* Keep the Tailwind v3 default border colour that the guide, policy and blog pages were authored against. */
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button { border-color: var(--color-gray-200, currentcolor); }
+}
 @theme {
   --color-navy: #1a2744;
   --color-navy-light: #243352;

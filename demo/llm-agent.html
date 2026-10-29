@@ -11,11 +11,11 @@
 <meta property="og:title" content="AI Analyst — aPlan4Sheets Demo">
 <meta property="og:description" content="Ask plain-English questions about Anaplan data and draft variance summaries for Sheets and Slides.">
 <meta property="og:url" content="https://aplan4sheets.com/demo/llm-agent.html">
-<meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+<meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-image-v1.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AI Analyst — aPlan4Sheets Demo">
 <meta name="twitter:description" content="Plain-English Anaplan analysis walkthrough for Google Sheets and Slides.">
-<meta name="twitter:image" content="https://aplan4sheets.com/assets/marketplace/og-icon.png">
+<meta name="twitter:image" content="https://aplan4sheets.com/assets/marketplace/og-image-v1.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -126,9 +126,9 @@ body.embed-mode .sheets-toolbar{height:32px;padding:4px 10px;font-size:12px}
 </head>
 <body>
 <nav class="site-nav">
-  <div class="logo"><div class="sheets-icon">a4</div><span>aPlan4Sheets</span></div>
+  <div class="logo"><svg width="28" height="28" viewBox="0 0 36 36" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><rect width="36" height="36" rx="8" fill="#243352"/><rect x="6" y="6" width="10" height="10" rx="2" fill="#0f9d58"/><rect x="18" y="6" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/><rect x="6" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.6"/><rect x="18" y="18" width="10" height="10" rx="2" fill="#0f9d58" opacity="0.35"/></svg><span>aPlan4Sheets</span></div>
   <div class="site-nav-links"><a href="/demos.html">← Back to Demos</a><a href="/">Home</a></div>
-  <button class="cta-btn" onclick="window.open('https://workspace.google.com/marketplace/app/anaplan_connector_for_sheets/751768451107','_blank','noopener')">Marketplace Listing</button>
+  <button class="cta-btn" onclick="window.open('https://workspace.google.com/marketplace/app/aplan4sheets/751768451107','_blank','noopener')">Marketplace Listing</button>
 </nav>
 <div class="demo-controls">
   <button class="ctrl-play" id="playBtn">⏸ Pause</button>
@@ -318,7 +318,7 @@ async function scene5(){
   await wait(1800);
   exportReviewedResult('guided-tour');
   await wait(1200);
-  addMsg('ai','This is a local illustration of the review-and-export flow, not a Google file creation. The actual Aplan AI Export to Sheet and separately configured Claude Write to sheet actions require explicit user action. Neither is Anaplan model write-back.');
+  addMsg('ai','This is a local illustration of the review-and-export flow, not a Google file creation. The actual AI Analyst Export to Sheet and separately configured Claude Write to sheet actions require explicit user action. Neither is Anaplan model write-back.');
 }
 async function scene6(){const a=AI_ANALYSIS;addMsg('ai','<strong>Executive summary draft</strong><br>Q1 revenue exceeded budget by '+money(a.revenue.variance)+'. After '+money(a.cogs.variance)+' of additional cost of revenue and '+money(a.opex.variance)+' of additional operating expense, EBITDA remained '+money(a.ebitda.actual)+', in line with budget. Marketing accounts for '+money(a.largestOverrun.variance)+' of the Opex increase; invoice timing is a follow-up question, not a confirmed explanation.'+reference('Variance Analysis!A5:F18'));await wait(1400);addMsg('ai','<strong>Suggested presentation</strong><br>Use a variance waterfall from budget EBITDA to actual EBITDA. Its signed movements sum to '+money(a.bridge.reduce((sum,row)=>sum+row.impact,0))+'. Review the commentary and any linked chart before sharing. No Slides deck is generated here.');}
 async function scene7(){document.getElementById('toast').textContent='Sample analysis complete · source references retained';document.getElementById('toast').classList.add('visible');addMsg('ai','<strong>Analysis ready for review.</strong> The fictional result reconciles to the source snapshot. The simulated export and narrative do not change Anaplan or create Google files. Validate assumptions before sharing a real report.');}

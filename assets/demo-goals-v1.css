@@ -3,7 +3,7 @@
 .demo-header,.demo-hero,.demo-footer { background:#1a2744; color:#fff; }
 .demo-header-inner { max-width:1152px; margin:auto; padding:16px 24px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px 24px; }
 .demo-brand { display:inline-flex; align-items:center; gap:10px; color:inherit; font-size:18px; font-weight:750; text-decoration:none; white-space:nowrap; }
-.demo-brand-mark { width:32px; height:32px; display:grid; place-items:center; background:#0f9d58; border-radius:7px; font-size:14px; }
+.demo-brand-mark { width:32px; height:32px; display:grid; place-items:center; border-radius:7px; }
 .demo-header-links { display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; }
 .demo-header-links a { display:inline-flex; align-items:center; gap:5px; min-height:44px; padding:10px 12px; border-radius:7px; color:#e3ebf5; font-size:14px; font-weight:600; text-decoration:none; }
 .demo-header-links a:hover { background:#2e4164; color:#fff; }

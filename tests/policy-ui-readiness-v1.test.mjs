@@ -51,7 +51,7 @@ test('guide uses current menu, authentication, model and export labels with expl
   const dom = open('guide.html');
   try {
     const d = dom.window.document;
-    assert.match(text(d.getElementById('step-1')), /earlier name Anaplan Connector for Sheets™ during the name update/);
+    assert.match(text(d.getElementById('step-1')), /If the Extensions menu still shows the earlier name Anaplan Connector for Sheets™, it is the same add-on/);
     assert.match(text(d.getElementById('step-2')), /Open Sidebar/);
     assert.match(text(d.getElementById('step-2')), /Sign in to Anaplan, Set Up OAuth, or Set Up OAuth Credentials/);
     assert.match(text(d.getElementById('step-3')), /Sign-in method/);
@@ -80,5 +80,5 @@ test('factual update preserves current-domain policy links, support, dates, and 
   }
   assert.match(read('privacy.html'), /Last Updated: October 27, 2026/);
   assert.match(read('terms.html'), /Effective Date: September 2, 2025 · Last Updated: October 27, 2026/);
-  assert.match(read('guide.html'), /marketplace\/app\/anaplan_connector_for_sheets\/751768451107/);
+  assert.match(read('guide.html'), /marketplace\/app\/aplan4sheets\/751768451107/);
 });

@@ -25,7 +25,7 @@ window.OAuthClientData = {
     {
       "name": "Name the client",
       "heading": "Choose New, then give this connection a clear name.",
-      "caption": "Choose New to open the client form. Enter a name such as Aplan4Sheets. Keep the name alphanumeric so it meets Anaplan’s naming rules.",
+      "caption": "Choose New to open the client form. Enter a name such as aPlan4Sheets. Keep the name alphanumeric so it meets Anaplan’s naming rules.",
       "tip": "Choose a name your administrators will recognize when reviewing integrations.",
       "duration": 5000
     },
@@ -60,5 +60,5 @@ window.OAuthClientData = {
   ],
   "callback": "https://connector.example.invalid/oauth/callback",
   "clientId": "DEMO_CLIENT_ID_NOT_VALID",
-  "clientName": "Aplan4Sheets"
+  "clientName": "aPlan4Sheets"
 };

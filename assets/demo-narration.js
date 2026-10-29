@@ -53,7 +53,7 @@ window.DemoNarration = {
     'Describe the question in plain English. Be specific about the period, version, and comparison you want to analyze.',
     'Review the source context while the analysis runs. Check the returned numbers and explanation against the underlying data.',
     'Review the findings and draft narrative. AI output is a starting point for your judgment, not an automatically approved report.',
-    'Export only after review. Aplan AI offers Export to Sheet; the separately configured Claude pilot offers Write to sheet. Neither is Anaplan model write-back.',
+    'Export only after review. The AI Analyst offers Export to Sheet; the separately configured Claude pilot offers Write to sheet. Neither is Anaplan model write-back.',
     'Use the reviewed findings to prepare presentation talking points. Review your charts and Slides output before sharing them.',
     'Your reviewed result is ready for the next reporting step. Claude handoffs require a configured connector and depend on your environment.'
   ],

@@ -161,7 +161,7 @@ test('Marketplace simulation omits fabricated reputation counters and links to c
     assert.equal(d.document.querySelector('.stars'),null);
     assert.doesNotMatch(d.document.body.textContent,/★★★★★|⇩\s*20|1\s*ⓘ/);
     const link=[...d.document.querySelectorAll('a')].find(a=>a.textContent.includes('View current Marketplace details'));
-    assert.ok(link);assert.equal(link.rel,'noopener');assert.match(link.href,/workspace\.google\.com\/marketplace\/app\/anaplan_connector_for_sheets\/751768451107/);
+    assert.ok(link);assert.equal(link.rel,'noopener');assert.match(link.href,/workspace\.google\.com\/marketplace\/app\/aplan4sheets\/751768451107/);
   }finally{d.close();}
 });
 
