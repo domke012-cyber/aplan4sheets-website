@@ -13,7 +13,7 @@
   <meta property="og:url" content="https://aplan4sheets.com/blog/anaplan-reporting-automation-google-sheets.html">
   <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-image-v1.png">
   <meta property="article:published_time" content="2026-05-03">
-  <meta property="article:modified_time" content="2026-05-03">
+  <meta property="article:modified_time" content="2026-10-29">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Anaplan Reporting Automation in Google Sheets">
   <meta name="twitter:description" content="Connect Anaplan to Google Sheets, schedule refreshes, and keep recurring finance reports current.">
@@ -37,7 +37,7 @@
     "description": "A practical workflow for automating Anaplan reporting in Google Sheets with connected views, pivots, and scheduled refreshes.",
     "image": "https://aplan4sheets.com/assets/marketplace/og-image-v1.png",
     "datePublished": "2026-05-03",
-    "dateModified": "2026-05-03",
+    "dateModified": "2026-10-29",
     "author": {"@type": "Organization", "name": "aPlan4Sheets"},
     "publisher": {
       "@type": "Organization",
@@ -89,7 +89,7 @@
         <li><strong>Start with governed Anaplan views:</strong> Use saved views or modules that already match the reporting source your team trusts.</li>
         <li><strong>Connect each report tab:</strong> Pull the Anaplan data into dedicated source tabs in Google Sheets.</li>
         <li><strong>Build presentation tabs:</strong> Reference the source tabs for summaries, charts, commentary, and variance calculations.</li>
-        <li><strong>Schedule refreshes:</strong> Refresh the connected tabs hourly, daily, or weekly depending on the report cadence.</li>
+        <li><strong>Schedule refreshes:</strong> Refresh the connected tabs hourly, daily, or weekly depending on the report cadence, and check the schedule status in the sidebar.</li>
         <li><strong>Review exceptions:</strong> Keep formulas and commentary in the workbook while source data refreshes from Anaplan.</li>
       </ol>
 
@@ -102,15 +102,15 @@
       </ul>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Where scheduled refresh helps</h2>
-      <p class="text-text-muted mb-4">Scheduled refresh is most useful for recurring reports with stable source views. Once the Anaplan connection is configured, the sheet can refresh on a cadence so the team does not have to remember a manual export before each review.</p>
-      <p class="text-text-muted mb-4">For a deeper look at cadence, retry behavior, and setup steps, read the <a href="/blog/anaplan-scheduled-refresh-google-sheets.html" class="text-sheets-green hover:underline">Anaplan scheduled refresh guide</a> or watch the <a href="/demo/schedule.html" class="text-sheets-green hover:underline">refresh demo</a>.</p>
+      <p class="text-text-muted mb-4">Scheduled refresh is most useful for recurring reports with stable source views. Once the Anaplan connection is configured, the sheet can refresh on a cadence so the team does not have to remember a manual export before each review. Google-managed trigger timing is approximate, and each run depends on valid authentication and the source model being available, so check the status before a deadline rather than assuming the last run succeeded.</p>
+      <p class="text-text-muted mb-4">For a deeper look at cadence, what to expect from Google-managed trigger timing, and setup steps, read the <a href="/blog/anaplan-scheduled-refresh-google-sheets.html" class="text-sheets-green hover:underline">Anaplan scheduled refresh guide</a> or watch the <a href="/demo/schedule.html" class="text-sheets-green hover:underline">refresh demo</a>.</p>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Governance tips</h2>
       <ul class="list-disc pl-6 text-text-muted mb-6 space-y-2">
         <li>Keep Anaplan saved views narrow and intentional so reporting sheets pull only the data they need.</li>
         <li>Name source tabs clearly so reviewers know which data is connected and which tabs contain formulas or commentary.</li>
         <li>Use a separate workbook for highly shared reports when access needs differ from the model builder workflow.</li>
-        <li>Review refresh timing before board meetings, close deadlines, or forecast submission windows.</li>
+        <li>Review refresh status and timing before board meetings, close deadlines, or forecast submission windows.</li>
       </ul>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Related resources</h2>

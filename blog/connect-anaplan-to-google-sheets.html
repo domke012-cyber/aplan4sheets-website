@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How to Connect Anaplan to Google Sheets (2026 Guide) | aPlan4Sheets</title>
-  <meta name="description" content="Step-by-step guide to connecting Anaplan to Google Sheets using aPlan4Sheets. Pull Anaplan data into Sheets with one click. Works on Mac, PC, and Chromebook.">
+  <meta name="description" content="Install aPlan4Sheets, sign in to Anaplan, add a model, and pull your first Anaplan view into Google Sheets. Works on Mac, PC, and Chromebook.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://aplan4sheets.com/blog/connect-anaplan-to-google-sheets.html">
   <meta property="og:type" content="article">
@@ -13,10 +13,10 @@
   <meta property="og:url" content="https://aplan4sheets.com/blog/connect-anaplan-to-google-sheets.html">
   <meta property="og:image" content="https://aplan4sheets.com/assets/marketplace/og-image-v1.png">
   <meta property="article:published_time" content="2026-04-17">
-  <meta property="article:modified_time" content="2026-05-03">
+  <meta property="article:modified_time" content="2026-10-29">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How to Connect Anaplan to Google Sheets">
-  <meta name="twitter:description" content="Install aPlan4Sheets, authenticate with Anaplan, choose a model, and pull your first Anaplan view into Google Sheets.">
+  <meta name="twitter:description" content="Install aPlan4Sheets, sign in to Anaplan, add a model, and pull your first Anaplan view into Google Sheets.">
   <meta name="twitter:image" content="https://aplan4sheets.com/assets/marketplace/og-image-v1.png">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/icons/icon-180.png">
@@ -31,10 +31,11 @@
     "name": "How to Connect Anaplan to Google Sheets",
     "description": "Connect your Anaplan models to Google Sheets using the aPlan4Sheets add-on.",
     "step": [
-      {"@type": "HowToStep", "name": "Install aPlan4Sheets", "text": "Install aPlan4Sheets from the Google Workspace Marketplace."},
-      {"@type": "HowToStep", "name": "Authenticate with Anaplan", "text": "Open the aPlan4Sheets sidebar and log in with your Anaplan credentials via OAuth or Basic Auth."},
-      {"@type": "HowToStep", "name": "Select a workspace and model", "text": "Choose your Anaplan workspace and model from the dropdown menus in the sidebar."},
-      {"@type": "HowToStep", "name": "Export or pivot your data", "text": "Select a saved view or module and click Export, or use the Pivot Engine for custom layouts."}
+      {"@type": "HowToStep", "name": "Install aPlan4Sheets", "text": "Install aPlan4Sheets from the Google Workspace Marketplace. Your organization may need to approve the installation."},
+      {"@type": "HowToStep", "name": "Sign in to Anaplan", "text": "Open the aPlan4Sheets sidebar, choose a Sign-in method, and sign in with Anaplan OAuth/SSO or Basic Auth."},
+      {"@type": "HowToStep", "name": "Add a model", "text": "Click Add Model, select the tenant, workspace, and model, then click Save Model."},
+      {"@type": "HowToStep", "name": "Export or pivot your data", "text": "Use Export Actions or Saved Views to pull data into Sheets, or configure a Pivot View and click Create Pivot."},
+      {"@type": "HowToStep", "name": "Refresh on demand or on a schedule", "text": "Click Refresh Sheets to update selected configurations, or add an hourly, daily, or weekly schedule under Scheduled Refreshes."}
     ]
   }
   </script>
@@ -57,7 +58,7 @@
     "description": "Step-by-step guide to connecting Anaplan to Google Sheets using aPlan4Sheets.",
     "image": "https://aplan4sheets.com/assets/marketplace/og-image-v1.png",
     "datePublished": "2026-04-17",
-    "dateModified": "2026-05-03",
+    "dateModified": "2026-10-29",
     "author": {"@type": "Organization", "name": "aPlan4Sheets"},
     "publisher": {
       "@type": "Organization",
@@ -91,42 +92,45 @@
   <article class="pt-28 pb-20 max-w-3xl mx-auto px-6">
     <p class="text-sm text-sheets-green font-semibold uppercase tracking-wide mb-3">Guide</p>
     <h1 class="text-4xl md:text-5xl font-extrabold text-navy leading-tight mb-6">How to Connect Anaplan to Google Sheets</h1>
-    <p class="text-lg text-text-muted mb-10">A step-by-step guide to pulling Anaplan data into Google Sheets using the aPlan4Sheets connector. No Excel, no desktop software, no VMs.</p>
+    <p class="text-lg text-text-muted mb-10">A step-by-step guide to pulling Anaplan data into Google Sheets with the aPlan4Sheets add-on. It runs in the browser, so there is no desktop software to install.</p>
 
     <div class="prose prose-lg max-w-none">
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Why connect Anaplan to Google Sheets?</h2>
-      <p class="text-text-muted mb-4">Anaplan is the standard for enterprise planning, but many FP&A teams still need data in spreadsheets for ad-hoc analysis, board reporting, and collaboration with stakeholders who don't have Anaplan access.</p>
-      <p class="text-text-muted mb-4">Traditionally, this meant using AXL (Anaplan Excel Add-in) or Fluence XL on Windows. But if your team uses Macs, Chromebooks, or Google Workspace, those tools don't work. aPlan4Sheets solves this by bringing Anaplan data directly into Google Sheets through the browser.</p>
+      <p class="text-text-muted mb-4">Anaplan is the standard for enterprise planning, but many FP&A teams still need data in spreadsheets for ad-hoc analysis, board reporting, and collaboration with stakeholders who do not have Anaplan access.</p>
+      <p class="text-text-muted mb-4">For Excel-centred teams, Anaplan XL Reporting (AXL, formerly Fluence XL) is Anaplan's own add-in. aPlan4Sheets covers the same need for teams whose reporting lives in Google Workspace: it brings Anaplan data directly into Google Sheets through the browser, so it works wherever Google Sheets does, including Mac and Chromebook.</p>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">What you'll need</h2>
       <ul class="list-disc pl-6 text-text-muted mb-6 space-y-2">
-        <li>A Google Workspace account (Gmail works too)</li>
-        <li>An Anaplan account with workspace access</li>
-        <li>Google Chrome, Edge, or any modern browser</li>
+        <li>A Google Workspace account on your organization's domain. The OAuth/SSO sign-in flow does not support Gmail or personal-domain accounts.</li>
+        <li>An Anaplan account with access to the workspace and model you want to connect</li>
+        <li>A modern browser such as Google Chrome or Microsoft Edge</li>
+        <li>Approval from your Google Workspace administrator, if your organization reviews add-on installations</li>
       </ul>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 1: Install aPlan4Sheets</h2>
-      <p class="text-text-muted mb-4">Visit the <a href="https://workspace.google.com/marketplace/app/aplan4sheets/751768451107" class="text-sheets-green hover:underline" target="_blank" rel="noopener">Google Workspace Marketplace listing</a> and click "Install." Grant the required permissions when prompted. The add-on will appear in your Google Sheets Extensions menu.</p>
+      <p class="text-text-muted mb-4">Visit the <a href="https://workspace.google.com/marketplace/app/aplan4sheets/751768451107" class="text-sheets-green hover:underline" target="_blank" rel="noopener">Google Workspace Marketplace listing</a> and click "Install". Review the requested permissions and follow your organization's approval process. The add-on then appears in the Google Sheets Extensions menu. A Google Workspace administrator can also install it domain-wide from the Admin Console.</p>
 
-      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 2: Authenticate with Anaplan</h2>
-      <p class="text-text-muted mb-4">Open any Google Sheet, go to <strong>Extensions > aPlan4Sheets > Open Sidebar</strong>. Click "Login" and authenticate with your Anaplan credentials. aPlan4Sheets supports both OAuth (SSO) and Basic Auth (email + password).</p>
-      <p class="text-text-muted mb-4">Authentication uses Anaplan endpoints. OAuth/SSO avoids entering an Anaplan password in the connector; Basic Auth and authentication tokens use user-specific Google Apps Script storage. See the <a href="/privacy.html" class="text-sheets-green hover:underline">Privacy Policy</a> for data handling.</p>
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 2: Sign in to Anaplan</h2>
+      <p class="text-text-muted mb-4">Open any Google Sheet and go to <strong>Extensions &gt; aPlan4Sheets &gt; Open Sidebar</strong>. The sidebar opens on a <strong>Sign-in method</strong> selector. Leave it set to OAuth/SSO and click <strong>Sign in with Anaplan SSO</strong>; a popup opens so you can complete your organization's login. If your organization permits it, you can switch the method to Basic Auth and sign in with your Anaplan email and password instead.</p>
+      <p class="text-text-muted mb-4">OAuth/SSO uses Anaplan's authentication flow and avoids entering an Anaplan password in the connector. If your tenant has not created an OAuth client yet, a tenant security administrator creates it in Anaplan Administration; the <a href="/guide.html" class="text-sheets-green hover:underline">setup guide</a> walks through it. Basic Auth retains your Anaplan email and password in user-specific Google Apps Script storage. See the <a href="/privacy.html" class="text-sheets-green hover:underline">Privacy Policy</a> for storage and retention details.</p>
 
-      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 3: Select your workspace and model</h2>
-      <p class="text-text-muted mb-4">After logging in, the sidebar shows your available Anaplan tenants. Select a tenant, then choose a workspace and model. The sidebar loads all available modules and views.</p>
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 3: Add a model</h2>
+      <p class="text-text-muted mb-4">After signing in, the sidebar reads "No models configured yet". Click <strong>Add Model</strong>, select the tenant, choose an available workspace, select the model you are authorized to access, and click <strong>Save Model</strong>. You can add more than one model; the sidebar then lists the connected model's export actions, saved views, and pivot views.</p>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 4: Export or pivot your data</h2>
-      <p class="text-text-muted mb-4">You have two options:</p>
+      <p class="text-text-muted mb-4">The sidebar has three ways to bring data into the sheet:</p>
       <ul class="list-disc pl-6 text-text-muted mb-6 space-y-2">
-        <li><strong>Quick Export:</strong> Click any saved view or module to export data directly to a new sheet. Data appears with Anaplan's formatting preserved.</li>
-        <li><strong>Pivot Engine:</strong> Click the pivot icon to open the full pivot dialogue. Drag dimensions between rows, columns, and page filters. Select specific items, apply filters, and execute. The result is a custom pivot view written to your sheet.</li>
+        <li><strong>Export Actions:</strong> Open the Export Actions card, select one or more exports defined in the model, and click <strong>Run Selected Exports</strong>. Review the destination warning before confirming; existing data in the destination can be replaced.</li>
+        <li><strong>Saved Views:</strong> Open the Saved Views card, select a view, and click <strong>Export View</strong>. The view lands in the sheet as configured in Anaplan, with no manual mapping.</li>
+        <li><strong>Pivot Views:</strong> Select a view and click <strong>Configure Pivot</strong>. Arrange dimensions across rows, columns, and pages, select the page items you want, and click <strong>Create Pivot</strong> to write the layout into the sheet. Use <strong>Repivot</strong> later to reopen the saved pivot with updated settings.</li>
       </ul>
+      <p class="text-text-muted mb-4">Supported UX grid widgets can also be connected, with their grid styles, such as hierarchy emphasis, number formats, and conditional colors, brought into Sheets.</p>
 
-      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 5: Set up scheduled refreshes</h2>
-      <p class="text-text-muted mb-4">Once your data is in Sheets, you can schedule automatic refreshes. Go to the Refresh tab in the sidebar, select the sheets you want to refresh, and set a schedule (hourly, daily, or weekly). Your sheets will always have the latest Anaplan data.</p>
+      <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Step 5: Refresh on demand or on a schedule</h2>
+      <p class="text-text-muted mb-4">Click <strong>Refresh Sheets</strong> to update the configurations you select. To automate updates, open <strong>Scheduled Refreshes</strong>, click <strong>+ Add Schedule</strong>, choose the scope and a cadence (hourly, daily, or weekly), and click <strong>Save Schedule</strong>. Google-managed trigger timing is approximate, and each run depends on valid authentication and the source model being available; the sidebar shows status and errors when a refresh needs attention.</p>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Works on every platform</h2>
-      <p class="text-text-muted mb-4">Because aPlan4Sheets runs entirely in the browser through Google Sheets, it works on Mac, PC, Chromebook, and Linux. No desktop software to install, no Windows VMs needed.</p>
+      <p class="text-text-muted mb-4">Because aPlan4Sheets runs in the browser through Google Sheets, it works on Mac, PC, Chromebook, and Linux. There is no desktop software to install.</p>
 
       <h2 class="text-2xl font-bold text-navy mt-12 mb-4">Plan your next workflow</h2>
       <p class="text-text-muted mb-4">If your team is evaluating Anaplan-connected Sheets for Mac or Chromebook users, read the <a href="/blog/anaplan-google-sheets-connector-mac-chromebook.html" class="text-sheets-green hover:underline">platform guide</a>. If the goal is recurring reporting, the <a href="/blog/anaplan-reporting-automation-google-sheets.html" class="text-sheets-green hover:underline">Anaplan reporting automation guide</a> covers connected source tabs, refresh cadence, and governance tips.</p>
