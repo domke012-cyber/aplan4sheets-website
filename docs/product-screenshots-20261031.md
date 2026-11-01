@@ -54,3 +54,7 @@ repository with the owner (`outputs/product-screenshots-2026-10-31/`).
 
 - `npm test`: 214/214; `git diff --check` clean.
 - Home page rendered locally with headless Chrome and checked at 1280 px.
+
+Update 2026-11-01: `assets/product/01-formatted-grid.jpg` was replaced by a capture from the fictional
+Northstar model (see `ux-pivot-window-20261101.md`, Addendum 2). `og-image-v2.png` still derives from the
+earlier hero.
