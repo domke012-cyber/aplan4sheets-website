@@ -1,0 +1,30 @@
+/* Formatted UX Pages workflow strip and pivot window features (home page and guide). */
+.ux-kicker { display:inline-block; margin-bottom:12px; padding:5px 12px; border-radius:999px; background:#e7f5ec; color:#0b7544; font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+.ux-steps { list-style:none; margin:48px 0 0; padding:0; display:grid; gap:24px; }
+.ux-step figure { margin:0; height:100%; display:flex; flex-direction:column; background:#fff; border:1px solid #d5dfeb; border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgb(26 39 68 / 8%); }
+.ux-step img { display:block; width:100%; height:auto; border-bottom:1px solid #e5ebf2; }
+.ux-step figcaption { display:grid; grid-template-columns:auto 1fr; column-gap:12px; row-gap:4px; align-items:center; padding:16px 18px 18px; font-size:14px; line-height:1.55; color:#52647b; }
+.ux-step figcaption strong { color:#1a2744; font-size:16px; }
+.ux-step figcaption > span:last-child { grid-column:2; }
+.ux-step-number { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:#0f9d58; color:#fff; font-size:13px; font-weight:700; }
+.ux-note { margin:28px 0 0; text-align:center; color:#52647b; font-size:13px; line-height:1.6; }
+.ux-note a { color:#0b7544; font-weight:650; text-decoration:underline; text-underline-offset:3px; }
+.pw-feature { display:grid; gap:24px; align-items:center; margin-top:48px; }
+.pw-shot { margin:0; background:#fff; border:1px solid #d5dfeb; border-radius:16px; overflow:hidden; box-shadow:0 18px 40px rgb(26 39 68 / 12%); }
+.pw-shot img { display:block; width:100%; height:auto; }
+.pw-copy h3 { font-size:22px; font-weight:700; color:#1a2744; line-height:1.25; }
+.pw-copy p { margin-top:12px; color:#52647b; font-size:16px; line-height:1.65; }
+.pw-copy ul { margin:14px 0 0; padding:0; list-style:none; display:grid; gap:8px; color:#1a2744; font-size:14px; line-height:1.5; }
+.pw-copy li { position:relative; padding-left:22px; }
+.pw-copy li::before { content:''; position:absolute; left:0; top:7px; width:10px; height:10px; border-radius:50%; background:#0f9d58; }
+.guide-shots { display:grid; gap:14px; margin:0 0 24px; }
+.guide-shots figure { margin:0; border:1px solid #d5dfeb; border-radius:12px; overflow:hidden; background:#fff; }
+.guide-shots img { display:block; width:100%; height:auto; }
+.guide-shots figcaption { padding:10px 12px; font-size:13px; line-height:1.5; color:#52647b; }
+.guide-shots figcaption strong { display:block; color:#1a2744; margin-bottom:2px; }
+@media (min-width:640px) { .guide-shots { grid-template-columns:repeat(3, minmax(0, 1fr)); } }
+@media (min-width:768px) {
+  .ux-steps { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .pw-feature { grid-template-columns:minmax(0, 1.25fr) minmax(0, 1fr); gap:40px; }
+  .pw-feature-reverse .pw-shot { order:2; }
+}

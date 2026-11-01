@@ -57,6 +57,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site-v1.css">
+  <link rel="stylesheet" href="/assets/pivot-window-v1.css">
   <style>
     .fade-in {
       opacity: 1;
@@ -239,7 +240,7 @@
         </a>
         <a href="#step-5" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
           <span class="step-number-sm">5</span>
-          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Create Your First Pivot</span>
+          <span class="text-sm font-medium text-navy group-hover:text-sheets-green transition-colors">Create Your First Report</span>
         </a>
         <a href="#step-6" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white hover:shadow-sm transition-all group">
           <span class="step-number-sm">6</span>
@@ -421,11 +422,46 @@
         <div class="flex items-start gap-5 mb-6">
           <div class="step-number">5</div>
           <div>
-            <h2 class="text-2xl md:text-3xl font-bold text-navy">Create Your First Pivot</h2>
-            <p class="mt-1 text-text-muted">Use Pivot Views to build a custom pivot layout.</p>
+            <h2 class="text-2xl md:text-3xl font-bold text-navy">Create Your First Report</h2>
+            <p class="mt-1 text-text-muted">Export a Formatted UX Page, or build a pivot from a module view. Both open the same pivot window.</p>
           </div>
         </div>
         <div class="ml-0 sm:ml-[68px]">
+          <h3 class="text-lg font-bold text-navy mb-3">Export a Formatted UX Page</h3>
+          <p class="text-text-dark leading-relaxed mb-4">
+            The <strong>Formatted UX Pages</strong> card finds the grids on an Anaplan UX page and exports one with its formatting, row groups and page selectors.
+          </p>
+          <ol class="list-decimal list-inside space-y-2 text-text-dark mb-6">
+            <li>Open the <strong>"Formatted UX Pages"</strong> card in the sidebar and choose <strong>"Browse UX Pages"</strong></li>
+            <li>Expand an app and a category, or search for the page by name</li>
+            <li>Choose <strong>"Discover modules"</strong> on the page, then select the grid you want from the page layout</li>
+            <li>Choose <strong>"Export selected grid"</strong>. The pivot window opens with the page's rows, columns, pages and shown items prefilled</li>
+            <li>Adjust the cards, hierarchy levels or combinations if needed, then choose <strong>"Create Pivot"</strong> and wait for the completion message</li>
+            <li>Later, use the card's <strong>Repivot</strong> button to change the selection, <strong>Link</strong> to share page selections with another pivot, and the Refresh controls to reload the data</li>
+          </ol>
+          <div class="guide-demo-card mb-6">
+            <iframe src="/demo/formatted-ux.html?embed=1&loop=1" title="Formatted UX page export demo" class="guide-demo-frame" loading="lazy" allow="autoplay"></iframe>
+            <div class="guide-demo-caption"><span>Silent preview of browsing UX pages, selecting a grid and hierarchy levels, and creating the formatted sheet.</span><a class="guide-demo-link" href="/demo/formatted-ux.html" aria-label="Open narrated walkthrough: From UX page to formatted Sheet">Open narrated walkthrough →</a></div>
+          </div>
+          <h3 class="text-lg font-bold text-navy mb-3">Shape the pivot window</h3>
+          <p class="text-text-dark leading-relaxed mb-4">
+            Three controls do most of the work before the report reaches the sheet. The screenshots show a fictional model.
+          </p>
+          <div class="guide-shots">
+            <figure>
+              <img src="/assets/product/09-pivot-window-chips.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Pivot window with dimension cards in the Rows, Columns and Pages zones after Time was dragged from Columns into Rows">
+              <figcaption><strong>Dimension cards</strong>Drag a card between Rows, Columns and Pages. Its selection travels with it. Click a card to open its Item Selector.</figcaption>
+            </figure>
+            <figure>
+              <img src="/assets/product/10-hierarchy-selectors.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Item Selector with Hierarchy Selectors open, showing Select All, Deselect All and Only This for each level">
+              <figcaption><strong>Hierarchy Selectors</strong>Open "Show Hierarchy Selectors" and use Only This to keep a whole level, or search the tree for single items.</figcaption>
+            </figure>
+            <figure>
+              <img src="/assets/product/11-show-hide-combinations.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Show / Hide column combinations editor with a preview of the nested columns and two occurrences hidden">
+              <figcaption><strong>Show / Hide</strong>Under Row or Column combinations, preview the nested grid and hide the exact occurrences you do not want, then choose Apply Show / Hide.</figcaption>
+            </figure>
+          </div>
+          <h3 class="text-lg font-bold text-navy mb-3">Build a pivot from a module view</h3>
           <p class="text-text-dark leading-relaxed mb-4">
             The <strong>Pivot Views</strong> section lets you pull data from an Anaplan view and arrange dimensions exactly how you need them, including rows, columns, and page filters.
           </p>
