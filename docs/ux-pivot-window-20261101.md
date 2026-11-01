@@ -72,6 +72,22 @@ Level 2 › Cost Center, 28 items), Time and Line Items on columns, GAAP Basis a
 page selectors. The only edits are cosmetic: on all four frames the workbook title, clipped by the 1.6 crop,
 was rewritten and the title-bar icons shifted right of it; on `07` the unrelated app row above
 the Northstar app was relabelled, the clipped sliver of the sidebar's account card at the right
-edge was filled, and the mouse cursor was removed from the grid preview. The Show / Hide frame (`11`) keeps its earlier capture because the data
-preview could not be queried on that model's workspace (the Extensions query returns 401 for a
-non-SSO session there). OCR of the served JPGs: 0 real-term hits.
+edge was filled, and the mouse cursor was removed from the grid preview. OCR of the served JPGs: 0 real-term hits.
+
+## Addendum 2 — hero and Show / Hide recaptured from Northstar (same day)
+
+`01` (the hero) and `11` (Show / Hide) now come from the Northstar model as well, so no frame on
+the home page or the guide carries a retouched Anaplan name or figure any more.
+
+- `11`: the Show / Hide data preview loaded on a retry (the earlier 401 from the Extensions
+  query cleared on its own once the workspace's SSO exception had propagated). The frame shows the
+  Budget Review grid with Cost Center on rows, Time and Line Items nested on columns, two FY25
+  occurrences hidden (MTD Variance % and QTD Actuals), 355 of 357 combinations shown. Same crop and
+  title rewrite as `07`–`10`.
+- `01`: captured in the same browser window, which could not be resized to a 1.6 frame, so the
+  image is the window's left part (row headers, the Cost Center labels and columns C–H) joined to
+  its right part (the grid scrollbar, the sidebar and the title-bar icons) with the empty band between
+  them removed; nothing inside either part was moved. The signed-in card was relabelled with the
+  fictional user (Jordan, jordan@northstar.example, avatar letter J), the only retouch on the frame.
+
+OCR of both finals: 0 real-term hits, "Northstar" and "Jordan" present.
