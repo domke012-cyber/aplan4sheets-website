@@ -39,7 +39,7 @@ test('Get started opens the complete guide alongside the interactive demo and it
     assert.match(hero.querySelector('#getStarted').textContent, /Get started/);
     assert.ok(hero.querySelector('.home-hero-actions a[href="/demo/budget-review.html"]'));
     assert.deepEqual([...hero.querySelectorAll('.home-setup-path li')].map(li=>li.textContent), ['Install','Connect','Add a model','Create a report','Refresh']);
-    assert.equal(guide.window.document.querySelectorAll('.guide-demo-link').length, 7);
+    assert.equal(guide.window.document.querySelectorAll('.guide-demo-link').length, 8);
     for (const a of guide.window.document.querySelectorAll('.guide-demo-link')) {
       assert.ok(fs.existsSync(path.join(root, a.getAttribute('href').split('?')[0])));
     }

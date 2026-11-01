@@ -66,7 +66,7 @@ test('guide uses current menu, authentication, model and export labels with expl
     assert.match(d.querySelector('#step-6 iframe').getAttribute('src'), /^\/demo\/exports\.html\?embed=1/);
     assert.match(text(d.getElementById('step-7')), /Select the saved reports.*number of selected configurations/);
     assert.doesNotMatch(text(d.body), /Pre-Defined Exports|Filter Views|Refresh Selected Exports|Login with Anaplan SSO|credentials are encrypted and stored securely/);
-    assert.equal(d.querySelectorAll('iframe').length, 7, 'illustrative demo embeds are preserved');
+    assert.equal(d.querySelectorAll('iframe').length, 8, 'illustrative demo embeds are preserved');
   } finally { dom.window.close(); }
 });
 

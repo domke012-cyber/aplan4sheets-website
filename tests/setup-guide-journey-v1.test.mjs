@@ -18,6 +18,7 @@ test('Every silent guide preview links directly to its narrated, user-controlled
       '/demo/setup.html',
       '/demo/oauth-setup.html',
       '/demo/setup.html?focus=model',
+      '/demo/formatted-ux.html',
       '/demo/pivot.html',
       '/demo/exports.html',
       '/demo/schedule.html'

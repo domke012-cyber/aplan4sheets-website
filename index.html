@@ -158,6 +158,7 @@
   <link rel="stylesheet" href="/assets/site-v1.css">
   <link rel="stylesheet" href="/assets/homepage-enhancements-v1.css">
   <link rel="stylesheet" href="/assets/product-preview-v1.css">
+  <link rel="stylesheet" href="/assets/pivot-window-v1.css">
   <link rel="stylesheet" href="/assets/content-reveal-v1.css">
   <script src="/assets/homepage-navigation-v1.js" defer></script>
   <script src="/assets/content-reveal-v1.js" defer></script>
@@ -233,6 +234,98 @@
     </div>
   </section>
 
+  <!-- Formatted UX Pages workflow -->
+  <section id="ux-workflow" class="py-20 md:py-28 bg-white" aria-labelledby="uxWorkflowHeading">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <p class="ux-kicker">Formatted UX Pages</p>
+        <h2 id="uxWorkflowHeading" class="text-3xl md:text-4xl font-bold text-navy">From an Anaplan UX page to a formatted Sheet</h2>
+        <p class="mt-4 text-text-muted text-lg max-w-2xl mx-auto">Start from the page your team already uses in Anaplan. The connector finds the grid, opens it in the pivot window, and writes a formatted sheet you can refresh.</p>
+      </div>
+      <ol class="ux-steps">
+        <li class="ux-step fade-in">
+          <figure>
+            <img src="/assets/product/07-ux-pages-browse.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Formatted UX Pages dialog listing the apps and pages of a fictional model, with the grids on the Expense Variance page discovered and the main grid selected for export">
+            <figcaption><span class="ux-step-number">1</span><strong>Browse UX Pages</strong><span>Open an app, pick a page, choose Discover modules and select the grid you want. Combined grids keep their shared page filters.</span></figcaption>
+          </figure>
+        </li>
+        <li class="ux-step fade-in">
+          <figure>
+            <img src="/assets/product/08-pivot-window-prefilled.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Pivot window opened from the UX page with Department on Rows, Time and Line Items on Columns, and the page selectors on Pages, each shown as a card with its item count and selection badge">
+            <figcaption><span class="ux-step-number">2</span><strong>Export selected grid</strong><span>The pivot window opens prefilled with the page's rows, columns, pages and shown items. Adjust anything before it reaches the sheet.</span></figcaption>
+          </figure>
+        </li>
+        <li class="ux-step fade-in">
+          <figure>
+            <img src="/assets/product/01-formatted-grid.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Formatted budget review written to Google Sheets beside the connector sidebar, with frozen headers, grouped department rows and page selectors, using fictional figures">
+            <figcaption><span class="ux-step-number">3</span><strong>Create Pivot</strong><span>A formatted sheet with frozen headers, rows grouped by hierarchy, the page selectors and a last-updated stamp.</span></figcaption>
+          </figure>
+        </li>
+        <li class="ux-step fade-in">
+          <figure>
+            <img src="/assets/product/02-sidebar-home.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="aPlan4Sheets sidebar with the Formatted UX Pages card expanded, offering Browse UX Pages, Repivot and Link beside the exported budget review">
+            <figcaption><span class="ux-step-number">4</span><strong>Repivot, Link, Refresh</strong><span>Reopen the pivot window from the sidebar card, link pivots that share filters, and refresh on demand or on a schedule.</span></figcaption>
+          </figure>
+        </li>
+      </ol>
+      <p class="ux-note">Product screenshots · Fictional model and figures · <a href="/demo/formatted-ux.html">Walk through the UX page export →</a></p>
+    </div>
+  </section>
+
+  <!-- The pivot window -->
+  <section id="pivot-window" class="py-20 md:py-28 bg-gray-50" aria-labelledby="pivotWindowHeading">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center fade-in">
+        <p class="ux-kicker">The pivot window</p>
+        <h2 id="pivotWindowHeading" class="text-3xl md:text-4xl font-bold text-navy">Shape the report before it reaches the sheet</h2>
+        <p class="mt-4 text-text-muted text-lg max-w-2xl mx-auto">Every export opens in the same window, whether it starts from a UX page or a module view. Three controls do most of the work.</p>
+      </div>
+      <div class="pw-feature fade-in">
+        <figure class="pw-shot">
+          <img src="/assets/product/09-pivot-window-chips.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Pivot window after dragging the Time card from Columns into Rows: Rows holds Department and Time, Columns holds Line Items, and Pages holds the page selectors; the Item Selector on the left shows the hierarchy levels and the first departments">
+        </figure>
+        <div class="pw-copy">
+          <h3>Dimension cards you can move</h3>
+          <p>Each dimension is a card with its item count and a selection badge. Drag a card between <strong>Rows</strong>, <strong>Columns</strong> and <strong>Pages</strong> and its selection travels with it. Here Time has just moved from Columns into Rows.</p>
+          <ul>
+            <li>Click a card to open its Item Selector</li>
+            <li>Page cards can select several items and sum them</li>
+            <li>Add a compatible module beside the first with Add Module</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pw-feature pw-feature-reverse fade-in">
+        <figure class="pw-shot">
+          <img src="/assets/product/10-hierarchy-selectors.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Item Selector for the Department card with Hierarchy Selectors open: All Departments, Division, Department and Cost Center levels, each with Select All, Deselect All and Only This, and Only This applied to the Department level so 20 of 162 items are selected">
+        </figure>
+        <div class="pw-copy">
+          <h3>Select a whole hierarchy level</h3>
+          <p><strong>Show Hierarchy Selectors</strong> lists every level of the list with Select All, Deselect All and Only This. One click isolates the 20 departments, and the card's badge updates to 20/162.</p>
+          <ul>
+            <li>Search the tree, or expand it and tick single items</li>
+            <li>Default, All and None reset the selection</li>
+            <li>Add Formula creates a calculated field next to the line items</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pw-feature fade-in">
+        <figure class="pw-shot">
+          <img src="/assets/product/11-show-hide-combinations.jpg" width="1280" height="800" loading="lazy" decoding="async" alt="Show / Hide column combinations editor: a preview of the nested Time and Line Items columns with fictional values, two occurrences hidden, and a searchable list of the twelve combinations with Show all, Hide all and Apply Show / Hide">
+        </figure>
+        <div class="pw-copy">
+          <h3>Show or hide exact nested occurrences</h3>
+          <p>Nested columns multiply fast. <strong>Show / Hide</strong> previews the nested grid with live Anaplan values. Click a leaf header, or tick the list, to hide the occurrences you do not want, then apply. It works for rows too, and for each grid region of a combined UX page.</p>
+          <ul>
+            <li>Page through the combinations and refresh the preview data</li>
+            <li>Order the occurrences you keep</li>
+            <li>Group rows by hierarchy in the written sheet</li>
+          </ul>
+        </div>
+      </div>
+      <p class="ux-note">Product screenshots · Fictional model and figures · <a href="/demo/nested-selections.html">Try the nested selections demo →</a></p>
+    </div>
+  </section>
+
   <!-- Latest connected-reporting workflows -->
   <section id="latest" class="py-20 md:py-28 bg-gray-50">
     <div class="max-w-6xl mx-auto px-6">
@@ -243,25 +336,12 @@
       </div>
       <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         <div class="fade-in bg-white rounded-2xl border border-gray-200 p-6 shadow-sm min-w-0">
-          <p class="text-sm font-semibold text-navy mb-4">Different measures for different periods</p>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left" style="min-width:460px">
-              <caption class="text-xs text-text-muted text-left pb-3">Illustrative budget review · sample data</caption>
-              <thead class="bg-navy text-white">
-                <tr><th rowspan="2" scope="col" class="p-3 rounded-tl-lg">Metric</th><th scope="col" class="p-3 text-center">FY26</th><th scope="colgroup" colspan="3" class="p-3 text-center rounded-tr-lg">FY27</th></tr>
-                <tr><th scope="col" class="p-3">Forecast</th><th scope="col" class="p-3">Budget</th><th scope="col" class="p-3">YoY</th><th scope="col" class="p-3">YoY %</th></tr>
-              </thead>
-              <tbody class="text-navy">
-                <tr class="border-b border-gray-100"><th scope="row" class="p-3">Revenue</th><td class="p-3">$100M</td><td class="p-3">$120M</td><td class="p-3">$20M</td><td class="p-3">20.0%</td></tr>
-                <tr class="bg-green-light"><th scope="row" class="p-3">Operating profit</th><td class="p-3">$18M</td><td class="p-3">$24M</td><td class="p-3">$6M</td><td class="p-3">33.3%</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="mt-4 text-xs text-text-muted">Keep only the combinations you want—not every measure repeated under every year.</p>
+          <p class="text-sm font-semibold text-navy mb-3">Exact nested selections</p>
+          <p class="text-text-muted leading-relaxed">Keep different measures under each year instead of every measure repeated under every period. The interactive demo lets you tick the exact occurrences and watch the layout update.</p>
           <a href="/demo/nested-selections.html" class="mt-5 inline-flex text-sheets-green text-sm font-semibold">Explore nested selections →</a>
         </div>
         <div class="space-y-7 fade-in min-w-0">
-          <div><h3 class="text-xl font-bold text-navy">Preview. Show or hide. Repivot.</h3><p class="mt-2 text-text-muted leading-relaxed">Select exact row and column occurrences across two or three nested dimensions. Preview the layout, change selections, and save it for refresh.</p></div>
+          <div><h3 class="text-xl font-bold text-navy">Row and column combinations</h3><p class="mt-2 text-text-muted leading-relaxed">Under each zone of the pivot window, choose All or Show / Hide. Preview the nested grid, hide the occurrences you do not need, order the rest, and save the layout for refresh.</p></div>
           <div><h3 class="text-xl font-bold text-navy">One filter, connected reports</h3><p class="mt-2 text-text-muted leading-relaxed">Link compatible pivots in the same model so shared page selections stay in sync. Combine compatible module grids in one output.</p></div>
           <div><h3 class="text-xl font-bold text-navy">Reuse your workbook setup</h3><p class="mt-2 text-text-muted leading-relaxed">Clone a connected workbook with its saved-view and pivot configurations, then reconnect under the receiving user's own access.</p></div>
         </div>
@@ -299,8 +379,8 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/>
             </svg>
           </div>
-          <h3 class="text-lg font-bold text-navy mb-2">Anaplan UX formatting</h3>
-          <p class="text-text-muted leading-relaxed text-sm">Bring supported UX grid styles into Sheets, including hierarchy emphasis, number formats, and conditional colors.</p>
+          <h3 class="text-lg font-bold text-navy mb-2">Formatted UX Pages</h3>
+          <p class="text-text-muted leading-relaxed text-sm">Browse your Anaplan apps and pages, discover the grids on a page, and export one with its formatting, row groups and page selectors intact.</p>
         </div>
         <!-- Feature 3 -->
         <div class="fade-in text-center">
@@ -352,7 +432,7 @@
             </svg>
           </div>
           <h3 class="text-lg font-bold text-navy mb-2">Powerful pivot engine</h3>
-          <p class="text-text-muted text-sm leading-relaxed">Transpose rows and columns, apply page selectors, and explore multi-dimensional Anaplan data in flexible pivot layouts — all inside Sheets.</p>
+          <p class="text-text-muted text-sm leading-relaxed">Dimension cards you drag between Rows, Columns and Pages, hierarchy level selectors, and Show / Hide for exact nested occurrences, all before the report reaches the sheet.</p>
         </div>
         <!-- Feature 3 -->
         <div class="fade-in bg-white rounded-xl p-7 border border-gray-100 hover:border-sheets-green/30 hover:shadow-lg transition-all">
@@ -470,7 +550,7 @@
                 </div>
               </div>
               <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                <span class="text-sm font-medium text-text-muted">Pivot configuration · watch the walkthrough</span>
+                <span class="text-sm font-medium text-text-muted">The pivot window · watch the walkthrough</span>
               </div>
             </div>
           </a>
