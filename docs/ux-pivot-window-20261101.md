@@ -62,3 +62,16 @@ A small fictional capture model is being built separately so future captures nee
 - `git diff --check` clean.
 
 Rollback: revert the merge commit on `main`; the new images are additive.
+
+## Addendum — recaptured from the fictional Northstar model (same day)
+
+Frames `07`, `08`, `09` and `10` were recaptured from the production add-on on a fictional
+Anaplan model built for this purpose ("Northstar Planning", Budget Owner Review board), so they
+carry no retouched names or figures at all: Cost Center hierarchy (All Cost Centers › Level 1 ›
+Level 2 › Cost Center, 28 items), Time and Line Items on columns, GAAP Basis and Versions as
+page selectors. The only edits are cosmetic: on all four frames the workbook title, clipped by the 1.6 crop,
+was rewritten and the title-bar icons shifted right of it; on `07` the unrelated app row above
+the Northstar app was relabelled, the clipped sliver of the sidebar's account card at the right
+edge was filled, and the mouse cursor was removed from the grid preview. The Show / Hide frame (`11`) keeps its earlier capture because the data
+preview could not be queried on that model's workspace (the Extensions query returns 401 for a
+non-SSO session there). OCR of the served JPGs: 0 real-term hits.
