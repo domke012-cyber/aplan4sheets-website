@@ -26,7 +26,7 @@ function rules(stylesheet = css) {
 
 test('Every shared-player walkthrough uses the versioned nested-layout fix', () => {
   assert.match(css, /@import url\('\.\/demo-responsive\.css'\)/);
-  for (const file of demos.filter(file => file !== 'formatted-ux.html')) {
+  for (const file of demos.filter(file => !['formatted-ux.html', 'pivot-workflow.html'].includes(file))) {
     const dom = new JSDOM(fs.readFileSync(path.join(root, 'demo', file), 'utf8'));
     assert.equal(dom.window.document.querySelector('link[href*="demo-responsive"]')?.getAttribute('href'), '../assets/demo-responsive-v2.css', file);
     dom.window.close();

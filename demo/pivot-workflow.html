@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Build a Pivot in Google Sheets | aPlan4Sheets</title>
+  <meta name="description" content="Try the aPlan4Sheets pivot workflow: select an Anaplan module view, rearrange dimensions, choose hierarchy levels, and create a sample Google Sheets report.">
+  <link rel="canonical" href="https://aplan4sheets.com/demo/pivot-workflow.html">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/pivot-workflow-v1.css">
+  <script src="../assets/pivot-workflow-v1.js" defer></script>
+</head>
+<body>
+  <header class="site-head">
+    <nav aria-label="Site navigation">
+      <a class="brand" href="../index.html"><span class="brand-icon" aria-hidden="true">▦</span>aPlan4Sheets</a>
+      <a href="../demos.html">All demos <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+  <main class="shell">
+    <div class="intro">
+      <p class="eyebrow"><span></span> INTERACTIVE PRODUCT DEMO</p>
+      <h1>Build an Anaplan pivot in Sheets.</h1>
+      <p>Choose a view, move dimensions, and pick a cost center level. The sample sheet updates to match your layout.</p>
+    </div>
+    <section class="guide" aria-label="Walkthrough guide">
+      <ol class="steps" id="steps">
+        <li aria-current="step"><span>1</span> Choose a view</li>
+        <li><span>2</span> Arrange dimensions</li>
+        <li><span>3</span> Choose a hierarchy level</li>
+        <li><span>4</span> Create pivot</li>
+      </ol>
+      <div class="guide-detail">
+        <p id="guide" aria-live="polite">Open <strong>Operating Expenses</strong>, choose <strong>Department Forecast</strong>, then select <strong>Configure Pivot</strong>.</p>
+        <button class="quiet" type="button" id="reset">Reset demo</button>
+      </div>
+    </section>
+    <section class="workbook" aria-label="Simulated Google Sheets workbook">
+      <div class="sheets-header">
+        <span class="sheets-icon" aria-hidden="true">▦</span>
+        <div>
+          <div class="workbook-name">Northstar Planning · Forecast Review</div>
+          <div class="sheets-menus" aria-hidden="true">File <span>Edit</span> View <span>Insert</span> Format <span>Data</span> Tools <span>Extensions</span> Help</div>
+        </div>
+        <span class="demo-badge">Sample workbook</span>
+      </div>
+      <div class="toolbar" aria-hidden="true"><span>↶</span><span>↷</span><span>100% ▾</span><span>$</span><span>%</span><span>123 ▾</span><span>Arial ▾</span><span>10</span><b>B</b><i>I</i></div>
+      <div class="workspace">
+        <div class="sheet-pane">
+          <div class="formula" aria-hidden="true"><span>A1</span><i>fx</i><span id="formula-value"></span></div>
+          <div class="sheet-scroll" id="sheet" tabindex="0" role="region" aria-label="Spreadsheet grid"></div>
+          <div class="sheet-tabs"><span aria-hidden="true">＋</span><strong id="sheet-tab">Sheet1</strong></div>
+        </div>
+        <aside class="sidebar" aria-label="aPlan4Sheets sidebar">
+          <div class="sidebar-brand"><span class="sidebar-mark" aria-hidden="true">A</span><span>aPlan4Sheets</span><small>Connected</small></div>
+          <div class="source-card">
+            <h2><span aria-hidden="true">▦</span> Pivot Views</h2>
+            <div id="view-picker">
+              <label class="field-label" for="view-search">Search modules or views</label>
+              <input id="view-search" type="search" placeholder="Search views…" autocomplete="off">
+              <div class="catalog">
+                <div class="model">Northstar Planning</div>
+                <div id="modules"></div>
+              </div>
+              <button class="primary" id="configure" type="button" disabled>Configure Pivot</button>
+            </div>
+            <div id="saved-view" hidden></div>
+          </div>
+        </aside>
+        <section id="pivot-dialog" class="pivot-dialog" role="dialog" aria-labelledby="pivot-title" hidden>
+          <div class="dialog-title"><h2 id="pivot-title">Configure Pivot</h2><button type="button" id="close" aria-label="Close pivot configuration">×</button></div>
+          <div class="view-banner"><strong>View:</strong> <span id="view-name"></span></div>
+          <div class="pivot-body">
+            <div class="selector">
+              <div class="selector-title"><h3>Item Selector</h3><span id="selected-count"></span></div>
+              <div id="selector-body"></div>
+            </div>
+            <div class="layout" id="layout" aria-label="Pivot layout"></div>
+          </div>
+          <div class="dialog-footer">
+            <p id="layout-status" role="status"></p>
+            <button class="secondary" id="cancel" type="button">Cancel</button>
+            <button class="primary" id="create" type="button">Create Pivot</button>
+          </div>
+        </section>
+      </div>
+    </section>
+    <p class="disclosure">Interactive simulation using fictional data. No Anaplan sign-in, live connection, or Google file required.</p>
+  </main>
+</body>
+</html>

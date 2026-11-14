@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-labelledby="title desc">
+<title id="title">Fictional Northstar Budget Review in Sheets</title>
+<desc id="desc">A formatted sample report with high-contrast blue headings, grouped cost centers and GAAP Basis and Versions page selectors.</desc>
+<defs><clipPath id="sheet"><rect width="1280" height="800" rx="12"/></clipPath></defs>
+<g clip-path="url(#sheet)" font-family="Arial, Helvetica, sans-serif">
+<rect width="1280" height="800" fill="#fff"/>
+<rect width="1280" height="130" fill="#f7f9fc"/>
+<rect x="28" y="20" width="35" height="41" rx="6" fill="#148650"/>
+<path d="M37 32h17v18H37zM37 38h17M37 44h17M45 32v18" fill="none" stroke="#fff" stroke-width="1.4"/>
+<text x="78" y="46" font-size="27" font-weight="700" fill="#233247">Northstar Budget Review</text>
+<text x="79" y="76" font-size="17" fill="#495a72">File　 Edit　 View　 Insert　 Format　 Data　 Tools　 Extensions</text>
+<rect x="21" y="92" width="1238" height="28" rx="13" fill="#eaf0f8"/>
+<text x="43" y="112" font-size="15" fill="#354c6a">⌕ Menus　 ↶　 ↷　 100%　 $　 %　　 Default　　 10　 B　 I</text>
+<rect x="0" y="130" width="1280" height="47" fill="#edf2f8"/>
+<rect x="0" y="177" width="59" height="577" fill="#f5f8fc"/>
+<rect x="964" y="130" width="316" height="624" fill="#f5f8fd"/>
+<path d="M964 130v624M59 130v624" stroke="#d5dfed" stroke-width="2"/>
+<text x="991" y="169" font-size="21" font-weight="700" fill="#233247">Anaplan Connector</text>
+<text x="991" y="207" font-size="16" fill="#4c627e">Connected model</text>
+<text x="991" y="234" font-size="21" font-weight="700" fill="#233247">Northstar Planning</text>
+<rect x="986" y="263" width="268" height="60" rx="10" fill="#e3efff" stroke="#b3cef7"/>
+<text x="1005" y="299" font-size="20" font-weight="700" fill="#17457b">Formatted UX Pages</text>
+<text x="995" y="359" font-size="17" fill="#465c78">Budget Owner Review</text>
+<rect x="986" y="380" width="268" height="50" rx="9" fill="#2269c5"/>
+<text x="1120" y="412" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">Browse UX Pages</text>
+<rect x="986" y="444" width="128" height="44" rx="8" fill="#e2edfb"/>
+<rect x="1126" y="444" width="128" height="44" rx="8" fill="#e2edfb"/>
+<text x="1050" y="472" text-anchor="middle" font-size="17" font-weight="700" fill="#184478">Repivot</text>
+<text x="1190" y="472" text-anchor="middle" font-size="17" font-weight="700" fill="#184478">Link</text>
+<text x="990" y="704" font-size="14" font-weight="700" letter-spacing="1" fill="#4b6483">ILLUSTRATIVE REPORT</text>
+<text x="990" y="728" font-size="16" fill="#4b6483">Fictional data</text>
+<rect x="77" y="198" width="160" height="32" rx="5" fill="#edf2f8"/><rect x="245" y="198" width="159" height="32" rx="5" fill="#e2efff"/>
+<rect x="77" y="236" width="160" height="32" rx="5" fill="#edf2f8"/><rect x="245" y="236" width="159" height="32" rx="5" fill="#e2efff"/>
+<text x="89" y="220" font-size="16" font-weight="700" fill="#2a405c">GAAP Basis</text>
+<text x="89" y="258" font-size="16" font-weight="700" fill="#2a405c">Versions</text>
+<text x="258" y="220" font-size="16" fill="#16477d">GAAP　▾</text>
+<text x="258" y="258" font-size="16" fill="#16477d">Forecast　▾</text>
+<rect x="59" y="286" width="905" height="45" fill="#d5e8ff"/>
+<text x="457" y="315" text-anchor="middle" font-size="19" font-weight="700" fill="#153b68">January 2027</text>
+<text x="796" y="315" text-anchor="middle" font-size="19" font-weight="700" fill="#153b68">February 2027</text>
+<rect x="59" y="331" width="905" height="44" fill="#e7f1fe"/>
+<path d="M59 375h905" stroke="#9ab7d9" stroke-width="3"/>
+<text x="78" y="359" font-size="17" font-weight="700" fill="#153b68">Cost Center</text>
+<text x="449" y="359" text-anchor="end" font-size="17" font-weight="700" fill="#153b68">Actual</text>
+<text x="607" y="359" text-anchor="end" font-size="17" font-weight="700" fill="#153b68">Forecast</text>
+<text x="773" y="359" text-anchor="end" font-size="17" font-weight="700" fill="#153b68">Actual</text>
+<text x="937" y="359" text-anchor="end" font-size="17" font-weight="700" fill="#153b68">Forecast</text>
+
+<text x="203" y="159" text-anchor="middle" font-size="15" fill="#58708f">A</text>
+<text x="400" y="159" text-anchor="middle" font-size="15" fill="#58708f">B</text>
+<text x="550" y="159" text-anchor="middle" font-size="15" fill="#58708f">C</text>
+<text x="708" y="159" text-anchor="middle" font-size="15" fill="#58708f">D</text>
+<text x="875" y="159" text-anchor="middle" font-size="15" fill="#58708f">E</text>
+<rect x="59" y="375" width="905" height="38" fill="#f0f6ff"/>
+<path d="M59 413h905" stroke="#e0e8f3"/><text x="30" y="400" text-anchor="middle" font-size="14" fill="#637996">7</text><text x="78" y="400" font-size="18" font-weight="700" fill="#25456b">▾  Americas</text>
+<text x="449" y="400" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">1,538</text>
+<text x="607" y="400" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">1,572</text>
+<text x="773" y="400" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">1,589</text>
+<text x="937" y="400" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">1,615</text>
+<path d="M59 451h905" stroke="#e0e8f3"/><text x="30" y="438" text-anchor="middle" font-size="14" fill="#637996">8</text><text x="102" y="438" font-size="18" font-weight="400" fill="#334861">Field Sales</text>
+<text x="449" y="438" text-anchor="end" font-size="18" font-weight="400" fill="#334861">620</text>
+<text x="607" y="438" text-anchor="end" font-size="18" font-weight="400" fill="#334861">644</text>
+<text x="773" y="438" text-anchor="end" font-size="18" font-weight="400" fill="#334861">642</text>
+<text x="937" y="438" text-anchor="end" font-size="18" font-weight="400" fill="#334861">656</text>
+<path d="M59 489h905" stroke="#e0e8f3"/><text x="30" y="476" text-anchor="middle" font-size="14" fill="#637996">9</text><text x="102" y="476" font-size="18" font-weight="400" fill="#334861">Product Engineering</text>
+<text x="449" y="476" text-anchor="end" font-size="18" font-weight="400" fill="#334861">918</text>
+<text x="607" y="476" text-anchor="end" font-size="18" font-weight="400" fill="#334861">928</text>
+<text x="773" y="476" text-anchor="end" font-size="18" font-weight="400" fill="#334861">947</text>
+<text x="937" y="476" text-anchor="end" font-size="18" font-weight="400" fill="#334861">959</text>
+<rect x="59" y="489" width="905" height="38" fill="#f0f6ff"/>
+<path d="M59 527h905" stroke="#e0e8f3"/><text x="30" y="514" text-anchor="middle" font-size="14" fill="#637996">10</text><text x="78" y="514" font-size="18" font-weight="700" fill="#25456b">▾  EMEA</text>
+<text x="449" y="514" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">1,104</text>
+<text x="607" y="514" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">1,128</text>
+<text x="773" y="514" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">1,119</text>
+<text x="937" y="514" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">1,149</text>
+<path d="M59 565h905" stroke="#e0e8f3"/><text x="30" y="552" text-anchor="middle" font-size="14" fill="#637996">11</text><text x="102" y="552" font-size="18" font-weight="400" fill="#334861">Enterprise Sales</text>
+<text x="449" y="552" text-anchor="end" font-size="18" font-weight="400" fill="#334861">695</text>
+<text x="607" y="552" text-anchor="end" font-size="18" font-weight="400" fill="#334861">710</text>
+<text x="773" y="552" text-anchor="end" font-size="18" font-weight="400" fill="#334861">702</text>
+<text x="937" y="552" text-anchor="end" font-size="18" font-weight="400" fill="#334861">724</text>
+<path d="M59 603h905" stroke="#e0e8f3"/><text x="30" y="590" text-anchor="middle" font-size="14" fill="#637996">12</text><text x="102" y="590" font-size="18" font-weight="400" fill="#334861">Customer Success</text>
+<text x="449" y="590" text-anchor="end" font-size="18" font-weight="400" fill="#334861">409</text>
+<text x="607" y="590" text-anchor="end" font-size="18" font-weight="400" fill="#334861">418</text>
+<text x="773" y="590" text-anchor="end" font-size="18" font-weight="400" fill="#334861">417</text>
+<text x="937" y="590" text-anchor="end" font-size="18" font-weight="400" fill="#334861">425</text>
+<rect x="59" y="603" width="905" height="38" fill="#f0f6ff"/>
+<path d="M59 641h905" stroke="#e0e8f3"/><text x="30" y="628" text-anchor="middle" font-size="14" fill="#637996">13</text><text x="78" y="628" font-size="18" font-weight="700" fill="#25456b">▾  APAC</text>
+<text x="449" y="628" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">856</text>
+<text x="607" y="628" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">878</text>
+<text x="773" y="628" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">871</text>
+<text x="937" y="628" text-anchor="end" font-size="18" font-weight="700" fill="#25456b">886</text>
+<path d="M59 679h905" stroke="#e0e8f3"/><text x="30" y="666" text-anchor="middle" font-size="14" fill="#637996">14</text><text x="102" y="666" font-size="18" font-weight="400" fill="#334861">Data Platform</text>
+<text x="449" y="666" text-anchor="end" font-size="18" font-weight="400" fill="#334861">521</text>
+<text x="607" y="666" text-anchor="end" font-size="18" font-weight="400" fill="#334861">535</text>
+<text x="773" y="666" text-anchor="end" font-size="18" font-weight="400" fill="#334861">528</text>
+<text x="937" y="666" text-anchor="end" font-size="18" font-weight="400" fill="#334861">539</text>
+<path d="M59 717h905" stroke="#e0e8f3"/><text x="30" y="704" text-anchor="middle" font-size="14" fill="#637996">15</text><text x="102" y="704" font-size="18" font-weight="400" fill="#334861">Business Operations</text>
+<text x="449" y="704" text-anchor="end" font-size="18" font-weight="400" fill="#334861">335</text>
+<text x="607" y="704" text-anchor="end" font-size="18" font-weight="400" fill="#334861">343</text>
+<text x="773" y="704" text-anchor="end" font-size="18" font-weight="400" fill="#334861">343</text>
+<text x="937" y="704" text-anchor="end" font-size="18" font-weight="400" fill="#334861">347</text>
+<path d="M289 331v386M466 331v386M626 286v431M792 331v386" stroke="#e0e8f3"/>
+<text x="78" y="739" font-size="14" fill="#58708f">USD in thousands</text>
+<rect y="754" width="1280" height="46" fill="#edf2f9"/>
+<text x="27" y="783" font-size="18" fill="#4c6482">＋　 Sheet1</text>
+<rect x="137" y="759" width="221" height="36" rx="5" fill="#dbeafe"/>
+<text x="157" y="783" font-size="17" font-weight="700" fill="#17457b">[P] Budget Review　▾</text>
+</g></svg>

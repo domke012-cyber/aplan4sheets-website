@@ -10,7 +10,7 @@ const readPage = () => new JSDOM(source, { url: 'https://aplan4sheets.com/demos.
 const text = node => node.textContent.replace(/\s+/g, ' ').trim();
 const groups = {
   'get-connected': ['marketplace-install', 'oauth-client', 'oauth-setup', 'setup'],
-  'build-reports': ['formatted-ux', 'budget-review', 'pivot', 'exports', 'nested-selections', 'multi-module', 'discovery', 'ux-formatting'],
+  'build-reports': ['pivot-workflow', 'formatted-ux', 'budget-review', 'pivot', 'exports', 'nested-selections', 'multi-module', 'discovery', 'ux-formatting'],
   automate: ['schedule'],
   'explore-ai': ['llm-agent']
 };
@@ -42,7 +42,7 @@ test('Four native goal links reach complete, permanently available groups withou
       }
       assert.ok(section.querySelector('a[href="#choose-goal"]'));
     }
-    assert.equal(d.querySelectorAll('#demoGrid [data-walkthrough]').length, 14);
+    assert.equal(d.querySelectorAll('#demoGrid [data-walkthrough]').length, 15);
     assert.equal(d.querySelector('[role="tab"], [role="tablist"], [role="tabpanel"]'), null);
     assert.equal(d.querySelector('#demoGrid button'), null);
   } finally { dom.window.close(); }
@@ -57,9 +57,9 @@ test('Structured demo list matches the visible cards exactly, including installa
     const expected = [...d.querySelectorAll('#demoGrid [data-walkthrough]')].map((card, index) => ({
       '@type': 'ListItem', position: index + 1, name: text(card.querySelector('h3')), url: card.href
     }));
-    assert.equal(list.numberOfItems, 14);
+    assert.equal(list.numberOfItems, 15);
     assert.deepEqual(list.itemListElement, expected);
-    assert.equal(new Set(expected.map(item => item.url)).size, 14);
+    assert.equal(new Set(expected.map(item => item.url)).size, 15);
   } finally { dom.window.close(); }
 });
 
