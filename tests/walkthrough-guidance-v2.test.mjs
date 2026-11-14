@@ -7,7 +7,7 @@ import { JSDOM } from 'jsdom';
 import FakeTimers from '@sinonjs/fake-timers';
 
 const root = path.resolve(import.meta.dirname, '..');
-const demos = fs.readdirSync(path.join(root, 'demo')).filter(name => name.endsWith('.html') && name !== 'formatted-ux.html');
+const demos = fs.readdirSync(path.join(root, 'demo')).filter(name => name.endsWith('.html') && !['formatted-ux.html', 'pivot-workflow.html'].includes(name));
 function fixture(file) {
   const dom = new JSDOM(fs.readFileSync(path.join(root, 'demo', file), 'utf8'), { url: 'https://example.test/demo/' + file, runScripts: 'outside-only', pretendToBeVisual: true });
   const { window } = dom, errors = [], played = [];

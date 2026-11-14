@@ -7,9 +7,9 @@ import { JSDOM } from 'jsdom';
 import FakeTimers from '@sinonjs/fake-timers';
 const root=path.resolve(import.meta.dirname,'..');
 const demos=fs.readdirSync(path.join(root,'demo')).filter(name=>name.endsWith('.html'));
-// Formatted UX uses its own step-driven narration controller. Keep it in
-// the all-demo asset validation; its lifecycle has separate regression coverage.
-const autoplayDemos=demos.filter(name=>name!=='formatted-ux.html');
+// Formatted UX and the hands-on pivot have separate interaction coverage.
+// Keep both in all-demo asset validation, but not shared player checks.
+const autoplayDemos=demos.filter(name=>!['formatted-ux.html','pivot-workflow.html'].includes(name));
 function createDemo(file,query='') {
   const html=fs.readFileSync(path.join(root,'demo',file),'utf8');
   const dom=new JSDOM(html,{url:`https://example.test/demo/${file}${query}`,runScripts:'outside-only',pretendToBeVisual:true});

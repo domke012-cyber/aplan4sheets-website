@@ -26,6 +26,12 @@ Walkthroughs use `assets/demo-responsive-v2.css`, which preserves the original
 layout checkpoint and fixes nested card/grid/dialog clipping in standalone and
 embedded previews. See `docs/demo-layout-v2-review-20261007.md` for verification.
 
+The hands-on `/demo/pivot-workflow.html` starts in the connector sidebar:
+find a saved or default view, configure Rows, Columns and Pages, select an
+entire cost-center level or individual items, and create the resulting sample
+report. All figures are fictional and interactions run locally without Anaplan
+or Google credentials. The original narrated `/demo/pivot.html` remains available.
+
 The flagship `/demo/budget-review.html` is a working, fictional
 budget-review simulation. Choose exact columns/rows, execute the sample pivot,
 build a chart, and change to Q4 Forecast with an explicit refresh. The sheet,

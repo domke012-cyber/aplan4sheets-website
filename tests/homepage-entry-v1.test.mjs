@@ -37,11 +37,23 @@ test('Get started opens the complete guide alongside the interactive demo and it
     const hero = dom.window.document.querySelector('.home-hero');
     assert.equal(hero.querySelector('#getStarted').getAttribute('href'), '/guide.html');
     assert.match(hero.querySelector('#getStarted').textContent, /Get started/);
-    assert.ok(hero.querySelector('.home-hero-actions a[href="/demo/budget-review.html"]'));
+    assert.ok(hero.querySelector('.home-hero-actions a[href="/demo/pivot-workflow.html"]'));
     assert.deepEqual([...hero.querySelectorAll('.home-setup-path li')].map(li=>li.textContent), ['Install','Connect','Add a model','Create a report','Refresh']);
     assert.equal(guide.window.document.querySelectorAll('.guide-demo-link').length, 8);
     for (const a of guide.window.document.querySelectorAll('.guide-demo-link')) {
       assert.ok(fs.existsSync(path.join(root, a.getAttribute('href').split('?')[0])));
     }
   } finally { dom.window.close(); guide.window.close(); }
+});
+
+test('Homepage highlights the hands-on pivot demo without reusing the dark report capture', () => {
+  const dom = new JSDOM(read('index.html'));
+  try {
+    const d = dom.window.document;
+    assert.equal(d.querySelector('.product-preview-link').getAttribute('href'), '/demo/pivot-workflow.html');
+    assert.ok(d.querySelector('.home-product-preview img[src$="10-hierarchy-selectors.jpg"]'));
+    assert.equal(d.querySelectorAll('img[src$="01-formatted-grid.jpg"]').length, 0);
+    assert.ok(d.querySelector('#ux-workflow img[src$="12-formatted-grid-preview.svg"]'));
+    assert.match(read('sitemap.xml'), /<loc>https:\/\/aplan4sheets\.com\/demo\/pivot-workflow\.html<\/loc>/);
+  } finally { dom.window.close(); }
 });
