@@ -23,6 +23,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/site-v1.css">
   <link rel="stylesheet" href="/assets/homepage-enhancements-v1.css">
+  <style>
+    .founder-profile { display: grid; gap: 1.5rem; align-items: start; }
+    .founder-profile img { width: min(10rem, 100%); height: auto; border-radius: 0.75rem; }
+    .founder-profile a { overflow-wrap: anywhere; }
+    @media (min-width: 640px) {
+      .founder-profile { grid-template-columns: 10rem minmax(0, 1fr); }
+    }
+  </style>
   <script src="/assets/homepage-navigation-v1.js" defer></script>
   <script type="application/ld+json">
   {
@@ -83,9 +91,14 @@
     </section>
 
     <section class="mb-14">
-      <h2 class="text-2xl font-bold text-navy mb-4">Who builds it</h2>
-      <p class="text-text-muted leading-relaxed mb-4">aPlan4Sheets is designed, built and supported by <strong class="text-navy">Ryan Domke</strong>, an FP&amp;A practitioner and Anaplan model builder. The product decisions come from day-to-day planning work: month-end variance packs, board reporting, headcount and revenue models, and the reconciliations that sit between a planning model and the spreadsheet a leadership team actually reads.</p>
-      <p class="text-text-muted leading-relaxed">Support goes to the person who wrote the code. Questions, setup help and feedback reach <a class="text-sheets-green font-medium hover:underline" href="mailto:ryan.domke@aplan4sheets.com">ryan.domke@aplan4sheets.com</a>.</p>
+      <h2 class="text-2xl font-bold text-navy mb-4">Founder</h2>
+      <div class="founder-profile">
+        <img src="/assets/ryan-domke-founder.webp" alt="Ryan Domke, founder of aPlan4Sheets" width="640" height="640" decoding="async">
+        <div>
+          <p class="text-text-muted leading-relaxed mb-4"><strong class="text-navy">Ryan Domke</strong> founded aPlan4Sheets and leads product development and support. He is an FP&amp;A practitioner and Anaplan model builder. The product decisions come from day-to-day planning work: month-end variance packs, board reporting, headcount and revenue models, and the reconciliations that sit between a planning model and the spreadsheet a leadership team actually reads.</p>
+          <p class="text-text-muted leading-relaxed">Support goes to the person who wrote the code. Questions, setup help and feedback reach <a class="text-sheets-green font-medium hover:underline" href="mailto:ryan.domke@aplan4sheets.com">ryan.domke@aplan4sheets.com</a>.</p>
+        </div>
+      </div>
     </section>
 
     <section class="mb-14">
